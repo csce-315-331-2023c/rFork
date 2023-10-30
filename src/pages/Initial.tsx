@@ -2,7 +2,7 @@ import React from 'react'
 import "../css/index.css"
 import { useNavigate } from 'react-router-dom'
 
-export default function Login() {
+export default function Initial() {
   const navigate = useNavigate();
 
   return (
