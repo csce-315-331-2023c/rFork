@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Kiosk from './pages/Kiosk';
 import MenuBoard from './pages/MenuBoard';
 import NotFound from './pages/NotFound';
+import ManagerDashboard from './pages/ManagerDashboard';
+import CashRegister from './pages/CashRegister';
 
 function App() {
   return (
@@ -13,8 +15,8 @@ function App() {
         <Route path='/' Component={Login} />
         <Route path='/kiosk' Component={Kiosk} />
         <Route path='/menu-board' Component={MenuBoard} />
-        <Route path='/manager-dashboard' Component={Login} />
-        <Route path='/cash-register' Component={Login} />
+        <Route path='/manager-dashboard' Component={ManagerDashboard} />
+        <Route path='/cash-register' Component={CashRegister} />
         <Route path='/*' Component={NotFound} />
       </Routes>
     </BrowserRouter>
