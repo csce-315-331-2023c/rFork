@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function MenuPage() {
+export default function MenuBoard() {
   return (
     <div>
         <header>
