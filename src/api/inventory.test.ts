@@ -2,10 +2,10 @@ import db from './index';
 import { getAllInventoryItems } from './inventory';
 
 afterAll(async () => {
-        await db.end();
+    await db.end();
 });
 
-describe('getAll', () => {
+describe('getAllInventoryItems', () => {
     it('should return all inventory items', async () => {
         const result = await getAllInventoryItems();
 
