@@ -1,6 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-// db connection setup
+if (process.env.NODE_ENV === 'development') {
+    console.warn('Running in development mode!');
+}
 
-export { hello } from './other_file';
+import { initDatabase } from './db_init';
+
+// this runs when the file is first imported, no need to explicitly invoke it
+export const db = initDatabase();
