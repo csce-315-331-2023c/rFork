@@ -5,17 +5,18 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
     // yes, this is inefficient
 
     // get all inventory items, create id->name map
-    const inventoryQuery = 'SELECT (id, item_name) FROM inventory_item';
+    const inventoryQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_name) FROM inventory_item) t';
 
     const inventoryResult = await db.query(inventoryQuery);
 
     let inventoryMap: Map<number, string> = new Map();
     for (let row of inventoryResult.rows) {
-        inventoryMap.set(row.id, row.item_name);
+        const { f1: id, f2: item_name } = row.row_to_json.row;
+        inventoryMap.set(id, item_name);
     }
 
     // get all ingredients, populate name from map, create list
-    const ingredientQuery = 'SELECT (id, item_id, menu_item_id, qty_used) FROM menu_item_ingredient_defaults';
+    const ingredientQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_id, menu_item_id, qty_used) FROM menu_item_ingredient_defaults) t';
 
     const ingredientResult = await db.query(ingredientQuery);
     
@@ -23,25 +24,29 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
 
     let ingredients: ingredient[] = [];
     for (let row of ingredientResult.rows) {
+        const { f2: inventory_id, f3: menu_item_id, f4: quantity } = row.row_to_json.row;
+
         ingredients.push({
-            inventoryId: row.inventory_id,
-            name: inventoryMap.get(row.inventory_id) || 'N/A',
-            quantity: row.quantity,
-            menuItemId: row.id
+            inventoryId: inventory_id,
+            name: inventoryMap.get(inventory_id) || 'N/A',
+            quantity: quantity,
+            menuItemId: menu_item_id
         });
     }
 
     // get all menu items, create id->item map
-    const menuItemQuery = 'SELECT (id, name, price_cents) FROM menu_item';
+    const menuItemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name, price_cents) FROM menu_item) t';
 
     const menuItemResult = await db.query(menuItemQuery);
 
     let menuItemsMap: Map<number, MenuItem> = new Map();
     for (let row of menuItemResult.rows) {
-        menuItemsMap.set(row.id, {
-            id: row.id,
-            name: row.name,
-            price: row.price_cents / 100, // convert cents to dollars
+        const { f1: id, f2: item_name, f3: price } = row.row_to_json.row;
+
+        menuItemsMap.set(id, {
+            id: id,
+            name: item_name,
+            price: price / 100, // convert cents to dollars
             ingredients: []
         });
     }
