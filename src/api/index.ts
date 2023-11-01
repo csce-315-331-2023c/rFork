@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 if (process.env.NODE_ENV === 'development') {
     console.warn('Running in development mode!');
