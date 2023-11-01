@@ -18,7 +18,7 @@ export type InventoryItem = {
 };
 
 export type Order = {
-    id: number;
+    id?: number;
     date: Date;
     items: MenuItem[];
     total: number;
