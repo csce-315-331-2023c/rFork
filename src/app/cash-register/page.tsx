@@ -9,11 +9,47 @@ export default function CashRegister() {
     return (
         <div>
             <button className='bg-black text-white' onClick={() => {
-                const order: any = {
-                    date: 0,
-                    item: [],
-                    total: 0,
-                }
+                const order = {
+                    date: new Date(),
+                    total: 100,
+                    items: [
+                        {
+                            id: 1,
+                            name: 'Cheeseburger',
+                            price: 10,
+                            ingredients: [
+                                {
+                                    inventoryId: 1,
+                                    name: 'Bun',
+                                    quantity: 1
+                                },
+                                {
+                                    inventoryId: 2,
+                                    name: 'Beef Patty',
+                                    quantity: 1
+                                },
+                                {
+                                    inventoryId: 3,
+                                    name: 'Cheese',
+                                    quantity: 1
+                                }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            name: 'Fries',
+                            price: 5,
+                            ingredients: [
+                                {
+                                    inventoryId: 4,
+                                    name: 'Potato',
+                                    quantity: 1
+                                }
+                            ]
+                        }
+                    ]
+                };
+                
                 fetch("http://localhost:3000/api/orders",
                     {
                         method: "POST",

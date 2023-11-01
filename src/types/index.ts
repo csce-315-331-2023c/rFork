@@ -5,7 +5,7 @@ export type Ingredient = {
 };
 
 export type MenuItem = {
-    id: number;
+    id?: number;
     name: string;
     price: number;
     ingredients: Ingredient[];
