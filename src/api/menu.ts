@@ -40,8 +40,8 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
     for (let row of menuItemResult.rows) {
         menuItemsMap.set(row.id, {
             id: row.id,
-            name: row.item_name,
-            price: row.price / 100, // convert cents to dollars
+            name: row.name,
+            price: row.price_cents / 100, // convert cents to dollars
             ingredients: []
         });
     }
