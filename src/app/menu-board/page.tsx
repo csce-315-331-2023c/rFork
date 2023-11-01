@@ -19,6 +19,7 @@ export default function MenuBoard() {
 
     return (
         <div>
+            <a href="/">[Back button]</a>
             <header className='py-5'>
                 MENU BOARD
             </header>
