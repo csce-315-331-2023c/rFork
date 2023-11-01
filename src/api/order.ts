@@ -12,6 +12,10 @@ export async function submitOrder(order: Order): Promise<void> {
 
     order.id = orderResult.rows[0].id;
 
+    if (order.items.length === 0) {
+        return;
+    }
+
     // menu_item_orders - order id, menu item id
     const menuItemOrders = order.items.map(item => [order.id, item.id]);
 
@@ -35,9 +39,7 @@ export async function submitOrder(order: Order): Promise<void> {
     const menuItemOrderIngredientQuery = `
         INSERT INTO menu_item_order_ingredients (menu_item_order_id, item_id, qty_used) VALUES ${
             ingredientOrders.map((_, i) => `($${3 * i + 1}, $${3 * i + 2}, $${3 * i + 3})`).join(', ')
-        }
-        RETURNING id
-    `;
+        } RETURNING id`;
 
     const menuItemOrderIngredientResult = await db.query(menuItemOrderIngredientQuery, ingredientOrders.flat());
     if (menuItemOrderIngredientResult.rowCount !== ingredientOrders.length) {

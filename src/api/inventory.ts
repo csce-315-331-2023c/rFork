@@ -8,7 +8,7 @@ export async function getAllInventoryItems(): Promise<InventoryItem[]> {
 
     let inventoryItems: InventoryItem[] = [];
     for (let row of result.rows) {
-        const { f1: id, f2: item_name, f3: current_qty } = row.row_to_json;
+        const { f1: id, f2: item_name, f3: current_qty } = row.row_to_json.row;
         
         inventoryItems.push({
             id: id,
