@@ -13,6 +13,8 @@ describe('getAllInventoryItems', () => {
         expect(result[0]).toHaveProperty('id');
         expect(result[0]).toHaveProperty('name');
         expect(result[0]).toHaveProperty('currentStock');
+
+        console.log(result[0]);
     });
 });
 

@@ -17,5 +17,7 @@ describe('getAllMenuItems', () => {
         expect(result[0].ingredients[0]).toHaveProperty('inventoryId');
         expect(result[0].ingredients[0]).toHaveProperty('name');
         expect(result[0].ingredients[0]).toHaveProperty('quantity');
+
+        console.log(result[0]);
     });
 });
