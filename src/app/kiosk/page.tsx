@@ -7,37 +7,14 @@ import { MenuItem } from '../../types';
 export default function Kiosk() {
 
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-
     useEffect(() => {
-        fetch("http://localhost:3000/api/menu-items").then((result) => console.log(result));
-        const fakeData: MenuItem[] = [
-            {
-                id: 0,
-                name: "Crepe",
-                price: 100,
-                ingredients: []
-            },
-            {
-                id: 0,
-                name: "Strawberry Crepe",
-                price: 200,
-                ingredients: []
-            },
-            {
-                id: 0,
-                name: "Lemon Crepe",
-                price: 100,
-                ingredients: []
-            },
-            {
-                id: 0,
-                name: "Chicken Enchilada",
-                price: 100,
-                ingredients: []
-            },
-        ];
-
-        setMenuItems(fakeData);
+        const unsubscribe = () => {
+            fetch("http://localhost:3000/api/menu").then(async (result) => {
+                const allMenuItems = await result.json();
+                setMenuItems(allMenuItems);
+            });
+        }
+        return unsubscribe;
     }, []);
 
     return (
