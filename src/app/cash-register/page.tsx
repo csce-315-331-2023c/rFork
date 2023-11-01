@@ -1,10 +1,21 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
-import { Order } from '../../types';
+import { MenuItem, Order } from '../../types';
 
 export default function CashRegister() {
     const [response, setResponse] = useState("No Response");
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+    useEffect(() => {
+        const unsubscribe = () => {
+            fetch("http://localhost:3000/api/menu").then(async (result) => {
+                const allMenuItems = await result.json();
+                setMenuItems(allMenuItems);
+            });
+        }
+        return unsubscribe;
+    }, []);
 
     return (
         <div>
@@ -61,6 +72,7 @@ export default function CashRegister() {
 
             }}>Create Order</button>
             <div>{response}</div>
+            <div>{JSON.stringify(menuItems)}</div>
         </div>
     )
 }
