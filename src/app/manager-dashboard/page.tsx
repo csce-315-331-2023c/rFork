@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
-import KioskButton from '../../components/KioskButton'
+import ImageButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
 
 export default function ManagerDashboard() {

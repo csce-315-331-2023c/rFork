@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
-import KioskButton from '../../components/KioskButton'
+import ImageButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
 
 export default function MenuBoard() {
@@ -26,7 +26,7 @@ export default function MenuBoard() {
             <div>
                 Here are the first 8 items:
                 <div>{menuItems.slice(0,8).map((menuItem, index) => (
-                        <KioskButton
+                        <ImageButton
                             text={menuItem.name}
                             price={menuItem.price}
                             key={index}
