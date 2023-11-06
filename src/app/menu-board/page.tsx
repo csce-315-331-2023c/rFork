@@ -25,10 +25,11 @@ export default function MenuBoard() {
             </header>
             <div>
                 Here are the first 8 items:
-                <div>{menuItems.slice(0,8).map((menuItem) => (
+                <div>{menuItems.slice(0,8).map((menuItem, index) => (
                         <KioskButton
                             text={menuItem.name}
                             price={menuItem.price}
+                            key={index}
                         />
                     ))}</div>
             </div>

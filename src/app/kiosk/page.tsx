@@ -25,10 +25,11 @@ export default function Kiosk() {
             <div className='px-10'>
                 <h1 className='text-4xl'>Items</h1>
                 <div className='grid grid-cols-4 gap-4'>
-                    {menuItems.map((menuItem) => (
+                    {menuItems.map((menuItem, index) => (
                         <KioskButton
                             text={menuItem.name}
                             price={menuItem.price}
+                            key={index}
                         />
                     ))}
                 </div>
