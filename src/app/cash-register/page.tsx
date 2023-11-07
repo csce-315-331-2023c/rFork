@@ -51,7 +51,21 @@ export default function CashRegister() {
         (async function () {
             fetch("/api/menu").then(async (result) => {
                 const allMenuItems = await result.json();
-                setMenuItems(allMenuItems);
+                if (allMenuItems && (typeof allMenuItems == 'object') && allMenuItems.constructor == Array) {
+                    setMenuItems(allMenuItems);
+                    const menuItemButtons = allMenuItems.map((menuItem: MenuItem) => {
+                        return <TextButton text={menuItem.name} onPress={() => { }} />
+                    });
+
+                    setTopRightChildren([
+                        (<TextButton text='Menu Items' onPress={() => setMiddleRightChildren(menuItemButtons)} />),
+                        ...defaultTopRightButtons,
+                    ])
+                }
+                else {
+                    alert("An issue occured while attempting to fetch menu items from server.");
+                }
+
                 setLoading(false);
             });
         })();
@@ -62,6 +76,7 @@ export default function CashRegister() {
     // HTML Rendering
     return (
         <div className='flex flex-col h-screen'>
+            {/* Header */}
             <nav className='h-10 bg-slate-300'></nav>
             <div className='grid grid-cols-3 grid-rows-3 flex-1 w-full'>
                 {/* Left Side */}
@@ -71,13 +86,13 @@ export default function CashRegister() {
                     <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3'>
                         <div></div>
                         <ul>
-                            <li>asd</li>
-                            <li>asd</li>
-                            <li>asd</li>
-                            <li>asd</li>
+                            <li>Subtotal:</li>
+                            <li>Tax:</li>
+                            <li>Tip:</li>
+                            <li>Total:</li>
                         </ul>
                         <TextButton text='Cancel Order' />
-                        <TextButton text='Pay' />
+                        <TextButton text='Pay' color='#3de8e0' />
                     </div>
                 </div>
                 {/* Right Side */}
