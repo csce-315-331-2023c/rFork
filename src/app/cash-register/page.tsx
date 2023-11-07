@@ -9,11 +9,6 @@ export default function CashRegister() {
     const [response, setResponse] = useState("No Response");
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
-    // Content Hooks
-    const [topRightChildren, setTopRightChildren] = useState<React.JSX.Element[] | null>(null);
-    const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
-    const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
-
     // Component Constants
     const discountButtons = [
         (<TextButton text='-5%' key={0} />),
@@ -45,9 +40,13 @@ export default function CashRegister() {
         />),
     ]
 
+    // Content Hooks
+    const [topRightChildren, setTopRightChildren] = useState<React.JSX.Element[] | null>(defaultTopRightButtons);
+    const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
+    const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
+
     // Closure Functions
     useEffect(() => {
-        setTopRightChildren(defaultTopRightButtons)
         fetch("/api/menu").then(async (result) => {
             const allMenuItems = await result.json();
             setMenuItems(allMenuItems);
