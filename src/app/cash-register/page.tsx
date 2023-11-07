@@ -6,8 +6,9 @@ import TextButton from '../../components/TextButton';
 
 export default function CashRegister() {
     // Data Hooks
-    const [response, setResponse] = useState("No Response");
+    const [response, setResponse] = useState<string>("No Response");
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     // Component Constants
     const discountButtons = [
@@ -47,18 +48,39 @@ export default function CashRegister() {
 
     // Closure Functions
     useEffect(() => {
-        fetch("/api/menu").then(async (result) => {
-            const allMenuItems = await result.json();
-            setMenuItems(allMenuItems);
-        });
+        (async function () {
+            fetch("/api/menu").then(async (result) => {
+                const allMenuItems = await result.json();
+                setMenuItems(allMenuItems);
+                setLoading(false);
+            });
+        })();
     }, []);
+
+    if (loading) return (<div>Page Loading...</div>);
 
     // HTML Rendering
     return (
         <div className='flex flex-col h-screen'>
             <nav className='h-10 bg-slate-300'></nav>
             <div className='grid grid-cols-3 grid-rows-3 flex-1 w-full'>
-                <div className='row-span-3 border-black border-r-2'></div>
+                {/* Left Side */}
+                <div className='row-span-3 border-black border-r-2 flex flex-col'>
+                    <div className='border-black border-b-2'>Order #</div>
+                    <div className='flex-1 border-black border-b-2'></div>
+                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3'>
+                        <div></div>
+                        <ul>
+                            <li>asd</li>
+                            <li>asd</li>
+                            <li>asd</li>
+                            <li>asd</li>
+                        </ul>
+                        <TextButton text='Cancel Order' />
+                        <TextButton text='Pay' />
+                    </div>
+                </div>
+                {/* Right Side */}
                 <div className='col-span-2 flex flex-col bg-white border-black border-b-2'>
                     <h2 className='text-center text-2xl underline'>Category</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>

@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function TextButton({ text, onPress }: { text?: string, onPress?: () => void, }): React.JSX.Element {
+export default function TextButton({ text, onPress, color, hoverColor }:
+    {
+        text?: string,
+        onPress?: () => void,
+        color?: string,
+        hoverColor?: string,
+    }) {
+    const [hover, setHover] = useState<boolean>();
+
     return (
-        <button className='h-full w-full text-center rounded-xl bg-gray-400 hover:bg-gray-700' onClick={onPress ?? (() => console.log("Button Pressed"))}>
+        <button
+            className='h-full w-full text-center rounded-xl bg-gray-400 hover:bg-gray-700'
+            onClick={onPress ?? (() => console.log("Button Pressed"))}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={{
+                backgroundColor: hover ? (hoverColor ?? "#DDD") : (color ?? "#999")
+            }}
+        >
             {text}
         </button>
     )
