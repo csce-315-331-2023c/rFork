@@ -3,17 +3,21 @@ import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
 import KioskButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
+import PageLoading from '../../components/PageLoading';
 
 export default function Kiosk() {
-
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         fetch("/api/menu").then(async (result) => {
             const allMenuItems = await result.json();
             setMenuItems(allMenuItems);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) return <PageLoading />;
 
     return (
         <div className='flex-col'>

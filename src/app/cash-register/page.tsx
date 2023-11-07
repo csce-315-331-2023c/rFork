@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import "../../css/index.css";
 import { MenuItem, Order } from '../../types';
 import TextButton from '../../components/TextButton';
+import PageLoading from '../../components/PageLoading';
 
 export default function CashRegister() {
     // Data Hooks
@@ -71,7 +72,7 @@ export default function CashRegister() {
         })();
     }, []);
 
-    if (loading) return (<div>Page Loading...</div>);
+    if (loading) return (<PageLoading />);
 
     // HTML Rendering
     return (

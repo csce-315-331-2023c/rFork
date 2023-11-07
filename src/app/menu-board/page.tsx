@@ -3,16 +3,21 @@ import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
 import ImageButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
+import PageLoading from '../../components/PageLoading';
 
 export default function MenuBoard() {
-
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
         fetch("http://localhost:3000/api/menu").then(async (result) => {
             const allMenuItems = await result.json();
             setMenuItems(allMenuItems);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) return <PageLoading />;
 
     return (
         <div>
