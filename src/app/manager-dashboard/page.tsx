@@ -5,16 +5,13 @@ import ImageButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
 
 export default function ManagerDashboard() {
-    
+
     const [inventoryItems, setInventoryItems] = useState<MenuItem[]>([]);
     useEffect(() => {
-        const unsubscribe = () => {
-            fetch("http://localhost:3000/api/inventory").then(async (result) => {
-                const allMenuItems = await result.json();
-                setInventoryItems(allMenuItems);
-            });
-        }
-        return unsubscribe;
+        fetch("http://localhost:3000/api/inventory").then(async (result) => {
+            const allMenuItems = await result.json();
+            setInventoryItems(allMenuItems);
+        });
     }, []);
 
     return (

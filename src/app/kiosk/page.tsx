@@ -7,14 +7,12 @@ import { MenuItem } from '../../types';
 export default function Kiosk() {
 
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
     useEffect(() => {
-        const unsubscribe = () => {
-            fetch("http://localhost:3000/api/menu").then(async (result) => {
-                const allMenuItems = await result.json();
-                setMenuItems(allMenuItems);
-            });
-        }
-        return unsubscribe;
+        fetch("/api/menu").then(async (result) => {
+            const allMenuItems = await result.json();
+            setMenuItems(allMenuItems);
+        });
     }, []);
 
     return (
