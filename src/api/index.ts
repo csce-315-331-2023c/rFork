@@ -4,6 +4,10 @@ if (process.env.NODE_ENV === 'development') {
     console.warn('Running in development mode!');
 }
 
+if (typeof performance === "undefined") {
+    global.performance = require("perf_hooks").performance;
+}
+
 import { Client } from 'pg';
 
 const client = new Client({
