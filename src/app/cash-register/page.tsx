@@ -54,12 +54,12 @@ export default function CashRegister() {
                 const allMenuItems = await result.json();
                 if (allMenuItems && (typeof allMenuItems == 'object') && allMenuItems.constructor == Array) {
                     setMenuItems(allMenuItems);
-                    const menuItemButtons = allMenuItems.map((menuItem: MenuItem) => {
-                        return <TextButton text={menuItem.name} onPress={() => { }} />
+                    const menuItemButtons = allMenuItems.map((menuItem: MenuItem, index) => {
+                        return <TextButton text={menuItem.name} onPress={() => { }} key={index} />
                     });
 
                     setTopRightChildren([
-                        (<TextButton text='Menu Items' onPress={() => setMiddleRightChildren(menuItemButtons)} />),
+                        (<TextButton text='Menu Items' onPress={() => setMiddleRightChildren(menuItemButtons)} key={2} />),
                         ...defaultTopRightButtons,
                     ])
                 }
@@ -82,9 +82,9 @@ export default function CashRegister() {
             <div className='grid grid-cols-3 grid-rows-3 flex-1 w-full'>
                 {/* Left Side */}
                 <div className='row-span-3 border-black border-r-2 flex flex-col'>
-                    <div className='border-black border-b-2'>Order #</div>
-                    <div className='flex-1 border-black border-b-2'></div>
-                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3'>
+                    <div className='border-black border-y-2'>Order #</div>
+                    <div className='flex-1'></div>
+                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3 border-black border-t-2'>
                         <div></div>
                         <ul>
                             <li>Subtotal:</li>
@@ -97,20 +97,20 @@ export default function CashRegister() {
                     </div>
                 </div>
                 {/* Right Side */}
-                <div className='col-span-2 flex flex-col bg-white border-black border-b-2'>
-                    <h2 className='text-center text-2xl underline'>Category</h2>
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Category</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {topRightChildren}
                     </div>
                 </div>
-                <div className='col-span-2 flex flex-col bg-white border-black border-b-2'>
-                    <h2 className='text-center text-2xl underline'>Options</h2>
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Options</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {middleRightChildren}
                     </div>
                 </div>
-                <div className='col-span-2 flex flex-col bg-white border-black'>
-                    <h2 className='text-center text-2xl underline'>Add-ons</h2>
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Add-ons</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {bottomRightChildren}
                     </div>

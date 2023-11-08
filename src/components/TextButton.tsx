@@ -11,7 +11,7 @@ export default function TextButton({ text, onPress, color, hoverColor }:
 
     return (
         <button
-            className='h-full w-full text-center rounded-xl bg-gray-400 hover:bg-gray-700'
+            className='h-full w-full text-center rounded-xl'
             onClick={onPress ?? (() => console.log("Button Pressed"))}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
