@@ -10,7 +10,7 @@ export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/inventory").then(async (result) => {
+        fetch("/api/inventory").then(async (result) => {
             const allMenuItems = await result.json();
             setInventoryItems(allMenuItems);
             setLoading(false);

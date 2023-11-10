@@ -10,7 +10,7 @@ export default function MenuBoard() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/menu").then(async (result) => {
+        fetch("/api/menu").then(async (result) => {
             const allMenuItems = await result.json();
             setMenuItems(allMenuItems);
             setLoading(false);
