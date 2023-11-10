@@ -5,7 +5,7 @@ export async function submitOrder(order: Order): Promise<void> {
     // restaurant_order - date, total
     const orderQuery = 'INSERT INTO restaurant_order (create_time, subtotal_cents) VALUES ($1, $2) RETURNING id';
 
-    const orderResult = await db.query(orderQuery, [order.date, order.total * 100]);
+    const orderResult = await db.query(orderQuery, [order.timestamp, order.total * 100]);
     if (orderResult.rowCount !== 1) {
         throw new Error('Error inserting order');
     }
@@ -34,7 +34,7 @@ export async function submitOrder(order: Order): Promise<void> {
 
     // menu_item_order_ingredients - menu item order id, inventory item id, quantity
 
-    const ingredientOrders = order.items.flatMap(item => item.ingredients.map(ing => [item.id, ing.inventoryId, ing.quantity]));
+    const ingredientOrders = order.items.flatMap(item => item.ingredients.map(ing => [item.id, ing.itemId, ing.quantity]));
 
     const menuItemOrderIngredientQuery = `
         INSERT INTO menu_item_order_ingredients (menu_item_order_id, item_id, qty_used) VALUES ${

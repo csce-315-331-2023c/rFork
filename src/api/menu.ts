@@ -27,8 +27,8 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
         const { f2: inventory_id, f3: menu_item_id, f4: quantity } = row.row_to_json.row;
 
         ingredients.push({
-            inventoryId: inventory_id,
-            name: inventoryMap.get(inventory_id) || 'N/A',
+            itemId: inventory_id,
+            itemName: inventoryMap.get(inventory_id) || 'N/A',
             quantity: quantity,
             menuItemId: menu_item_id
         });
