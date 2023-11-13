@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS menu_item (
 CREATE TABLE IF NOT EXISTS menu_item_ingredients(
     id SERIAL PRIMARY KEY,
     item_id INT REFERENCES inventory_item(id),
-    qty_used INT,
+    qty_used INT
     -- Unsure what is normal ingredient means and /is valid extra?
 );
 
