@@ -1,78 +1,122 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import "../../css/index.css"
+import React, { useEffect, useState } from 'react';
+import "../../css/index.css";
 import { MenuItem, Order } from '../../types';
+import TextButton from '../../components/TextButton';
+import PageLoading from '../../components/PageLoading';
 
 export default function CashRegister() {
-    const [response, setResponse] = useState("No Response");
+    // Data Hooks
+    const [response, setResponse] = useState<string>("No Response");
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
+    // Component Constants
+    const discountButtons = [
+        (<TextButton text='-5%' key={0} />),
+        (<TextButton text='-10%' key={1} />),
+    ]
+
+    const tipButtons = [
+        (<TextButton text='5%' key={0} />),
+        (<TextButton text='10%' key={1} />),
+        (<TextButton text='15%' key={2} />),
+    ]
+
+    const defaultTopRightButtons = [
+        (<TextButton
+            text='Discounts'
+            onPress={() => {
+                setMiddleRightChildren(discountButtons);
+                setBottomRightChildren(null);
+            }}
+            key={0}
+        />),
+        (<TextButton
+            text='Tips'
+            onPress={() => {
+                setMiddleRightChildren(tipButtons);
+                setBottomRightChildren(null);
+            }}
+            key={0}
+        />),
+    ]
+
+    // Content Hooks
+    const [topRightChildren, setTopRightChildren] = useState<React.JSX.Element[] | null>(defaultTopRightButtons);
+    const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
+    const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
+
+    // Closure Functions
     useEffect(() => {
-        const unsubscribe = () => {
-            fetch("http://localhost:3000/api/menu").then(async (result) => {
+        (async function () {
+            fetch("/api/menu").then(async (result) => {
                 const allMenuItems = await result.json();
-                setMenuItems(allMenuItems);
+                if (allMenuItems && (typeof allMenuItems == 'object') && allMenuItems.constructor == Array) {
+                    setMenuItems(allMenuItems);
+                    const menuItemButtons = allMenuItems.map((menuItem: MenuItem, index) => {
+                        return <TextButton text={menuItem.name} onPress={() => { }} key={index} />
+                    });
+
+                    setTopRightChildren([
+                        (<TextButton text='Menu Items' onPress={() => setMiddleRightChildren(menuItemButtons)} key={2} />),
+                        ...defaultTopRightButtons,
+                    ])
+                }
+                else {
+                    alert("An issue occured while attempting to fetch menu items from server.");
+                }
+
+                setLoading(false);
             });
-        }
-        return unsubscribe;
+        })();
     }, []);
 
-    return (
-        <div>
-            <button className='bg-black text-white' onClick={() => {
-                const order = {
-                    date: new Date(),
-                    total: 100,
-                    items: [
-                        {
-                            id: 1,
-                            name: 'Cheeseburger',
-                            price: 10,
-                            ingredients: [
-                                {
-                                    inventoryId: 1,
-                                    name: 'Bun',
-                                    quantity: 1
-                                },
-                                {
-                                    inventoryId: 2,
-                                    name: 'Beef Patty',
-                                    quantity: 1
-                                },
-                                {
-                                    inventoryId: 3,
-                                    name: 'Cheese',
-                                    quantity: 1
-                                }
-                            ]
-                        },
-                        {
-                            id: 2,
-                            name: 'Fries',
-                            price: 5,
-                            ingredients: [
-                                {
-                                    inventoryId: 4,
-                                    name: 'Potato',
-                                    quantity: 1
-                                }
-                            ]
-                        }
-                    ]
-                };
-                
-                fetch("http://localhost:3000/api/orders",
-                    {
-                        method: "POST",
-                        body: JSON.stringify(order)
-                    }
-                ).then(async (res) => {
-                    setResponse(await res.text())
-                });
+    if (loading) return (<PageLoading />);
 
-            }}>Create Order</button>
-            <div>{response}</div>
-            <div>{JSON.stringify(menuItems)}</div>
+    // HTML Rendering
+    return (
+        <div className='flex flex-col h-screen'>
+            {/* Header */}
+            <nav className='h-10 bg-slate-300'></nav>
+            <div className='grid grid-cols-3 grid-rows-3 flex-1 w-full'>
+                {/* Left Side */}
+                <div className='row-span-3 border-black border-r-2 flex flex-col'>
+                    <div className='border-black border-y-2'>Order #</div>
+                    <div className='flex-1'></div>
+                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3 border-black border-t-2'>
+                        <div></div>
+                        <ul>
+                            <li>Subtotal:</li>
+                            <li>Tax:</li>
+                            <li>Tip:</li>
+                            <li>Total:</li>
+                        </ul>
+                        <TextButton text='Cancel Order' />
+                        <TextButton text='Pay' color='#3de8e0' />
+                    </div>
+                </div>
+                {/* Right Side */}
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Category</h2>
+                    <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
+                        {topRightChildren}
+                    </div>
+                </div>
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Options</h2>
+                    <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
+                        {middleRightChildren}
+                    </div>
+                </div>
+                <div className='col-span-2 flex flex-col bg-white'>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Add-ons</h2>
+                    <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
+                        {bottomRightChildren}
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }
