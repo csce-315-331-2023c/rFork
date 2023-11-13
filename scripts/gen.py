@@ -5,36 +5,35 @@ from datetime import timedelta
 from datetime import datetime
 
 #Constants
-menuDict = {
-    0: ("Apple Cinammon Creme Brulee","1250"),
-    1: ("Berry Agave (Vegan)","1250"),
-    2: ("Bonne Maman","925"),
-    3: ("Dulce de Leche","925"),
-    4: ("Cookie Butter","1125"),
-    5: ("Lemon & Sugar","825"),
-    6: ("Nutella Strawberries","1050"),
-    7: ("Oreo Cookies n' Cream","1150"),
-    8: ("S'mores","1195"),
-    9: ("Chicken Alfredo","1325"),
-    10: ("Chicken Carbonara","1395"),
-    11: ("Le California","1395"),
-    12: ("Chicken Enchilada","1295"),
-    13: ("Chicken Florentine","1295"),
-    14: ("Philly Cheesesteak","1395"),
-    15: ("Ham & Gruyere","1195"),
-    16: ("Nordic","1395"),
-    17: ("The Vegan","1150"),
-    18: ("Truffled Caprese","1250"),
-    19: ("Turkey, Grapes & Brie","1295")
-}
+menuList = [
+    {"Apple Cinammon Creme Brulee": 1250},
+    {"Berry Agave (Vegan)": 1250},
+    {"Bonne Maman": 925},
+    {"Dulce de Leche": 925},
+    {"Cookie Butter": 1125},
+    {"Lemon & Sugar": 825},
+    {"Nutella Strawberries": 1050},
+    {"Oreo Cookies n' Cream": 1150},
+    {"S'mores": 1195},
+    {"Chicken Alfredo": 1325},
+    {"Chicken Carbonara": 1395},
+    {"Le California": 1395},
+    {"Chicken Enchilada": 1295},
+    {"Chicken Florentine": 1295},
+    {"Philly Cheesesteak": 1395},
+    {"Ham & Gruyere": 1195},
+    {"Nordic": 1395},
+    {"The Vegan": 1150},
+    {"Truffled Caprese": 1250},
+    {"Turkey, Grapes & Brie": 1295}]
 
 ruleSet = {
     "start": "2022/10/28 5:00",
     "end": "2023/10/28 17:00",
     "filename": "restaurant_orders.txt",
     "tip": [.10, .20, .30],
-    "maxItems": 3,
-    "menu": menuDict,
+    "maxItems": 1,
+    "menu": menuList,
     "employees": [1, 2, 3, None]
 }
 
@@ -49,14 +48,14 @@ def random_date(start, end):
     random_second = randrange(int_delta)
     return dt_start + timedelta(seconds=random_second)
 
-#gets a random price based off of the number of items and prices of menuDict Items
-def getPrice(maxItems, menuDict):
+#gets a random price based off of the number of items and prices of menuList Items
+def getPrice(maxItems, menuList):
     items = randint(1,maxItems)
     price = 0
     itemList = []
     for i in range(items):
-        item = list(menuDict)
-        price+= choice(list(menuDict))
+        item = list(menuList)
+        price+= choice(list(menuList))
     return price
 
 def generateData(file_name, dictColValues, amount):
@@ -64,7 +63,7 @@ def generateData(file_name, dictColValues, amount):
         csvwriter = csv.writer(file)
         headers = ["id"] + dictColValues
         csvwriter.writerow(headers)
-        for i in range(1,amount):
+        for i in range(1,amount+1):
             row = [i]
             hold_price = 0
             for col in dictColValues:
@@ -86,36 +85,11 @@ def generateData(file_name, dictColValues, amount):
 
 
 def main():
-    #in hindsight since everything is dependent on something else there's not much of a need to use a function that can generate random csv's that are unrelated based on a generic template
-
-    entries = 20000
-
+    #TODO add functionality for command line defining of variables
+    
     #order
     order_rules = ['date','total','employee']
-    generateData('orders.csv',order_rules,entries) 
-
-    #order_item
-    with open('order_item.csv',"w") as file:
-        csvwriter = csv.writer(file)
-        headers = ["id", "order_id", "menu_item_id"]
-        csvwriter.writerow(headers)
-        order_item_id = 1
-        for i in range(1,entries):
-            for j in range(randint(1,ruleSet["maxItems"])):
-                menu_item = choice(list(menuDict.keys()))
-                csvwriter.writerow([order_item_id,i,menu_item])
-                order_item_id+=1
-    file.close()
-
-    #order_item_ingredient
-    with open("order_item.csv","r") as order_items_file:
-        with open('order_item_ingredient.csv',"w") as file:
-            csvwriter = csv.writer(file)
-            headers = ["id", "order_item_id", "inventory_item_id","quantity"]
-            csvwriter.writerow(headers)
-            for row in order_items_file:
-                
-
+    generateData('orders.csv',order_rules,100) 
 
 if __name__ == "__main__":
     main()

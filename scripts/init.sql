@@ -29,8 +29,7 @@ CREATE TABLE IF NOT EXISTS menu_item (
 CREATE TABLE IF NOT EXISTS menu_item_ingredients(
     id SERIAL PRIMARY KEY,
     item_id INT REFERENCES inventory_item(id),
-    qty_used INT,
-    is_valid_extra BOOLEAN
+    qty_used INT
     -- Unsure what is normal ingredient means and /is valid extra?
 );
 
@@ -59,7 +58,7 @@ CREATE TABLE IF NOT EXISTS order_item_ingredient (
     order_id INT REFERENCES order_item(id),
     inventory_item_id INT REFERENCES inventory_item(id),
     quantity INT,
-    is_valid_extra BOOLEAN
+    extra INT
     -- Unsure what is normal ingredient means and /is valid extra?
 );
 
