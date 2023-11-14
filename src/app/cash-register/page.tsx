@@ -7,69 +7,30 @@ import PageLoading from '../../components/PageLoading';
 
 export default function CashRegister() {
     // Data Hooks
-    const [response, setResponse] = useState<string>("No Response");
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const [subtotal, setSubtotal] = useState<number>(0);
+    const [tax, setTax] = useState<number>(0);
+    const [tip, setTip] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
+
+    const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
+    const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
 
     // Component Constants
     const discountButtons = [
         (<TextButton text='-5%' key={0} />),
         (<TextButton text='-10%' key={1} />),
-    ]
+    ];
 
     const tipButtons = [
         (<TextButton text='5%' key={0} />),
         (<TextButton text='10%' key={1} />),
         (<TextButton text='15%' key={2} />),
-    ]
-
-    const defaultTopRightButtons = [
-        (<TextButton
-            text='Discounts'
-            onPress={() => {
-                setMiddleRightChildren(discountButtons);
-                setBottomRightChildren(null);
-            }}
-            key={0}
-        />),
-        (<TextButton
-            text='Tips'
-            onPress={() => {
-                setMiddleRightChildren(tipButtons);
-                setBottomRightChildren(null);
-            }}
-            key={0}
-        />),
-    ]
-
-    // Content Hooks
-    const [topRightChildren, setTopRightChildren] = useState<React.JSX.Element[] | null>(defaultTopRightButtons);
-    const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
-    const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
-
+    ];
     // Closure Functions
     useEffect(() => {
-        (async function () {
-            fetch("/api/menu").then(async (result) => {
-                const allMenuItems = await result.json();
-                if (allMenuItems && (typeof allMenuItems == 'object') && allMenuItems.constructor == Array) {
-                    setMenuItems(allMenuItems);
-                    const menuItemButtons = allMenuItems.map((menuItem: MenuItem, index) => {
-                        return <TextButton text={menuItem.name} onPress={() => { }} key={index} />
-                    });
-
-                    setTopRightChildren([
-                        (<TextButton text='Menu Items' onPress={() => setMiddleRightChildren(menuItemButtons)} key={2} />),
-                        ...defaultTopRightButtons,
-                    ])
-                }
-                else {
-                    alert("An issue occured while attempting to fetch menu items from server.");
-                }
-
-                setLoading(false);
-            });
-        })();
+        setLoading(false);
     }, []);
 
     if (loading) return (<PageLoading />);
@@ -81,36 +42,99 @@ export default function CashRegister() {
             <nav className='h-10 bg-slate-300'></nav>
             <div className='grid grid-cols-3 grid-rows-3 flex-1 w-full'>
                 {/* Left Side */}
-                <div className='row-span-3 border-black border-r-2 flex flex-col'>
-                    <div className='border-black border-y-2'>Order #</div>
+                <div className='row-span-3 border-gray-500 border-r-2 flex flex-col'>
+                    <div className='border-gray-500 border-y-2'>Order #</div>
                     <div className='flex-1'></div>
-                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3 border-black border-t-2'>
+                    <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3 border-gray-500 border-t-2'>
                         <div></div>
-                        <ul>
-                            <li>Subtotal:</li>
-                            <li>Tax:</li>
-                            <li>Tip:</li>
-                            <li>Total:</li>
-                        </ul>
+                        <div className='flex flex-row justify-between px-10'>
+                            <ul>
+                                <li>Subtotal:</li>
+                                <li>Tax:</li>
+                                <li>Tip:</li>
+                                <li>Total:</li>
+                            </ul>
+                            <ul>
+                                <li>{`\$${subtotal.toFixed(2)}`}</li>
+                                <li>{`\$${tax.toFixed(2)}`}</li>
+                                <li>{`\$${tip.toFixed(2)}`}</li>
+                                <li>{`\$${total.toFixed(2)}`}</li>
+                            </ul>
+                        </div>
                         <TextButton text='Cancel Order' />
                         <TextButton text='Pay' color='#3de8e0' />
                     </div>
                 </div>
                 {/* Right Side */}
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-black border-y-2'>Category</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>Category</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
-                        {topRightChildren}
+                        <TextButton
+                            text='Sweet Crepes'
+                            onPress={() => {
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"sweetCrepeButton"}
+                        />
+                        <TextButton
+                            text='Savory Crepes'
+                            onPress={() => {
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"savoryCrepeButton"}
+                        />
+                        <TextButton
+                            text='Waffles'
+                            onPress={() => {
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"waffleButton"}
+                        />
+                        <TextButton
+                            text='Soups'
+                            onPress={() => {
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"soupsButton"}
+                        />
+                        <TextButton
+                            text='Drinks'
+                            onPress={() => {
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"drinkButton"}
+                        />
+                        <TextButton
+                            text='Discounts'
+                            onPress={() => {
+                                setMiddleRightChildren(discountButtons);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"discountButton"}
+                        />
+                        <TextButton
+                            text='Tips'
+                            onPress={() => {
+                                setMiddleRightChildren(tipButtons);
+                                setBottomRightChildren(null);
+                            }}
+                            key={"tipButton"}
+                        />
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-black border-y-2'>Options</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>Options</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {middleRightChildren}
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-black border-y-2'>Add-ons</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>Add-ons</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {bottomRightChildren}
                     </div>
