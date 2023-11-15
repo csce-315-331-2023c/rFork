@@ -1,5 +1,5 @@
 import db from './index';
-import { getAllMenuItems } from './menu';
+import { getAllMenuItems, getMenuItemByTag } from './menu';
 
 afterAll(async () => {
     await db.end();
@@ -19,5 +19,18 @@ describe('getAllMenuItems', () => {
         expect(result[0].ingredients[0]).toHaveProperty('quantity');
 
         console.log(result[0]);
+    });
+});
+
+describe('getMenuItemByTag', () => {
+    it('should return a menu item by id', async () => {
+        const result = await getMenuItemByTag("");
+
+        expect(result).toHaveProperty('id');
+        expect(result).toHaveProperty('name');
+        expect(result).toHaveProperty('price');
+        expect(result).toHaveProperty('ingredients');
+
+        console.log(result);
     });
 });
