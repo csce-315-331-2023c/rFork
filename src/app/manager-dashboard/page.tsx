@@ -1,21 +1,23 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
-import KioskButton from '../../components/KioskButton'
+import ImageButton from '../../components/ImageButton'
 import { MenuItem } from '../../types';
+import PageLoading from '../../components/PageLoading';
 
 export default function ManagerDashboard() {
-    
     const [inventoryItems, setInventoryItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
-        const unsubscribe = () => {
-            fetch("http://localhost:3000/api/inventory").then(async (result) => {
-                const allMenuItems = await result.json();
-                setInventoryItems(allMenuItems);
-            });
-        }
-        return unsubscribe;
+        fetch("/api/inventory").then(async (result) => {
+            const allMenuItems = await result.json();
+            setInventoryItems(allMenuItems);
+            setLoading(false);
+        });
     }, []);
+
+    if (loading) return <PageLoading />;
 
     return (
         <div className='flex-col'>
