@@ -1,11 +1,16 @@
-import { Order } from "../types";
+import { Ingredient, Order } from "../types";
 import db from "./index";
 
 export async function submitOrder(order: Order): Promise<void> {
     // restaurant_order - date, total
-    const orderQuery = 'INSERT INTO restaurant_order (create_time, subtotal_cents) VALUES ($1, $2) RETURNING id';
+    const orderQuery = 'INSERT INTO orders (create_time, subtotal_cents, employee_id) VALUES ($1, $2, $3) RETURNING id';
 
-    const orderResult = await db.query(orderQuery, [order.timestamp, order.total * 100]);
+    let employeeId: number | undefined;
+    if ('id' in order.submittedBy) {
+        employeeId = order.submittedBy.id;
+    }
+
+    const orderResult = await db.query(orderQuery, [order.timestamp, order.total * 100, employeeId]);
     if (orderResult.rowCount !== 1) {
         throw new Error('Error inserting order');
     }
@@ -19,7 +24,7 @@ export async function submitOrder(order: Order): Promise<void> {
     // menu_item_orders - order id, menu item id
     const menuItemOrders = order.items.map(item => [order.id, item.id]);
 
-    const menuItemOrderQuery = `INSERT INTO menu_item_orders(order_id, menu_item_id) VALUES ${
+    const menuItemOrderQuery = `INSERT INTO order_item(order_id, menu_item_id) VALUES ${
         menuItemOrders.map((_, i) => `($${2 * i + 1}, $${2 * i + 2})`).join(', ')
     } RETURNING id`;
 
@@ -34,11 +39,28 @@ export async function submitOrder(order: Order): Promise<void> {
 
     // menu_item_order_ingredients - menu item order id, inventory item id, quantity
 
-    const ingredientOrders = order.items.flatMap(item => item.ingredients.map(ing => [item.id, ing.itemId, ing.quantity]));
+    type ingredientsAndExtra = Ingredient & { isValidExtra: boolean };
+    let ingredientsAndExtras: ingredientsAndExtra[] = [];
+    for (let item of order.items) {
+        for (let ingredient of item.ingredients) {
+            ingredientsAndExtras.push({
+                ...ingredient,
+                isValidExtra: false
+            });
+        }
+
+        for (let extra of item.validExtras) {
+            ingredientsAndExtras.push({
+                ...extra,
+                isValidExtra: true
+            });
+        }
+    }
+    const ingredientOrders = order.items.flatMap(item => ingredientsAndExtras.map(ing => [item.id, ing.itemId, ing.quantity, ing.isValidExtra]));
 
     const menuItemOrderIngredientQuery = `
-        INSERT INTO menu_item_order_ingredients (menu_item_order_id, item_id, qty_used) VALUES ${
-            ingredientOrders.map((_, i) => `($${3 * i + 1}, $${3 * i + 2}, $${3 * i + 3})`).join(', ')
+        INSERT INTO order_item_ingredient (order_id, inventory_item_id, quantity, valid_extra) VALUES ${
+            ingredientOrders.map((_, i) => `($${4 * i + 1}, $${4 * i + 2}, $${4 * i + 3}, $${4 * i + 4})`).join(', ')
         } RETURNING id`;
 
     const menuItemOrderIngredientResult = await db.query(menuItemOrderIngredientQuery, ingredientOrders.flat());

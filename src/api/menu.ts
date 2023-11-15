@@ -16,21 +16,27 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
     }
 
     // get all ingredients, populate name from map, create list
-    const ingredientQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_id, menu_item_id, qty_used) FROM menu_item_ingredient_defaults) t';
+    const ingredientQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_id, menu_item_id, qty_used, valid_extra) FROM menu_item_ingredients) t';
 
     const ingredientResult = await db.query(ingredientQuery);
     
-    type ingredient = Ingredient & { menuItemId: number };
+    type ingredient = Ingredient & { menuItemId: number, isValidExtra: boolean };
 
     let ingredients: ingredient[] = [];
     for (let row of ingredientResult.rows) {
-        const { f2: inventory_id, f3: menu_item_id, f4: quantity } = row.row_to_json.row;
+        const { 
+            f2: inventory_id, 
+            f3: menu_item_id, 
+            f4: quantity,
+            f5: valid_extra
+        } = row.row_to_json.row;
 
         ingredients.push({
             itemId: inventory_id,
             itemName: inventoryMap.get(inventory_id) || 'N/A',
             quantity: quantity,
-            menuItemId: menu_item_id
+            menuItemId: menu_item_id,
+            isValidExtra: valid_extra
         });
     }
 
@@ -47,7 +53,8 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
             id: id,
             name: item_name,
             price: price / 100, // convert cents to dollars
-            ingredients: []
+            ingredients: [],
+            validExtras: []
         });
     }
 
