@@ -10,7 +10,7 @@ import Popup from '../../components/Popup';
 export default function Kiosk() {
     // User flow hooks
     const [loading, setLoading] = useState<boolean>(true);
-    const [showCustomizationPopup, setShowCustomizationPopup] = useState<boolean>(true);
+    const [showCustomizationPopup, setShowCustomizationPopup] = useState<boolean>(false);
 
     const testMenuItem: MenuItem = {
         name: "[MENU ITEM]",
@@ -37,6 +37,15 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
+        fetch("/api/menu").then(async (response) => {
+            const data = await response.json();
+            if (typeof data == "object") {
+                setSweetCrepes(data);
+            }
+        }).catch((err) => {
+            alert(`An issue occured fetching from the database: ${err}`);
+        });
+
         setLoading(false);
     }, []);
 
@@ -151,7 +160,7 @@ export default function Kiosk() {
                     <div className='flex-1 grid grid-cols-3 grid-rows-6 gap-2 p-2'>
                         {selectedItem && selectedItem.ingredients.map((ingredient) => {
                             return (
-                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemId}`} />
+                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemName}`} />
                             )
                         })}
                     </div>
@@ -174,16 +183,51 @@ export default function Kiosk() {
             <Popup
                 show={showCheckoutPopup}
             >
-                <div className='h-full w-full bg-white'>
+                <div className='flex flex-col h-full w-full bg-white'>
+                    <div className='flex flex-col flex-1'>
+                        {
+                            cartItems.length > 0 &&
+                            (<table className=''>
+                                <tr>
+                                    <td>Item Name</td>
+                                    <td>Item Price</td>
+                                    <td></td>
+                                </tr>
+                                {cartItems.map((item) => {
+                                    return (
+                                        <tr key={item.name} className=''>
+                                            <td>{item.name}</td>
+                                            <td>{item.price}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </table>) ||
+                            <p>There are no items to display</p>
+                        }
+                    </div>
                     <footer className='h-[10%] flex flex-row p-2 gap-10'>
                         <TextButton text='Back' onPress={() => setShowCheckoutPopup(false)} />
                         <TextButton
                             text='Submit'
-                            onPress={() => {
-                                if (selectedItem) {
-                                    addToOrder(selectedItem);
+                            onPress={async () => {
+                                const order: Order = {
+                                    timestamp: new Date(),
+                                    items: cartItems,
+                                    total: 100,
+                                    submittedBy: {
+                                        id: 1,
+                                        firstName: "KIOSK",
+                                        lastName: "KIOSK",
+                                        role: "Employee",
+                                    }
                                 }
-                                setShowCustomizationPopup(false);
+                                await fetch("/api/orders", { method: "POST", body: JSON.stringify(order) })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        console.log(data);
+                                    })
+                                    .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+                                setShowCheckoutPopup(false);
                             }}
                             color='#FF9638'
                             hoverColor='#FFC38E'
