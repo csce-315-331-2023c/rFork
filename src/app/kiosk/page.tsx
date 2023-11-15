@@ -12,20 +12,21 @@ export default function Kiosk() {
     // User flow hooks
     const [loading, setLoading] = useState<boolean>(true);
     const [showCustomizationPopup, setShowCustomizationPopup] = useState<boolean>(true);
-    
+
     // Lists of different tagged menu items
     const [sweetCrepes, setSweetCrepes] = useState<Array<MenuItem>>([]);
     const [savoryCrepes, setSavoryCrepes] = useState<Array<MenuItem>>([]);
     const [waffles, setWaffles] = useState<Array<MenuItem>>([]);
     const [soups, setSoups] = useState<Array<MenuItem>>([]);
     const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
-    
-    const testMenuItem = {
+
+    const testMenuItem: MenuItem = {
         name: "[MENU ITEM]",
         price: 12.50,
-        ingredients: [{ inventoryId: 0, name: "[MENU ITEM INGREDIENT]", quantity: 5 }],
+        ingredients: [{ itemId: 0, itemName: "[MENU ITEM INGREDIENT]", quantity: 5 }],
+        validExtras: [],
     }
-    
+
     // Data for adding item to cart
     const [selectedItem, setSelectedItem] = useState<MenuItem>(testMenuItem);
 
@@ -69,7 +70,7 @@ export default function Kiosk() {
         return (
             <button
                 onClick={onPress}
-                className={`border-gray-700 px-4 h-20 flex-1 text-xl ${extraClasses} ${borderClasses}`}
+                className={`border-gray-700 px-4 h-full flex-1 text-xl ${extraClasses} ${borderClasses}`}
                 onMouseEnter={() => setExtraClasses("underline bg-[#3332]")}
                 onMouseLeave={() => setExtraClasses("")}
             >
@@ -79,12 +80,38 @@ export default function Kiosk() {
     }
 
     function addToOrder(menuItem: MenuItem) {
-        const updatedCartItems = cartItems.push(selectedItem);
+        const updatedCartItems = cartItems;
+        updatedCartItems.push(selectedItem);
+        setCartItems(updatedCartItems);
         console.log(cartItems);
     }
 
     return (
         <div className='flex flex-col h-screen'>
+            {/* Navbar */}
+            <header className='h-[10%] w-full flex flex-row items-center justify-start px-6 py-2 bg-[#d6e3ff]'>
+                <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' />
+                <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Sweet Crepes' />
+                <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Savory Crepes' />
+                <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Waffles' />
+                <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Soups' />
+                <KioskNavButton onPress={() => { }} borderDirection={Direction.NONE} text='Drinks' />
+            </header>
+            {/* Menu Content */}
+            <div className='px-10 py-2 flex-1 h-4 overflow-y-auto'>
+                <h1 className='text-4xl underline'>Items</h1>
+                <div className='grid grid-cols-4 gap-4'>
+
+                </div>
+            </div>
+            {/* Bottom Buttons */}
+            <footer className='h-[10%]'>
+                <div className='flex flex-row items-center h-full'>
+                    <TextButton customClassName='flex-1 py-2 h-full' text='Cancel Order' />
+                    <TextButton customClassName='flex-1 py-2 h-full' text='Checkout' />
+                </div>
+            </footer>
+            {/* Popups */}
             <Popup
                 show={showCustomizationPopup}
             >
@@ -103,7 +130,7 @@ export default function Kiosk() {
                     <div className='flex-1 grid grid-cols-3 grid-rows-6 gap-2 p-2'>
                         {selectedItem.ingredients.map((ingredient) => {
                             return (
-                                <TextButton key={ingredient.inventoryId} text={`Remove ${ingredient.name}`} />
+                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemId}`} />
                             )
                         })}
                     </div>
@@ -121,31 +148,6 @@ export default function Kiosk() {
                     </footer>
                 </div>
             </Popup>
-            {/* Navbar */}
-            <header className='h-[10%] w-full'>
-                <nav className='flex flex-row items-center justify-start p-6 h-full w-full bg-[#d6e3ff]'>
-                    <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' />
-                    <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Sweet Crepes' />
-                    <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Savory Crepes' />
-                    <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Waffles' />
-                    <KioskNavButton onPress={() => { }} borderDirection={Direction.RIGHT} text='Soups' />
-                    <KioskNavButton onPress={() => { }} borderDirection={Direction.NONE} text='Drinks' />
-                </nav>
-            </header>
-            {/* Menu Content */}
-            <div className='px-10 py-2 flex-1 h-4 overflow-y-auto'>
-                <h1 className='text-4xl underline'>Items</h1>
-                <div className='grid grid-cols-4 gap-4'>
-
-                </div>
-            </div>
-            {/* Bottom Buttons */}
-            <footer className='h-[10%]'>
-                <div className='flex flex-row items-center h-full'>
-                    <TextButton customClassName='flex-1 py-2 h-full' text='Cancel Order' />
-                    <TextButton customClassName='flex-1 py-2 h-full' text='Checkout' />
-                </div>
-            </footer>
         </div>
     )
 }
