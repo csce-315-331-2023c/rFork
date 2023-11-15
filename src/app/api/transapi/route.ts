@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import {translate} from "../../../api/external/translate"
 
-export async function POST(req: NextRequest) {
-    const data: any = await req.json()
-    if(data.key && data.msg){
-        return NextResponse.json({ msg: await translate(data.msg, data.key) })
-    }
-    else{
-        return NextResponse.json({ message: "You done goofed" }, { status: 500 })
-    }
+export async function GET(request: NextRequest) {
+    const language = request.nextUrl.searchParams.get('language') || '';
+    const text = request.nextUrl.searchParams.get('text') || '';
+    const translatedText = await translate(text, language);
+    return NextResponse.json({language, text, translatedText })
 }
