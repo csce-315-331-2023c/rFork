@@ -2,8 +2,7 @@ import React from 'react'
 import 'dotenv/config';
 
 const key = process.env.TRANSLATE_API_KEY;
-const currentLanguage: string = "en";
-
+let currentLanguage: string = "en";
 
 function translate(text: string, newLanguage: string){
     const Url = `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${currentLanguage}&target=${newLanguage}&q=${encodeURIComponent(text)}`;
@@ -28,6 +27,8 @@ async function translatePage(newLanguage: string){
         const translated = await translate(e.innerText, newLanguage);
         const translatedText = await translated.text();
         e.textContent = translatedText;
-        
+
     }
+
+    currentLanguage = newLanguage;
 }

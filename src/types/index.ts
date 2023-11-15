@@ -23,3 +23,37 @@ export type Order = {
     items: MenuItem[];
     total: number;
 };
+
+export const enum Languages{
+    english = "en",
+    spanish = "es",
+    french = "fr",
+    german = "de",
+    italian = "it",
+    japanese = "ja",
+    korean = "ko",
+    chinese = "zh-CN",
+    russian = "ru",
+    portuguese = "pt",
+    arabic = "ar",
+    turkish = "tr",
+    polish = "pl",
+    dutch = "nl",
+    romanian = "ro",
+    hungarian = "hu",
+    czech = "cs",
+    indonesian = "id",
+    swedish = "sv",
+    danish = "da",
+    hebrew = "he",
+    norwegian = "no",
+    slovak = "sk",
+    bulgarian = "bg",
+    finnish = "fi",
+    vietnamese = "vi",
+    thai = "th",
+    greek = "el",
+    ukrainian = "uk",
+    catalan = "ca",
+    chineseTaiwan = "zh-TW",
+}
