@@ -37,8 +37,9 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
-        fetch("/api/menu").then(async (response) => {
+        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepe")}`).then(async (response) => {
             const data = await response.json();
+            console.log(data);
             if (typeof data == "object") {
                 setSweetCrepes(data);
             }

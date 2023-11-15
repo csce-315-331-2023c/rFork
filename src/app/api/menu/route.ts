@@ -2,9 +2,7 @@ import { getAllMenuItems, getMenuItemByTag } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
-    const { query } = request as unknown as { query: { tag?: string } };
-    const { tag } = query;
-
+    const tag = request.nextUrl.searchParams.get('tag');
     if (tag) {
         return getMenuItemByTag(tag as string)
             .then((result) => {

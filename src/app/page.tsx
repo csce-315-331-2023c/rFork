@@ -6,6 +6,7 @@ import DropDownMenu from "../components/DropdownMenu"
 import { Languages } from '../types'
 import { Dropdown } from 'react-bootstrap'
 import { translatePage } from '../api/external/translate'
+import 'bootstrap/dist/css/bootstrap.css'
 
 export default async function Initial() {
     const optionsArray = Object.keys(Languages);
