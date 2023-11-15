@@ -17,6 +17,7 @@ export default function ManagerDashboard() {
         (<TextButton text='View Transactions' key={2} />),
     ]
 
+
     useEffect(() => {
         fetch("/api/inventory").then(async (result) => {
             const allMenuItems = await result.json();
@@ -30,16 +31,15 @@ export default function ManagerDashboard() {
         <div className='flex flex-col h-screen'>
             {/* Header */}
             <nav className='h-10 bg-slate-300'></nav>
-            <div className='grid grid-cols-2 grid-rows-3 flex-1 w-full'>
+            <div className='grid grid-cols-2 grid-rows-1 flex-1 w-full'>
                 {/* Left Side */}
-                <div className='row-span-3 border-black border-r-2 flex flex-col'>
-                    <div className='border-black border-y-2 text-center'>Money/Management</div>
+                <div className='row-span-2 border-black border-r-2 flex flex-col'>
+                <h2 className='text-center text-2xl border-black border-y-2'>Money/Management</h2>
                     <div className='flex-1'></div>
-                    <div className='border-black border-y-2 text-center'>Employees</div>
+                    <h2 className='text-center text-2xl border-black border-y-2'>Employees</h2>
                     <div className='grid grid-cols-2 grid-rows-2 p-2 gap-2 h-1/3 border-black border-t-1'>
                  
-                       
-                    </div>
+                </div>
                     
                 </div>
                 {/* Right Side */}
