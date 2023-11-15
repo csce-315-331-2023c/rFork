@@ -72,13 +72,14 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
 }
 
 export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
-    const query = 'SELECT mi.id, mi.name, mi.price_cents FROM menu_item mi INNER JOIN menu_item_tag mit ON mi.id = mit.menu_item_id WHERE mit.tag_name = $1';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (mi.id, mi.name, mi.price_cents) FROM menu_item mi INNER JOIN menu_item_tag mit ON mi.id = mit.menu_item_id WHERE mit.tag_name = $1) t';
 
     const result = await db.query(query, [tag]);
+    console.log("here 1");
 
     let menuItems: MenuItem[] = [];
     for (let row of result.rows) {
-        const { f1: id, f2: name, f3: price } = row;
+        const { f1: id, f2: name, f3: price } = row.row_to_json.row;
 
         menuItems.push({
             id: id,
@@ -88,23 +89,27 @@ export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
             validExtras: []
         });
     }
+    console.log("here 2");
 
     // get all inventory items, create id->name map
     const inventoryQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_name) FROM inventory_item) t';
 
     const inventoryResult = await db.query(inventoryQuery);
+    console.log("here 3");
 
     let inventoryMap: Map<number, string> = new Map();
     for (let row of inventoryResult.rows) {
         const { f1: id, f2: item_name } = row.row_to_json.row;
         inventoryMap.set(id, item_name);
     }
+    console.log("here 4");
 
     let menuItemIds = menuItems.map(item => item.id);
 
-    const ingredientQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_id, menu_item_id, qty_used, valid_extra) FROM menu_item_ingredients) t WHERE menu_item_id = ANY($1)';
+    const ingredientQuery = 'SELECT row_to_json(t) FROM (SELECT (id, item_id, menu_item_id, qty_used, valid_extra) FROM menu_item_ingredients WHERE menu_item_id = ANY($1)) t';
 
     const ingredientResult = await db.query(ingredientQuery, [menuItemIds]);
+    console.log("here 5");
 
     type ingredient = Ingredient & { menuItemId: number, isValidExtra: boolean };
 
@@ -125,6 +130,7 @@ export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
             isValidExtra: valid_extra
         });
     }
+    console.log("here 6");
 
     // iterate ingredients, add to menu item
     for (let ing of ingredients) {
