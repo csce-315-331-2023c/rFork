@@ -38,12 +38,22 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
-        fetch(`/api/menu`).then(async (response) => {
+        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepes")}`).then(async (response) => {
             const data = await response.json();
             console.log(data);
             if (typeof data == "object") {
                 setSweetCrepes(data);
                 setSelectedItemList(data);
+            }
+        }).catch((err) => {
+            alert(`An issue occured fetching from the database: ${err}`);
+        });
+
+        fetch(`/api/menu?tag=${encodeURIComponent("Savory Crepes")}`).then(async (response) => {
+            const data = await response.json();
+            console.log(data);
+            if (typeof data == "object") {
+                setSavoryCrepes(data);
             }
         }).catch((err) => {
             alert(`An issue occured fetching from the database: ${err}`);
