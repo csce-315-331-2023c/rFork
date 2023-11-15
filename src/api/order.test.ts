@@ -8,7 +8,7 @@ afterAll(async () => {
 describe('submitOrder', () => {
     it('should submit an order', async () => {
         const order = {
-            date: new Date(),
+            timestamp: new Date(),
             total: 100,
             items: [
                 {
@@ -17,18 +17,25 @@ describe('submitOrder', () => {
                     price: 10,
                     ingredients: [
                         {
-                            inventoryId: 1,
-                            name: 'Bun',
+                            itemId: 1,
+                            itemName: 'Bun',
                             quantity: 1
                         },
                         {
-                            inventoryId: 2,
-                            name: 'Beef Patty',
+                            itemId: 2,
+                            itemName: 'Beef Patty',
                             quantity: 1
                         },
                         {
-                            inventoryId: 3,
-                            name: 'Cheese',
+                            itemId: 3,
+                            itemName: 'Cheese',
+                            quantity: 1
+                        }
+                    ],
+                    validExtras: [
+                        {
+                            itemId: 3,
+                            itemName: 'Cheese',
                             quantity: 1
                         }
                     ]
@@ -39,13 +46,20 @@ describe('submitOrder', () => {
                     price: 5,
                     ingredients: [
                         {
-                            inventoryId: 4,
-                            name: 'Potato',
+                            itemId: 4,
+                            itemName: 'Potato',
                             quantity: 1
                         }
-                    ]
+                    ],
+                    validExtras: []
                 }
-            ]
+            ],
+            submittedBy: {
+                id: 1,
+                firstName: 'John',
+                lastName: 'Doe',
+                role: 'Employee'
+            }
         };
 
         await submitOrder(order);
