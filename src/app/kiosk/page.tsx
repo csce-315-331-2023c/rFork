@@ -193,9 +193,9 @@ export default function Kiosk() {
                                     <td>Item Price</td>
                                     <td></td>
                                 </tr>
-                                {cartItems.map((item) => {
+                                {cartItems.map((item, index) => {
                                     return (
-                                        <tr key={item.name} className=''>
+                                        <tr key={`item.name ${index}`} className=''>
                                             <td>{item.name}</td>
                                             <td>{item.price}</td>
                                         </tr>
