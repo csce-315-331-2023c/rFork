@@ -28,7 +28,7 @@ export default function Kiosk() {
 
 
     // Temporary/Volatile data for user selecting experience
-    const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>(sweetCrepes);
+    const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
 
     // Final order info data
@@ -37,11 +37,12 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
-        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepe")}`).then(async (response) => {
+        fetch(`/api/menu`).then(async (response) => {
             const data = await response.json();
             console.log(data);
             if (typeof data == "object") {
                 setSweetCrepes(data);
+                setSelectedItemList(data);
             }
         }).catch((err) => {
             alert(`An issue occured fetching from the database: ${err}`);
@@ -95,6 +96,12 @@ export default function Kiosk() {
         const updatedCartItems = cartItems;
         updatedCartItems.push(menuItem);
         setCartItems(updatedCartItems);
+    }
+
+    function removeFromOrder(index: number) {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.splice(index, 1);
+        setCartItems(updatedCartItems);
         console.log(cartItems);
     }
 
@@ -124,6 +131,8 @@ export default function Kiosk() {
                                     setSelectedItem(menuItem);
                                     setShowCustomizationPopup(true);
                                 }}
+                                price={menuItem.price}
+                                color='#FFF'
                             />
                         )
                     })}
@@ -136,7 +145,7 @@ export default function Kiosk() {
                     <TextButton customClassName='flex-1 py-2 h-full text-2xl' text='Cancel Order' />
                     <TextButton
                         customClassName='flex-1 py-2 h-full text-2xl'
-                        text='Checkout'
+                        text={`Checkout/Edit Order (${cartItems.length})`}
                         onPress={() => setShowCheckoutPopup(true)}
                     />
                 </div>
@@ -188,20 +197,32 @@ export default function Kiosk() {
                     <div className='flex flex-col flex-1'>
                         {
                             cartItems.length > 0 &&
-                            (<table className=''>
-                                <tr>
-                                    <td>Item Name</td>
-                                    <td>Item Price</td>
-                                    <td></td>
-                                </tr>
-                                {cartItems.map((item, index) => {
-                                    return (
-                                        <tr key={`item.name ${index}`} className=''>
-                                            <td>{item.name}</td>
-                                            <td>{item.price}</td>
-                                        </tr>
-                                    );
-                                })}
+                            (<table className='text-lg'>
+                                <thead>
+                                    <tr className='border-black border-b-2'>
+                                        <td>Item Name</td>
+                                        <td>Item Price</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cartItems.map((item, index) => {
+                                        return (
+                                            <tr key={`${item.name} ${index}`} className='mb-4'>
+                                                <td>{item.name}</td>
+                                                <td>{`$${item.price}`}</td>
+                                                <TextButton
+                                                    text='X'
+                                                    onPress={() => {
+                                                        removeFromOrder(index);
+                                                    }}
+                                                    color='#AAA'
+                                                    hoverColor='#F88'
+                                                />
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
                             </table>) ||
                             <p>There are no items to display</p>
                         }
