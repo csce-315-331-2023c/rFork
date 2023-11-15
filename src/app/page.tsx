@@ -22,13 +22,7 @@ export default async function Initial() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    {optionsArray.map((option) => {
-                        return (
-                            <Dropdown.Item key={option} onClick={() => translatePage(option)}>
-                                {option}
-                            </Dropdown.Item>
-                        )
-                    })}
+                    <DropDownMenu options={Languages} />
                 </Dropdown.Menu>
             </Dropdown>
         </body>
