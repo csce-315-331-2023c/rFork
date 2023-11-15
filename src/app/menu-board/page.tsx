@@ -34,11 +34,11 @@ export default function MenuBoard() {
             {/* <header className='py-5'>
                 MENU BOARD
             </header> */}
-            <header className='flex flex-row justify-between border-2 border-black'>
-                <div className='border border-black rounded-xl m-4 p-2 align-center justify-evenly'>
+            <header className='flex flex-row border-2 border-black'>
+                <div className='flex flex-row justify-center border border-black rounded-xl m-4 p-2 align-center flex-1'>
                     <img className='rounded-xl' src="https://www.w3schools.com/html/pic_trulli.jpg" alt="Featured Item 1"></img>
                 </div>
-                <div className='border border-black rounded-xl m-4 p-2 align-center justify-evenly'>
+                <div className='flex flex-row justify-center border border-black rounded-xl m-4 p-2 align-center flex-1'>
                     <img className='rounded-xl' src="https://www.w3schools.com/html/img_chania.jpg" alt="Featured Item 2"></img>
                 </div>
             </header>
