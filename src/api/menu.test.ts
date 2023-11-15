@@ -14,8 +14,8 @@ describe('getAllMenuItems', () => {
         expect(result[0]).toHaveProperty('name');
         expect(result[0]).toHaveProperty('price');
         expect(result[0]).toHaveProperty('ingredients');
-        expect(result[0].ingredients[0]).toHaveProperty('inventoryId');
-        expect(result[0].ingredients[0]).toHaveProperty('name');
+        expect(result[0].ingredients[0]).toHaveProperty('itemId');
+        expect(result[0].ingredients[0]).toHaveProperty('itemName');
         expect(result[0].ingredients[0]).toHaveProperty('quantity');
 
         console.log(result[0]);
