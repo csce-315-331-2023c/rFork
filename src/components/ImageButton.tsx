@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 
 
-export default function ImageButton({ text, price, imageURI, onPress, color, hoverColor }: {
+export default function ImageButton({ text, price, imageURI, onPress, color, hoverColor, altText }: {
     text: string,
+    altText?: string,
     price?: number,
     imageURI?: string,
     onPress?: () => void,
     color?: string
-    hoverColor?: string
+    hoverColor?: string,
 }) {
 
     const [hover, setHover] = useState<boolean>(false);
@@ -21,9 +22,13 @@ export default function ImageButton({ text, price, imageURI, onPress, color, hov
                 backgroundColor: hover ? (hoverColor ?? "#DDD") : (color ?? "#999"),
             }}
         >
-            <img alt={text} className='object-scale-down w-auto max-h-44' src={imageURI ?? 'https://static.vecteezy.com/system/resources/previews/025/065/282/original/crepe-with-ai-generated-free-png.png'} />
+            <img
+                alt={altText ?? text}
+                className='object-scale-down w-auto max-h-44'
+                src={imageURI ?? 'https://static.vecteezy.com/system/resources/previews/025/065/282/original/crepe-with-ai-generated-free-png.png'}
+            />
             <p>{`${text}${price ? ` - $${(price).toFixed(2)}` : ''}`}</p>
-            <p className=''>{}</p>
+            <p className=''>{ }</p>
         </button>
     )
 }

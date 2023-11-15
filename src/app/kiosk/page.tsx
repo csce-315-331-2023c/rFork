@@ -6,6 +6,7 @@ import { MenuItem, Order } from '../../types';
 import PageLoading from '../../components/PageLoading';
 import TextButton from '../../components/TextButton';
 import Popup from '../../components/Popup';
+import { redirect } from 'next/navigation';
 
 export default function Kiosk() {
     // User flow hooks
@@ -94,7 +95,7 @@ export default function Kiosk() {
 
     function addToOrder(menuItem: MenuItem) {
         const updatedCartItems = cartItems;
-        updatedCartItems.push(menuItem);
+        updatedCartItems.push({ ...menuItem });
         setCartItems(updatedCartItems);
     }
 
@@ -102,7 +103,6 @@ export default function Kiosk() {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
-        console.log(cartItems);
     }
 
     return (
@@ -142,11 +142,17 @@ export default function Kiosk() {
             {/* Bottom Buttons */}
             <footer className='h-[10%]'>
                 <div className='flex flex-row items-center h-full'>
-                    <TextButton customClassName='flex-1 py-2 h-full text-2xl' text='Cancel Order' />
+                    <TextButton
+                        customClassName='flex-1 py-2 h-full text-2xl'
+                        text='Cancel Order'
+                        onPress={() => setCartItems([])}
+                    />
                     <TextButton
                         customClassName='flex-1 py-2 h-full text-2xl'
                         text={`Checkout/Edit Order (${cartItems.length})`}
                         onPress={() => setShowCheckoutPopup(true)}
+                        color='#FF9638'
+                        hoverColor='#FFC38E'
                     />
                 </div>
             </footer>
@@ -250,6 +256,7 @@ export default function Kiosk() {
                                     })
                                     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                 setShowCheckoutPopup(false);
+                                setCartItems([]);
                             }}
                             color='#FF9638'
                             hoverColor='#FFC38E'
