@@ -215,8 +215,8 @@ export default function Kiosk() {
                                     {cartItems.map((item, index) => {
                                         return (
                                             <tr key={`${item.name} ${index}`} className='mb-4'>
-                                                <td>{item.name}</td>
-                                                <td>{`$${item.price}`}</td>
+                                                <td key={`${item.name} ${index} 0`}>{item.name}</td>
+                                                <td key={`${item.name} ${index} 1`}>{`$${item.price}`}</td>
                                                 <TextButton
                                                     text='X'
                                                     onPress={() => {

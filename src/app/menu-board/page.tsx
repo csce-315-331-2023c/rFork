@@ -31,9 +31,6 @@ export default function MenuBoard() {
         // Creating the template for Menu Board based on the sketch in miro
         <div>
             <a href="/">[Back button]</a>
-            {/* <header className='py-5'>
-                MENU BOARD
-            </header> */}
             <header className='flex flex-row border-2 border-black'>
                 <div className='flex flex-row justify-center border border-black rounded-xl m-4 p-2 align-center flex-1'>
                     <img className='rounded-xl' src="https://www.w3schools.com/html/pic_trulli.jpg" alt="Featured Item 1"></img>
@@ -54,13 +51,6 @@ export default function MenuBoard() {
 
             <div>
                 Here are the first 8 items:
-                {/* <div>{menuItems.slice(0, 8).map((menuItem, index) => (
-                    <ImageButton
-                        text={menuItem.name}
-                        price={menuItem.price}
-                        key={index}
-                    />
-                ))}</div> */}
             </div>
         </div>
     )
