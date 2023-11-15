@@ -56,4 +56,4 @@ export const enum Languages{
     ukrainian = "uk",
     catalan = "ca",
     chineseTaiwan = "zh-TW",
-}
+};

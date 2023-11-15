@@ -9,7 +9,7 @@ function translate(text: string, newLanguage: string){
     return fetch(Url);
 }
 
-async function translatePage(newLanguage: string){
+export async function translatePage(newLanguage: string){
     const elements = document.getElementsByTagName("*");
     const elementTranslate: HTMLElement[] = [];
 
