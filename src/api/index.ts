@@ -18,5 +18,5 @@ export default client;
 
 // export everything so that it can be imported from a single file
 export { getAllInventoryItems } from './inventory';
-export { getAllMenuItems } from './menu';
+export { getAllMenuItems, getMenuItemByTag } from './menu';
 export { submitOrder } from './order';
