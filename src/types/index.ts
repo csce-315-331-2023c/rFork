@@ -74,3 +74,27 @@ export const Languages = {
     catalan : "ca",
     chineseTaiwan : "zh-TW",
 };
+
+export type WeatherCondition = {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+};
+
+export type WeatherInformation = {
+    timestamp: Date;
+    sunrise: Date;
+    sunset: Date;
+    temperature: number;
+    feelsLike: number;
+    pressure: number;
+    humidity: number;
+    dewPoint: number;
+    uvi: number;
+    clouds: number;
+    visibility: number;
+    windSpeed: number;
+    windDirection: number;
+    weather: WeatherCondition[];
+};
