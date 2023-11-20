@@ -22,9 +22,9 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherInf
     const current = resp.data.current;
 
     const weather: WeatherInformation = {
-        timestamp: new Date(current.dt),
-        sunrise: new Date(current.sunrise),
-        sunset: new Date(current.sunset),
+        timestamp: new Date(current.dt * 1000),
+        sunrise: new Date(current.sunrise * 1000),
+        sunset: new Date(current.sunset * 1000),
         temperature: current.temp,
         feelsLike: current.feels_like,
         pressure: current.pressure,
