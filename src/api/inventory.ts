@@ -25,3 +25,13 @@ export async function getAllInventoryItems(): Promise<InventoryItem[]> {
 
     return inventoryItems;
 }
+
+export async function addInventoryItem(newItemName: string, currentStock: number, reorderThreshold: number): Promise<void>{
+    const query = `
+        INSERT INTO inventory_item (item_name, stock, reorder_threshold)
+        VALUES ($1, $2, $3)
+        RETURNING id, item_name, stock, reorder_threshold
+    `;
+
+    const values = [newItemName, currentStock, reorderThreshold];
+}
