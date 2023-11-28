@@ -41,7 +41,7 @@ export default function InventoryItemView() {
                     datasets: [
                         {
                             label: 'Current Item Amounts',
-                            backgroundColor: "#BC0",
+                            backgroundColor: "#F90",
                             data: inventoryAmounts
                         },
                         {
