@@ -1,3 +1,4 @@
+import InventoryItemView from "../app/manager-dashboard/inventory-items/page";
 import { InventoryItem } from "../types";
 import db from "./index";
 
@@ -26,12 +27,18 @@ export async function getAllInventoryItems(): Promise<InventoryItem[]> {
     return inventoryItems;
 }
 
-export async function addInventoryItem(newItemName: string, currentStock: number, reorderThreshold: number): Promise<void>{
-    const query = `
-        INSERT INTO inventory_item (item_name, stock, reorder_threshold)
-        VALUES ($1, $2, $3)
-        RETURNING id, item_name, stock, reorder_threshold
-    `;
+export async function addInventoryItem(inventoryItem: InventoryItem): Promise<void> {
+    // restaurant_order - date, total
 
-    const values = [newItemName, currentStock, reorderThreshold];
+    const inventoryItemQuery = 'INSERT INTO inventory_item (id, item_name, stock, reorder_threshold) VALUES ($1, $2, $3, $4) RETURNING id';
+
+
+    const inventoryItemResult = await db.query(inventoryItemQuery, [inventoryItem.id, inventoryItem.name, inventoryItem.currentStock , inventoryItem.reorderThreshold]);
+    
+    if (inventoryItemResult.rowCount !== 1) {
+        throw new Error('Error inserting order');
+    }
+
+    inventoryItem.id = inventoryItemResult.rows[0].id;
+
 }

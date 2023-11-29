@@ -1,5 +1,5 @@
 import { getAllInventoryItems } from '../../../api'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { addInventoryItem } from '../../../api/inventory'
 import { Result } from 'postcss'
 
@@ -11,11 +11,12 @@ export async function GET() {
     })
 }
 
-// Yes this post request doesn't make sense it ruins the point but im going to do it for testing purposes
-export async function POST(newItemName: string, currentStock: number, reorderThreshold: number){
-    return addInventoryItem(newItemName, currentStock, reorderThreshold).then((result) => {
-        return NextResponse.json(result, { status: 200 })
+export async function POST(req: NextRequest) {
+    const data = await req.json()
+
+    return await addInventoryItem(data).then(() => {
+        return NextResponse.json({ message: "sucesfully added item", data })
     }).catch((error) => {
-        return NextResponse.json({ message: "Something went wrong", error }, { status: 500 })
-    })
+        return NextResponse.json({ message: "frickalik", data, error }, { status: 500 })
+    });
 }

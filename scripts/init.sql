@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS menu_item_ingredients(
     id SERIAL PRIMARY KEY,
     item_id INT REFERENCES inventory_item(id),
     menu_item_id INT REFERENCES menu_item(id),
-    qty_used INT
+    qty_used INT,
     valid_extra BOOLEAN
 );
 

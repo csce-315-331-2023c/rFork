@@ -6,7 +6,7 @@ import TextButton from '../../components/TextButton';
 import { MenuItem } from '../../types';
 import PageLoading from '../../components/PageLoading';
 import Link from 'next/link';
-import TextButton from '../../components/TextButton';
+
 
 export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
