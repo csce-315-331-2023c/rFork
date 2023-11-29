@@ -24,12 +24,13 @@ describe('getAllMenuItems', () => {
 
 describe('getMenuItemByTag', () => {
     it('should return a menu item by id', async () => {
-        const result = await getMenuItemByTag("");
+        const result = await getMenuItemByTag("Sweet Crepes");
 
-        expect(result).toHaveProperty('id');
-        expect(result).toHaveProperty('name');
-        expect(result).toHaveProperty('price');
-        expect(result).toHaveProperty('ingredients');
+        expect(result).not.toHaveLength(0);
+        expect(result[0]).toHaveProperty('id');
+        expect(result[0]).toHaveProperty('name');
+        expect(result[0]).toHaveProperty('price');
+        expect(result[0]).toHaveProperty('ingredients');
 
         console.log(result);
     });

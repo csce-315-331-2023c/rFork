@@ -5,7 +5,8 @@ const key = process.env.TRANSLATE_API_KEY;
 let currentLanguage: string = "en";
 
 export async function translate(text: string, newLanguage: string){
-    const Url = `https://translation.googleapis.com/language/translate/v2?key=${key}\\&source=${currentLanguage}&target=${newLanguage}&q=${encodeURIComponent(text)}`;
+    console.log(key);
+    const Url = `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${currentLanguage}&target=${newLanguage}&q=${encodeURIComponent(text)}`;
     console.log(Url);
     return fetch(Url).then(async (result) => {
         return await result.json();

@@ -6,6 +6,7 @@ import { MenuItem, Order } from '../../types';
 import PageLoading from '../../components/PageLoading';
 import TextButton from '../../components/TextButton';
 import Popup from '../../components/Popup';
+import { redirect } from 'next/navigation';
 
 export default function Kiosk() {
     // User flow hooks
@@ -28,7 +29,7 @@ export default function Kiosk() {
 
 
     // Temporary/Volatile data for user selecting experience
-    const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>(sweetCrepes);
+    const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
 
     // Final order info data
@@ -37,11 +38,22 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
-        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepe")}`).then(async (response) => {
+        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepes")}`).then(async (response) => {
             const data = await response.json();
             console.log(data);
             if (typeof data == "object") {
                 setSweetCrepes(data);
+                setSelectedItemList(data);
+            }
+        }).catch((err) => {
+            alert(`An issue occured fetching from the database: ${err}`);
+        });
+
+        fetch(`/api/menu?tag=${encodeURIComponent("Savory Crepes")}`).then(async (response) => {
+            const data = await response.json();
+            console.log(data);
+            if (typeof data == "object") {
+                setSavoryCrepes(data);
             }
         }).catch((err) => {
             alert(`An issue occured fetching from the database: ${err}`);
@@ -93,9 +105,14 @@ export default function Kiosk() {
 
     function addToOrder(menuItem: MenuItem) {
         const updatedCartItems = cartItems;
-        updatedCartItems.push(menuItem);
+        updatedCartItems.push({ ...menuItem });
         setCartItems(updatedCartItems);
-        console.log(cartItems);
+    }
+
+    function removeFromOrder(index: number) {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.splice(index, 1);
+        setCartItems(updatedCartItems);
     }
 
     return (
@@ -124,6 +141,8 @@ export default function Kiosk() {
                                     setSelectedItem(menuItem);
                                     setShowCustomizationPopup(true);
                                 }}
+                                price={menuItem.price}
+                                color='#FFF'
                             />
                         )
                     })}
@@ -133,11 +152,17 @@ export default function Kiosk() {
             {/* Bottom Buttons */}
             <footer className='h-[10%]'>
                 <div className='flex flex-row items-center h-full'>
-                    <TextButton customClassName='flex-1 py-2 h-full text-2xl' text='Cancel Order' />
                     <TextButton
                         customClassName='flex-1 py-2 h-full text-2xl'
-                        text='Checkout'
+                        text='Cancel Order'
+                        onPress={() => setCartItems([])}
+                    />
+                    <TextButton
+                        customClassName='flex-1 py-2 h-full text-2xl'
+                        text={`Checkout/Edit Order (${cartItems.length})`}
                         onPress={() => setShowCheckoutPopup(true)}
+                        color='#FF9638'
+                        hoverColor='#FFC38E'
                     />
                 </div>
             </footer>
@@ -188,20 +213,32 @@ export default function Kiosk() {
                     <div className='flex flex-col flex-1'>
                         {
                             cartItems.length > 0 &&
-                            (<table className=''>
-                                <tr>
-                                    <td>Item Name</td>
-                                    <td>Item Price</td>
-                                    <td></td>
-                                </tr>
-                                {cartItems.map((item) => {
-                                    return (
-                                        <tr key={item.name} className=''>
-                                            <td>{item.name}</td>
-                                            <td>{item.price}</td>
-                                        </tr>
-                                    );
-                                })}
+                            (<table className='text-lg'>
+                                <thead>
+                                    <tr className='border-black border-b-2'>
+                                        <td>Item Name</td>
+                                        <td>Item Price</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cartItems.map((item, index) => {
+                                        return (
+                                            <tr key={`${item.name} ${index}`} className='mb-4'>
+                                                <td key={`${item.name} ${index} 0`}>{item.name}</td>
+                                                <td key={`${item.name} ${index} 1`}>{`$${item.price}`}</td>
+                                                <TextButton
+                                                    text='X'
+                                                    onPress={() => {
+                                                        removeFromOrder(index);
+                                                    }}
+                                                    color='#AAA'
+                                                    hoverColor='#F88'
+                                                />
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
                             </table>) ||
                             <p>There are no items to display</p>
                         }
@@ -229,6 +266,7 @@ export default function Kiosk() {
                                     })
                                     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                 setShowCheckoutPopup(false);
+                                setCartItems([]);
                             }}
                             color='#FF9638'
                             hoverColor='#FFC38E'
