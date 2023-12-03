@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS menu_item (
     name VARCHAR(128),
     price_cents INT,
     img_uri VARCHAR(9001),
-    descriptiom VARCHAR(9001)
+    description VARCHAR(9001)
 );
 
 ------------------
