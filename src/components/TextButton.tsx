@@ -10,21 +10,22 @@ export default function TextButton({ text, onPress, color, hoverColor, customCla
         textColor?: string,
         customClassName?: string,
     }) {
-    const [hover, setHover] = useState<boolean>();
+    const [hover, setHover] = useState<boolean>(false);
     const [textColor, setTextColor] = useState<string>("#000");
 
     useEffect(() => {
-        const luminosity = hover ? calculateHexLuminosity(color ?? "#999") : calculateHexLuminosity(hoverColor ?? "#DDD");
-        if (luminosity < 127) {
+        const luminosity = hover ? calculateHexLuminosity(hoverColor ?? "#DDD") : calculateHexLuminosity(color ?? "#999");
+        if (luminosity < 140) {
             setTextColor("#FFF");
         }
         else {
-            setTextColor("#000");
+            setTextColor("#111");
         }
     }, [hover]);
 
     return (
         <button
+            id='google-translate-element'
             className={customClassName ? customClassName : 'h-full w-full text-center text-lg rounded-xl drop-shadow-md'}
             onClick={onPress ?? (() => console.log("Button Pressed"))}
             onMouseEnter={() => setHover(true)}
