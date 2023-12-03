@@ -5,7 +5,7 @@ import Link from 'next/link'
 import DropDownMenu from "../components/DropdownMenu"
 import { Languages } from '../types'
 import { Dropdown } from 'react-bootstrap'
-import { translatePage } from '../api/external/translate'
+import { translatePage } from '../api/translate'
 import 'bootstrap/dist/css/bootstrap.css'
 
 export default async function Initial() {
