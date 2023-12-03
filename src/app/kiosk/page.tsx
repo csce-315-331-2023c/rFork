@@ -38,29 +38,31 @@ export default function Kiosk() {
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     useEffect(() => {
-        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepes")}`).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (typeof data == "object") {
-                setSweetCrepes(data);
-                setSelectedItemList(data);
-            }
-        }).catch((err) => {
-            alert(`An issue occured fetching from the database: ${err}`);
-        });
-
-        fetch(`/api/menu?tag=${encodeURIComponent("Savory Crepes")}`).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (typeof data == "object") {
-                setSavoryCrepes(data);
-            }
-        }).catch((err) => {
-            alert(`An issue occured fetching from the database: ${err}`);
-        });
+        getMenuItemCategory("Sweet Crepes").then((data) => setSweetCrepes(data));
+        getMenuItemCategory("Savory Crepes").then((data) => setSavoryCrepes(data));
+        getMenuItemCategory("Waffles").then((data) => setWaffles(data));
+        getMenuItemCategory("Soups").then((data) => setSoups(data));
+        getMenuItemCategory("Drinks").then((data) => setDrinks(data));
 
         setLoading(false);
     }, []);
+
+    async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
+        return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    return data;
+                }
+                else {
+                    throw new Error("Endpoint did not return array");
+                }
+            })
+            .catch((err) => {
+                console.error(`Issue fetching items with tag tag '${tag}' from database: ${err}`)
+                return [];
+            })
+    }
 
     if (loading) return <PageLoading />;
 
@@ -133,6 +135,7 @@ export default function Kiosk() {
                 <h1 className='text-4xl underline'>Items</h1>
                 <div className='grid grid-cols-4 gap-4'>
                     {selectedItemList.map((menuItem) => {
+                        console.log(menuItem);
                         return (
                             <ImageButton
                                 key={menuItem.name}
@@ -143,6 +146,7 @@ export default function Kiosk() {
                                 }}
                                 price={menuItem.price}
                                 color='#FFF'
+                                imageURI={menuItem.imageURI}
                             />
                         )
                     })}

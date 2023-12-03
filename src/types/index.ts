@@ -10,6 +10,8 @@ export type MenuItem = {
     price: number;
     ingredients: Ingredient[];
     validExtras: Ingredient[];
+    description?: string;
+    imageURI?: string;
 };
 
 export type Tag = string;

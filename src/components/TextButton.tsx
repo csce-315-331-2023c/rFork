@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { calculateHexLuminosity } from '../helpers/colorUtils';
 
-export default function TextButton({ text, onPress, color, hoverColor, textColor, customClassName }:
+export default function TextButton({ text, onPress, color, hoverColor, customClassName }:
     {
         text?: string,
         onPress?: () => void,
@@ -10,6 +11,17 @@ export default function TextButton({ text, onPress, color, hoverColor, textColor
         customClassName?: string,
     }) {
     const [hover, setHover] = useState<boolean>();
+    const [textColor, setTextColor] = useState<string>("#000");
+
+    useEffect(() => {
+        const luminosity = hover ? calculateHexLuminosity(color ?? "#999") : calculateHexLuminosity(hoverColor ?? "#DDD");
+        if (luminosity < 127) {
+            setTextColor("#FFF");
+        }
+        else {
+            setTextColor("#000");
+        }
+    }, [hover]);
 
     return (
         <button
