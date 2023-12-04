@@ -20,13 +20,15 @@ export default function ManagerDashboard() {
             {/* Slide Menus */}
             <div className='grid grid-rows-2 grid-cols-2 flex-1'>
                 <div className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
-                    <ImageButton
-                        imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
-                        customClassName='flex-1 flex flex-col items-center justify-center border-[#888] border-2'
-                        color='#FFF'
-                        hoverColor='#CCC'
-                        altText='View Statistics Button Image'
-                    />
+                    <Link href='/manager-dashboard/reports'>
+                        <ImageButton
+                            imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
+                            customClassName='flex-1 flex flex-col items-center justify-center border-[#888] border-2 h-full'
+                            color='#FFF'
+                            hoverColor='#CCC'
+                            altText='View Statistics Button Image'
+                        />
+                    </Link>
                     <Link href='/manager-dashboard/inventory-items'>
                         <ImageButton
                             imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/35909/cardboard-box-clipart-xl.png'

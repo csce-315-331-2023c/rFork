@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS menu_item_ingredients(
     -- Unsure what is normal ingredient means and /is valid extra?
 );
 
-CREATE TABLE IF NOT EXISTS menu_item_tag(
+CREATE TABLE IF NOT EXISTS menu_item_tag( 
     id SERIAL PRIMARY KEY,
     menu_item_id INT REFERENCES menu_item(id),
     tag_name VARCHAR(128)
