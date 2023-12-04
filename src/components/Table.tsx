@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TextButton from '../components/TextButton';
 import { InventoryItem, MenuItem } from '../types';
-import axios from 'axios'
+
 export default function Table({ dataType, api, backgroundColor }: {
     dataType?: string,
     api?: string, // endpoint
@@ -23,7 +23,7 @@ export default function Table({ dataType, api, backgroundColor }: {
 
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchMenuItems = async () => {
             try {
                 const result = await fetch("/api/menu");
                 const allItems = await result.json();
@@ -34,8 +34,18 @@ export default function Table({ dataType, api, backgroundColor }: {
                 console.error("Error fetching data:", error);
             }
         };
-
-        fetchData();
+        const fetchMenuTags = async () => {
+            try {
+                const result = await fetch("/api/");
+                const allItems = await result.json();
+                console.log(allItems);
+                console.log("Fetched data:", allItems);
+                setData(allItems);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchMenuItems();
     }, []);
 
     const handleEdit = (id: number) => {
@@ -46,7 +56,7 @@ export default function Table({ dataType, api, backgroundColor }: {
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <input type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
+                    <input type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
                     <input type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.valueAsNumber)} />
                     <input type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
                     <input type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />

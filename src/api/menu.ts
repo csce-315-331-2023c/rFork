@@ -160,12 +160,10 @@ export async function addMenuItem(MenuItem: MenuItem): Promise<void> {
 }
 
 export async function updateMenuItem(updatedMenuItem: MenuItem): Promise<void> {
-    // Assuming updatedMenuItem has the 'id' property to identify the menu item
-    
-    // Construct the UPDATE query
+
     const updateMenuItemQuery = 'UPDATE menu_item SET name = $1, price_cents = $2, img_uri = $3, description = $4 WHERE id = $5';
 
-    // Execute the UPDATE query
+
     const updateResult = await db.query(updateMenuItemQuery, [updatedMenuItem.name, updatedMenuItem.price, updatedMenuItem.imageURI, updatedMenuItem.description, updatedMenuItem.id]);
 
     // Check if the update was successful
@@ -175,15 +173,13 @@ export async function updateMenuItem(updatedMenuItem: MenuItem): Promise<void> {
 }
 
 export async function deleteMenuItem(deletedMenuItem: MenuItem): Promise<void> {
-    // Assuming updatedMenuItem has the 'id' property to identify the menu item
-    
-    // Construct the UPDATE query
+
     const deleteMenuItemQuery = 'DELETE FROM menu_item WHERE id = $1';
 
-    // Execute the UPDATE query
+    
     const deleteResult = await db.query(deleteMenuItemQuery, [deletedMenuItem.id]);
 
-    // Check if the update was successful
+    // Check if the delete was successful
     if (deleteResult.rowCount !== 1) {
         throw new Error('Error updating menu item');
     }
