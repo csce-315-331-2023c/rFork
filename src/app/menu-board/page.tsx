@@ -27,6 +27,7 @@ export default function MenuBoard() {
         getMenuItemCategory("Soups").then((data) => setSoups(data));
         getMenuItemCategory("Drinks").then((data) => setDrinks(data));
         getMenuItemCategory("Featured").then((data) => setFeaturedItems(data));
+        setLoading(false);
     }, []);
 
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
