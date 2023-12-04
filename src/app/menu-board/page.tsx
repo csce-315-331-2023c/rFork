@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
 import ImageButton from '../../components/ImageButton'
-import { MenuItem } from '../../types';
+import { MenuItem, WeatherInformation } from '../../types';
 import PageLoading from '../../components/PageLoading';
+import { Carousel } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css'
 
 export default function MenuBoard() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -16,6 +18,7 @@ export default function MenuBoard() {
     const [soups, setSoups] = useState<Array<MenuItem>>([]);
     const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
     const [featuredItems, setFeaturedItems] = useState<Array<MenuItem>>([]);
+    const [weatherData, setWeatherData] = useState<WeatherInformation>();
 
     useEffect(() => {
         getMenuItemCategory("Sweet Crepes").then((data) => setSweetCrepes(data));
@@ -56,61 +59,74 @@ export default function MenuBoard() {
     return (
         // Creating the template for Menu Board based on the sketch in miro
         <div className='flex flex-col items-center h-screen py-2'>
-            <h1 className='text-5xl py-4'><strong>Featured Items</strong></h1>
-            <header className='flex flex-row justify-center h-[30%] border-black bg-[#9acbff] w-[95%] rounded-lg'>
-                <div className='flex flex-1 flex-col justify-center items-center px-10 py-2 h-full'>
-                    <div className='h-[80%]'>
-                        <img className='h-full rounded-lg' src={featuredItems[0] ? featuredItems[0].imageURI : ""} />
-                    </div>
-                    <h2 className='text-3xl'>{featuredItems[0] ? featuredItems[0].name : "No item featured"}</h2>
-                </div>
-                <div className='flex flex-1 flex-col justify-center items-center px-10 py-2 h-full'>
-                    <div className='h-[80%]'>
-                        <img className='h-full rounded-lg' src={featuredItems[1] ? featuredItems[1].imageURI : ""} />
-                    </div>
-                    <h2 className='text-3xl'>{featuredItems[1] ? featuredItems[1].name : "No item featured"}</h2>
-                </div>
-            </header>
-
-            <div className='flex flex-row w-full'>
-                <div className="flex flex-col flex-1 items-center px-10">
-                    <h1 className='w-full text-3xl'><i>Sweet Crepes</i></h1>
+            <img className="h-[5%]" src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' />
+            <Carousel
+                className='bg-[#56b3ff] w-full py-2 shadow-xl'
+                slide
+                interval={5000}
+                controls={false}
+                indicators={false}
+            >
+                {
+                    featuredItems.map((item) => {
+                        return (
+                            <Carousel.Item>
+                                <div className='flex flex-row items-center justify-center'>
+                                    <img className='h-72 rounded-xl mx-4' src={item.imageURI} alt={item.name} />
+                                    <div className='mx-4'>
+                                        <h2 className='text-center text-white'>{item.name}</h2>
+                                        <p className='text-center text-white'>{item.description}</p>
+                                    </div>
+                                </div>
+                            </Carousel.Item>
+                        );
+                    })
+                }
+            </Carousel>
+            <div className='flex flex-1 flex-row w-full'>
+                <div className="flex flex-col flex-1 items-center px-10 h-full justify-between">
+                    <h1 className='w-full text-3xl pt-6'><i>Sweet Crepes</i></h1>
                     {sweetCrepes.map((item) => (
-                        <p key={item.name} className='w-full text-xl py-1'>
-                            {`${item.name}.....\$${item.price.toFixed(2)}`}
-                        </p>
+                        <div key={item.name} className='flex flex-row justify-between w-full text-xl'>
+                            <p>{item.name}</p>
+                            <p>{`\$${item.price.toFixed(2)}`}</p>
+                        </div>
                     ))}
-                </div>
-                <div className="flex flex-col flex-1 items-center px-10">
-                    <h1 className='w-full text-3xl pt-4'><i>Savory Crepes</i></h1>
-                    {savoryCrepes.map((item) => (
-                        <p key={item.name} className='w-full text-xl py-1'>
-                            {`${item.name}.....\$${item.price.toFixed(2)}`}
-                        </p>
-                    ))}
-                </div>
-                <div className="flex flex-col flex-1 items-center px-10">
-                    <h1 className='w-full text-3xl pt-4'><i>Waffles</i></h1>
-                    {waffles.map((item) => (
-                        <p key={item.name} className='w-full text-xl py-1'>
-                            {`${item.name}.....\$${item.price.toFixed(2)}`}
-                        </p>
-                    ))}
-                    <h1 className='w-full text-3xl pt-4'><i>Soups (Seasonal)</i></h1>
+                    <h1 className='w-full text-3xl pt-6 border-black border-t-2'><i>Soups (Seasonal)</i></h1>
                     {soups.map((item) => (
-                        <p key={item.name} className='w-full text-xl py-1'>
-                            {`${item.name}.....\$${item.price.toFixed(2)}`}
-                        </p>
-                    ))}
-                    <h1 className='w-full text-3xl pt-4'><i>Beverages</i></h1>
-                    {drinks.map((item) => (
-                        <p key={item.name} className='w-full text-xl py-1'>
-                            {`${item.name}.....\$${item.price.toFixed(2)}`}
-                        </p>
+                        <div key={item.name} className='flex flex-row justify-between w-full text-xl'>
+                            <p>{item.name}</p>
+                            <p>{`\$${item.price.toFixed(2)}`}</p>
+                        </div>
                     ))}
                 </div>
-                <div className="flex flex-col flex-1 items-center px-10">
-                    
+                <div className="flex flex-col flex-1 items-center px-10 h-full justify-between">
+                    <h1 className='w-full text-3xl pt-6'><i>Savory Crepes</i></h1>
+                    {savoryCrepes.map((item) => (
+                        <div key={item.name} className='flex flex-row justify-between w-full text-xl'>
+                            <p>{item.name}</p>
+                            <p>{`\$${item.price.toFixed(2)}`}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="flex flex-col flex-1 items-center px-10 h-full justify-between">
+                    <h1 className='w-full text-3xl pt-6'><i>Waffles</i></h1>
+                    {waffles.map((item) => (
+                        <div key={item.name} className='flex flex-row justify-between w-full text-xl'>
+                            <p>{item.name}</p>
+                            <p>{`\$${item.price.toFixed(2)}`}</p>
+                        </div>
+                    ))}
+                    <h1 className='w-full text-3xl pt-6 border-black border-t-2'><i>Beverages</i></h1>
+                    {drinks.map((item) => (
+                        <div key={item.name} className='flex flex-row justify-between w-full text-xl'>
+                            <p>{item.name}</p>
+                            <p>{`\$${item.price.toFixed(2)}`}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="flex flex-col flex-1 items-center px-10 h-full justify-between">
+
                 </div>
             </div>
         </div>
