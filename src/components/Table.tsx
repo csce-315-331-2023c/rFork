@@ -9,8 +9,8 @@ export default function Table({ dataType, api, backgroundColor }: {
 }) {
 
     //handle for getting all the data
-    const [data, setData] = useState([]);
-    const [tagData, setTagData] = useState([]);
+    const [data, setData] = useState<Array<any>>([]);
+    const [tagData, setTagData] = useState<Array<any>>([]);
 
     //handle for adding a new item
     const [name, setName] = useState('');
@@ -131,7 +131,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                 <tbody>
                     {data.map((menuItem, index) => (
                         menuItem.id === editId ?
-                            <tr>
+                            <tr key={`Table Row ${index}`}>
                                 <td>{menuItem.id}</td>
                                 <td><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
                                 <td><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.value)} /></td>
@@ -189,7 +189,7 @@ export default function Table({ dataType, api, backgroundColor }: {
 
                                     /></td>
                             </tr> :
-                            <tr key={index} style={{ border: '1px solid black', background: backgroundColor }}>
+                            <tr key={`Table Row ${index}`} style={{ border: '1px solid black', background: backgroundColor }}>
                                 <td>{menuItem.id}</td>
                                 <td>{menuItem.name}</td>
                                 <td>${menuItem.price.toFixed(2)}</td>
