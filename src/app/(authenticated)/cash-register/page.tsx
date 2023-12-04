@@ -41,25 +41,47 @@ export default function CashRegister() {
     ];
 
     const tipButtons = [
-        (<TextButton text='5%' key={0} />),
-        (<TextButton text='10%' key={1} />),
-        (<TextButton text='15%' key={2} />),
+        (<TextButton text='10%' key={0} />),
+        (<TextButton text='15%' key={1} />),
+        (<TextButton text='20%' key={2} />),
     ];
     // Closure Functions
 
     useEffect(() => {
-        fetch(`/api/menu`).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (typeof data == "object") {
-                setSweetCrepes(data);
-                setSelectedItemList(data);
-            }
-        }).catch((err) => {
-            alert(`An issue occured fetching from the database: ${err}`);
-        });
+        getMenuItemCategory("Sweet Crepes").then((data) => setSweetCrepes(data));
+        getMenuItemCategory("Savory Crepes").then((data) => setSavoryCrepes(data));
+        getMenuItemCategory("Waffles").then((data) => setWaffles(data));
+        getMenuItemCategory("Soups").then((data) => setSoups(data));
+        getMenuItemCategory("Drinks").then((data) => setDrinks(data));
+
         setLoading(false);
     }, []);
+
+    async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
+        return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    return data;
+                }
+                else {
+                    throw new Error("Endpoint did not return array");
+                }
+            })
+            .catch((err) => {
+                console.error(`Issue fetching items with tag tag '${tag}' from database: ${err}`)
+                return [];
+            })
+    }
+
+    function updateOrderTotal(updatedCartItems: MenuItem[]) {
+        let updatedSubtotal = 0;
+        updatedCartItems.forEach((menuItem) => {
+            updatedSubtotal += menuItem.price;
+        });
+        console.log(updatedSubtotal);
+        setSubtotal(updatedSubtotal);
+    }
 
     function addToOrder(menuItem: MenuItem) {
         const updatedCartItems = [...cartItems];
@@ -67,12 +89,48 @@ export default function CashRegister() {
         setCartItems(updatedCartItems);
         setMiddleRightChildren(null);
         setBottomRightChildren(null);
+        updateOrderTotal(updatedCartItems);
     }
 
     function removeFromOrder(index: number) {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
+        updateOrderTotal(updatedCartItems);
+    }
+
+    /**
+     * Creates the middle content that displays each menu item in a given menu item list
+     * @param menuItemList List of menu items to display
+     */
+    function createMiddleMenuItemContent(menuItemList: MenuItem[]) {
+        const middleContent = menuItemList.map((item) => {
+            return (<TextButton
+                key={item.name}
+                text={item.name}
+                onPress={() => {
+                    let bottomContent = item.ingredients.map((ingredient) => {
+                        return (
+                            <TextButton
+                                key={ingredient.itemName}
+                                text={`Remove ${ingredient.itemName}`}
+                            />
+                        )
+                    });
+                    const addToOrderButton = <TextButton
+                        key={"Add to Order"}
+                        text={`Add to Order`}
+                        color='#0077FF'
+                        onPress={() => addToOrder(item)}
+                    />;
+
+                    bottomContent = [...bottomContent, addToOrderButton]
+                    setBottomRightChildren(bottomContent);
+                }}
+            />);
+        });
+        setMiddleRightChildren(middleContent);
+        setBottomRightChildren(null);
     }
 
     if (loading) return (<PageLoading />);
@@ -160,67 +218,28 @@ export default function CashRegister() {
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         <TextButton
                             text='Sweet Crepes'
-                            onPress={() => {
-                                const middleContent = sweetCrepes.map((item) => {
-                                    return (<TextButton
-                                        key={item.name}
-                                        text={item.name}
-                                        onPress={() => {
-                                            let bottomContent = item.ingredients.map((ingredient) => {
-                                                return (
-                                                    <TextButton
-                                                        key={ingredient.itemName}
-                                                        text={`Remove ${ingredient.itemName}`}
-                                                    />
-                                                )
-                                            });
-                                            const addToOrderButton = <TextButton
-                                                key={"Add to Order"}
-                                                text={`Add to Order`}
-                                                color='#0077FF'
-                                                onPress={() => addToOrder(item)}
-                                            />;
-
-                                            bottomContent = [...bottomContent, addToOrderButton]
-                                            setBottomRightChildren(bottomContent);
-                                        }}
-                                    />);
-                                });
-                                setMiddleRightChildren(middleContent);
-                                setBottomRightChildren(null);
-                            }}
+                            onPress={() => createMiddleMenuItemContent(sweetCrepes)}
                             key={"sweetCrepeButton"}
+                            color='#FFF3B9'
                         />
                         <TextButton
                             text='Savory Crepes'
-                            onPress={() => {
-                                setMiddleRightChildren(null);
-                                setBottomRightChildren(null);
-                            }}
+                            onPress={() => createMiddleMenuItemContent(savoryCrepes)}
                             key={"savoryCrepeButton"}
                         />
                         <TextButton
                             text='Waffles'
-                            onPress={() => {
-                                setMiddleRightChildren(null);
-                                setBottomRightChildren(null);
-                            }}
+                            onPress={() => createMiddleMenuItemContent(waffles)}
                             key={"waffleButton"}
                         />
                         <TextButton
                             text='Soups'
-                            onPress={() => {
-                                setMiddleRightChildren(null);
-                                setBottomRightChildren(null);
-                            }}
+                            onPress={() => createMiddleMenuItemContent(soups)}
                             key={"soupsButton"}
                         />
                         <TextButton
                             text='Drinks'
-                            onPress={() => {
-                                setMiddleRightChildren(null);
-                                setBottomRightChildren(null);
-                            }}
+                            onPress={() => createMiddleMenuItemContent(drinks)}
                             key={"drinkButton"}
                         />
                         <TextButton
