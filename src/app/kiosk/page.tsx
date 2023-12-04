@@ -142,14 +142,14 @@ export default function Kiosk() {
         <div className='flex flex-col h-screen'>
             {/* Navbar */}
             <header className='h-[10%] w-full flex flex-row items-center justify-start px-6 py-2 bg-[#d6e3ff]'>
-                <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' />
+                <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' alt='' />
                 <KioskNavButton onPress={() => { setSelectedItemList(sweetCrepes); setCategoryTitle("Sweet Crepes"); }} borderDirection={Direction.RIGHT} text='Sweet Crepes' />
                 <KioskNavButton onPress={() => { setSelectedItemList(savoryCrepes); setCategoryTitle("Savory Crepes"); }} borderDirection={Direction.RIGHT} text='Savory Crepes' />
                 <KioskNavButton onPress={() => { setSelectedItemList(waffles); setCategoryTitle("Waffles"); }} borderDirection={Direction.RIGHT} text='Waffles' />
                 <KioskNavButton onPress={() => { setSelectedItemList(soups); setCategoryTitle("Soups (Seasonal)"); }} borderDirection={Direction.RIGHT} text='Soups' />
                 <KioskNavButton onPress={() => { setSelectedItemList(drinks); setCategoryTitle("Drinks"); }} borderDirection={Direction.NONE} text='Drinks' />
-                <Dropdown>
-                    <Dropdown.Toggle className='flex flex-col justify-center items-center hover:bg-[#3333] hover:cursor-pointer p-2 h-full'>
+                <Dropdown className='hover:bg-[#3333]'>
+                    <Dropdown.Toggle variant='Secondary' className='flex flex-col justify-center items-center hover:cursor-pointer p-2 h-full'>
                         <IoLanguageOutline fontSize={"2.5rem"} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
