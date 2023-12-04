@@ -4,19 +4,25 @@ import "../css/index.css"
 import Link from 'next/link'
 import DropDownMenu from "../components/DropdownMenu"
 import { Languages } from '../types'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, Nav } from 'react-bootstrap'
 import { translatePage } from '../api/translate'
 import 'bootstrap/dist/css/bootstrap.css'
 
 export default async function Initial() {
-    const optionsArray = Object.keys(Languages);
+    // const optionsArray = Object.keys(Languages);
+
+    const buttonStyle = {
+        backgroundColor: "#4CAF50",
+        border: "none",
+        color: "white",
+        textDecoration: "none",
+        fontSize: "16px",
+        cursor: "pointer"
+    }
+
     return (
-        <div className='flex flex-col justify-between h-40 px-40'>
-            <Link href='/cash-register'><div className='bg-gray-600 rounded-md text-white'>Cash Register</div></Link>
-            <Link href='/manager-dashboard'><div className='bg-gray-600 rounded-md text-white'>Manager Dashboard</div></Link>
-            <Link href='/kiosk'><div className='bg-gray-600 rounded-md text-white'>Customer Kiosk</div></Link>
-            <Link href='/menu-board'><div className='bg-gray-600 rounded-md text-white'>Menu Board</div></Link>
-            <Dropdown>
+        <div className="h-screen w-screen">
+            {/* <Dropdown className="w-full">
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
                     Translate
                 </Dropdown.Toggle>
@@ -24,7 +30,13 @@ export default async function Initial() {
                 <Dropdown.Menu>
                     <DropDownMenu options={Languages} />
                 </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
+            <div className='grid grid-rows-2 grid-cols-2 h-full w-full'>
+                <Link href='/cash-register'><div style={buttonStyle}>Cash Register</div></Link>
+                <Link href='/manager-dashboard'><div style={buttonStyle}>Manager Dashboard</div></Link>
+                <Link href='/kiosk'><div style={buttonStyle}>Customer Kiosk</div></Link>
+                <Link href='/menu-board'><div style={buttonStyle}>Menu Board</div></Link>
+            </div>
         </div>
     )
 }
