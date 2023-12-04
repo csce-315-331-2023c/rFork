@@ -86,6 +86,31 @@ export default function reportView() {
             {
                 reportType == r.restock_report &&
                 <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className='px-10'>Item ID</th>
+                                <th className='px-10'>Item Name</th>
+                                <th className='px-10'>Current Stock</th>
+                                <th className='px-10'>Reorder Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                data.map((row, index) => {
+                                    return (
+
+                                        <tr key={`sales ${index}`}>
+                                            <td className='px-10'>{row.id}</td>
+                                            <td className='px-10'>{row.name}</td>
+                                            <td className='px-10'>{row.currentStock}</td>
+                                            <td className='px-10'>{row.reorderThreshold}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
             }
             {

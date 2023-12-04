@@ -1,7 +1,7 @@
 import React from 'react'
 import 'dotenv/config';
 import db from "./index";
-import { InventoryItem, Order } from "../types";
+import { InventoryItem, MenuItem, Order } from "../types";
 
 export async function product_usage(): Promise<InventoryItem[]> {
     return [];
@@ -32,8 +32,9 @@ export async function product_sales(start: Date, end: Date): Promise<Order[]> {
     return orders;
 }
 
-export async function product_excess(): Promise<InventoryItem[]> {
-    return [];
+export async function product_excess(start: Date, end: Date): Promise<InventoryItem[]> {
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item WHERE ) t';
+    return[];
 }
 
 export async function restock_report(): Promise<InventoryItem[]> {
@@ -61,8 +62,10 @@ export async function restock_report(): Promise<InventoryItem[]> {
     return inventoryItems;
 }
 
-export async function sells_together(start: Date, end: Date): Promise<Order[]> {
-    return [];
+export async function sells_together(start: Date, end: Date): Promise<MenuItem[]> {
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, name) FROM orders WHERE create_time BETWEEN $1 AND $2 ORDER BY create_time DESC) t';
+    const result = await db.query(query, [start, end]);
+    return[];
 }
 
 
