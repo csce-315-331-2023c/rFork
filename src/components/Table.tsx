@@ -7,12 +7,17 @@ export default function Table({ dataType, api, backgroundColor }: {
     api?: string, // endpoint
     backgroundColor?: string
 }) {
-    //handle for adding a new item
+    
+    //handle for getting all the data
     const [data, setData] = useState([]);
+    const [tagData, setTagData] = useState([]);
+
+    //handle for adding a new item
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [imageURI, setImageURI] = useState('');
     const [desc, setDescription] = useState('');
+    const [tag, setTag] = useState('');
 
     //handle updating/editing values
     const [editId, usetEditId] = useState<number>(-1);
@@ -20,14 +25,14 @@ export default function Table({ dataType, api, backgroundColor }: {
     const [uprice, usetPrice] = useState<number>(-1);
     const [uimageURI, usetImageURI] = useState<string>('');
     const [udesc, usetDescription] = useState<string>('');
-
+    const [utag, usetTag] = useState<string>('');
 
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
                 const result = await fetch("/api/menu");
                 const allItems = await result.json();
-                console.log(allItems);
+                //console.log(allItems);
                 console.log("Fetched data:", allItems);
                 setData(allItems);
             } catch (error) {
@@ -36,16 +41,18 @@ export default function Table({ dataType, api, backgroundColor }: {
         };
         const fetchMenuTags = async () => {
             try {
-                const result = await fetch("/api/");
-                const allItems = await result.json();
-                console.log(allItems);
-                console.log("Fetched data:", allItems);
-                setData(allItems);
+                const result = await fetch("/api/menu?tag=all");
+                const tagItems = await result.json();
+
+                console.log(tagItems);
+                console.log("Fetched tags:", tagItems.rows);
+                setTagData(tagItems.rows);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         fetchMenuItems();
+        fetchMenuTags();
     }, []);
 
     const handleEdit = (id: number) => {
@@ -60,6 +67,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                     <input type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.valueAsNumber)} />
                     <input type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
                     <input type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
+                    <input type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
                     <TextButton
                         text='Add a Menu Item'
                         onPress={async () => {
@@ -74,10 +82,10 @@ export default function Table({ dataType, api, backgroundColor }: {
                             await fetch("/api/menu", { method: "POST", body: JSON.stringify(menuItem) })
                                 .then((response) => response.json())
                                 .then((data) => {
-                                    console.log(data);
+                                    //console.log(data);
                                 })
                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-
+                            await fetch("/api/menu")
                         }}
                         color='#FF9638'
                         hoverColor='#FFC38E'
@@ -98,6 +106,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                         <th>Price</th>
                         <th>Image</th>
                         <th>Description</th>
+                        <th>Tag Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -110,6 +119,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.valueAsNumber)} /></td>
                                 <td><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetImageURI(e.target.value)} /></td>
                                 <td><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
+                                <td><input type="text" placeholder={menuItem.tag_name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => uset(e.target.value)} /></td>
                                 <td>
                                     <TextButton
                                         text='Update'
@@ -127,7 +137,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                             await fetch(`/api/menu?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(menuItem) })
                                                 .then((response) => response.json())
                                                 .then((data) => {
-                                                    console.log(data);
+                                                    //console.log(data);
                                                 })
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
 
@@ -151,7 +161,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                         await fetch(`/api/menu?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(menuItem) })
                                             .then((response) => response.json())
                                             .then((data) => {
-                                                console.log(data);
+                                                //console.log(data);
                                             })
                                             .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
 
@@ -169,6 +179,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                     <img src={menuItem.imageURI} style={{ maxWidth: '100px', maxHeight: '100px' }} alt={menuItem.name} />
                                 </td>
                                 <td >{menuItem.description}</td>
+                                <td>{tagData && tagData[menuItem.id] ? tagData[menuItem.id].tag_name : 'N/A'}</td>
                                 <td>
                                     <button onClick={() => handleEdit(menuItem.id)}>edit</button>
                                     <TextButton
@@ -183,11 +194,11 @@ export default function Table({ dataType, api, backgroundColor }: {
                                                 description: menuItem.description,
                                                 imageURI: menuItem.imageURI
                                             }
-                                            console.log(menuItem); 
+                                            //console.log(menuItem); 
                                             await fetch(`/api/menu?delete=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(menuItem) })
                                                 .then((response) => response.json())
                                                 .then((data) => {
-                                                    console.log(data);
+                                                    //console.log(data);
                                                 })
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();

@@ -181,6 +181,16 @@ export async function deleteMenuItem(deletedMenuItem: MenuItem): Promise<void> {
 
     // Check if the delete was successful
     if (deleteResult.rowCount !== 1) {
-        throw new Error('Error updating menu item');
+        throw new Error('Error deleting menu item');
     }
 }
+
+export async function getAllMenuItemTags(){
+    const getMenuItemTags = 'SELECT * FROM menu_item_tag';
+
+    const result = await db.query(getMenuItemTags);
+
+    return result;
+
+}
+
