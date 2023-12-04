@@ -8,7 +8,7 @@ export async function product_usage(){
 }
 
 export async function product_sales(start: Date, end: Date): Promise<Order[]>{
-    const query = 'SELECT row_to_json(t) FROM (SELECT * FROM orders WHERE create_time BETWEEN $1 AND $2 ORDER BY create_time DESC) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, employee_id) FROM orders WHERE create_time BETWEEN $1 AND $2 ORDER BY create_time DESC) t';
     const result = await db.query(query, [start, end]);
 
     let orders: Order[] = [];
@@ -62,7 +62,7 @@ export async function restock_report(): Promise<InventoryItem[]>{
 }
 
 export async function sells_together(start: Date, end: Date): Promise<Order[]>{
-    
+    return [];
 }
 
 
