@@ -7,7 +7,6 @@ export default function AuthedLayout({ children, }: { children: React.ReactNode 
 		<html lang="en">
 			<body>
 				<SessionProvider>
-					<AuthSessionHeader />
 					{children}
 				</SessionProvider>
 			</body>

@@ -5,6 +5,7 @@ import ImageButton from '../../../components/ImageButton';
 import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
 import TextButton from '../../../components/TextButton';
+import AuthSessionHeader from '../../../components/AuthSessionHeader';
 
 export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
@@ -17,6 +18,7 @@ export default function ManagerDashboard() {
 
     return (
         <div className='flex flex-col h-screen'>
+            <AuthSessionHeader />
             {/* Slide Menus */}
             <div className='grid grid-rows-2 grid-cols-2 flex-1'>
                 <div className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
