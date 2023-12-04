@@ -68,9 +68,9 @@ export default function MenuBoard() {
                 indicators={false}
             >
                 {
-                    featuredItems.map((item) => {
+                    featuredItems.map((item, index) => {
                         return (
-                            <Carousel.Item>
+                            <Carousel.Item key={index}>
                                 <div className='flex flex-row items-center justify-center'>
                                     <img className='h-72 rounded-xl mx-4' src={item.imageURI} alt={item.name} />
                                     <div className='mx-4'>
