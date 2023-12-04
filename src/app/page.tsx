@@ -8,7 +8,7 @@ import { Dropdown, Nav } from 'react-bootstrap'
 import { translatePage } from '../api/translate'
 import 'bootstrap/dist/css/bootstrap.css'
 
-export default async function Initial() {
+export default function Initial() {
     // const optionsArray = Object.keys(Languages);
 
     const buttonStyle = {
