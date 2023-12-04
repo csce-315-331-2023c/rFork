@@ -9,13 +9,22 @@ export default function MenuBoard() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    // temp
-    const testMenuItem: MenuItem = {
-        name: "[MENU ITEM]",
-        price: 12.50,
-        ingredients: [{ itemId: 0, itemName: "[MENU ITEM INGREDIENT]", quantity: 5 }],
-        validExtras: [],
-    }
+    // Lists of different tagged menu items
+    const [sweetCrepes, setSweetCrepes] = useState<Array<MenuItem>>([]);
+    const [savoryCrepes, setSavoryCrepes] = useState<Array<MenuItem>>([]);
+    const [waffles, setWaffles] = useState<Array<MenuItem>>([]);
+    const [soups, setSoups] = useState<Array<MenuItem>>([]);
+    const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
+    const [featuredItems, setFeaturedItems] = useState<Array<MenuItem>>([]);
+
+    useEffect(() => {
+        getMenuItemCategory("Sweet Crepes").then((data) => setSweetCrepes(data));
+        getMenuItemCategory("Savory Crepes").then((data) => setSavoryCrepes(data));
+        getMenuItemCategory("Waffles").then((data) => setWaffles(data));
+        getMenuItemCategory("Soups").then((data) => setSoups(data));
+        getMenuItemCategory("Drinks").then((data) => setDrinks(data));
+        getMenuItemCategory("Featured").then((data) => setFeaturedItems(data));
+    }, []);
 
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
         return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
@@ -46,44 +55,63 @@ export default function MenuBoard() {
 
     return (
         // Creating the template for Menu Board based on the sketch in miro
-        <div>
-            <a href="/">[Back button]</a>
-            <header className='flex flex-row border-2 border-red-600 max-h-[33vh] p-0'>
-                <div className='flex flex-row justify-center border border-black rounded-3xl m-4 p-0 align-center flex-1'>
-                    <img className='rounded-3xl' src="https://www.w3schools.com/html/pic_trulli.jpg" alt="Featured Item 1"></img>
+        <div className='flex flex-col items-center h-screen py-2'>
+            <h1 className='text-5xl py-4'><strong>Featured Items</strong></h1>
+            <header className='flex flex-row justify-center h-[30%] border-black bg-[#9acbff] w-[95%] rounded-lg'>
+                <div className='flex flex-1 flex-col justify-center items-center px-10 py-2 h-full'>
+                    <div className='h-[80%]'>
+                        <img className='h-full rounded-lg' src={featuredItems[0] ? featuredItems[0].imageURI : ""} />
+                    </div>
+                    <h2 className='text-3xl'>{featuredItems[0] ? featuredItems[0].name : "No item featured"}</h2>
                 </div>
-                <div className='flex flex-row justify-center border border-black rounded-3xl m-4 p-0 align-center flex-1'>
-                    <img className='rounded-3xl' src="https://www.w3schools.com/html/img_chania.jpg" alt="Featured Item 2"></img>
+                <div className='flex flex-1 flex-col justify-center items-center px-10 py-2 h-full'>
+                    <div className='h-[80%]'>
+                        <img className='h-full rounded-lg' src={featuredItems[1] ? featuredItems[1].imageURI : ""} />
+                    </div>
+                    <h2 className='text-3xl'>{featuredItems[1] ? featuredItems[1].name : "No item featured"}</h2>
                 </div>
             </header>
 
-            <div className='flex flex-row border-2 border-black'>
-                <div className='flex flex-row flex-1 border-2 border-red-500'>
-                    <div>Crepes</div>
-                    <div>
-                        Crepe items
-                        {testMenuItem.name}
-                    </div>
-                {/* </div> */}
-                
-                {/* <div className='flex flex-row flex-1 border-2 border-green-500'> */}
-                    <div>Seasonal</div>
-                    <ul>Item</ul>
+            <div className='flex flex-row w-full'>
+                <div className="flex flex-col flex-1 items-center px-10">
+                    <h1 className='w-full text-3xl'><i>Sweet Crepes</i></h1>
+                    {sweetCrepes.map((item) => (
+                        <p key={item.name} className='w-full text-xl py-1'>
+                            {`${item.name}.....\$${item.price.toFixed(2)}`}
+                        </p>
+                    ))}
                 </div>
-
-                <div className='flex flex-row flex-1 border-2 border-blue-500'>
-                    <div>Sides</div>
-                    <ul>Item</ul>
+                <div className="flex flex-col flex-1 items-center px-10">
+                    <h1 className='w-full text-3xl pt-4'><i>Savory Crepes</i></h1>
+                    {savoryCrepes.map((item) => (
+                        <p key={item.name} className='w-full text-xl py-1'>
+                            {`${item.name}.....\$${item.price.toFixed(2)}`}
+                        </p>
+                    ))}
                 </div>
-
-                <div className='flex flex-row flex-1 border-2 border-purple-500'>
-                    <div>Drinks</div>
-                    <ul>Item</ul>
+                <div className="flex flex-col flex-1 items-center px-10">
+                    <h1 className='w-full text-3xl pt-4'><i>Waffles</i></h1>
+                    {waffles.map((item) => (
+                        <p key={item.name} className='w-full text-xl py-1'>
+                            {`${item.name}.....\$${item.price.toFixed(2)}`}
+                        </p>
+                    ))}
+                    <h1 className='w-full text-3xl pt-4'><i>Soups (Seasonal)</i></h1>
+                    {soups.map((item) => (
+                        <p key={item.name} className='w-full text-xl py-1'>
+                            {`${item.name}.....\$${item.price.toFixed(2)}`}
+                        </p>
+                    ))}
+                    <h1 className='w-full text-3xl pt-4'><i>Beverages</i></h1>
+                    {drinks.map((item) => (
+                        <p key={item.name} className='w-full text-xl py-1'>
+                            {`${item.name}.....\$${item.price.toFixed(2)}`}
+                        </p>
+                    ))}
                 </div>
-            </div>
-
-            <div>
-                Here are the first 8 items:
+                <div className="flex flex-col flex-1 items-center px-10">
+                    
+                </div>
             </div>
         </div>
     )

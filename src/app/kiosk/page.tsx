@@ -53,16 +53,6 @@ export default function Kiosk() {
         getMenuItemCategory("Waffles").then((data) => setWaffles(data));
         getMenuItemCategory("Soups").then((data) => setSoups(data));
         getMenuItemCategory("Drinks").then((data) => setDrinks(data));
-
-        // Create google translate script element
-        const script = document.createElement('script');
-        script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-        script.async = true;
-        document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        }
     }, []);
 
     useEffect(() => {
