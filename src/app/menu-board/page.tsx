@@ -63,7 +63,7 @@ export default function MenuBoard() {
             <Carousel
                 className='bg-[#56b3ff] w-full py-2 shadow-xl'
                 slide
-                interval={5000}
+                interval={4000}
                 controls={false}
                 indicators={false}
             >
