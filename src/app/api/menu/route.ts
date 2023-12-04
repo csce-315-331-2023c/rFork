@@ -1,6 +1,6 @@
 import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
-import { addMenuItem, deleteMenuItem, updateMenuItem, getAllMenuItemTags } from '../../../api/menu';
+import { addMenuItem, deleteMenuItem, updateMenuItem, getAllMenuItemTags, addMenuTag, updateMenuTag } from '../../../api/menu';
 
 export async function GET(request: NextRequest) {
     const tag = request.nextUrl.searchParams.get('tag');
@@ -47,6 +47,11 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const edit_id = req.nextUrl.searchParams.get('edit');
     const delete_id = req.nextUrl.searchParams.get('delete');
+    const add_tag =  req.nextUrl.searchParams.get('add-tag');
+    const update_tag =  req.nextUrl.searchParams.get('update-tag');
+    console.log(delete_id);
+
+
     if (edit_id) {
         return await updateMenuItem(data).then(() => {
             return NextResponse.json({ message: "sucesfully updated item", data })
@@ -59,7 +64,20 @@ export async function POST(req: NextRequest) {
         }).catch((error) => {
             return NextResponse.json({ message: "frickalik deleting menu item failed", data, error }, { status: 500 })
         });
-    } {
+    }else if(add_tag){
+        return await addMenuTag(data, add_tag as string).then(() => {
+            return NextResponse.json({ message: "sucesfully added menu tag", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik failed to add menu tag", data, error }, { status: 500 })
+        });
+    }else if(update_tag){
+        return await updateMenuTag(data, update_tag as string).then(() => {
+            return NextResponse.json({ message: "sucesfully update menu tag", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik failed to update menu tag", data, error }, { status: 500 })
+        });
+    }
+    else {
         return await addMenuItem(data).then(() => {
             return NextResponse.json({ message: "sucesfully added item", data })
         }).catch((error) => {
