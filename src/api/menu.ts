@@ -173,3 +173,18 @@ export async function updateMenuItem(updatedMenuItem: MenuItem): Promise<void> {
         throw new Error('Error updating menu item');
     }
 }
+
+export async function deleteMenuItem(deletedMenuItem: MenuItem): Promise<void> {
+    // Assuming updatedMenuItem has the 'id' property to identify the menu item
+    
+    // Construct the UPDATE query
+    const deleteMenuItemQuery = 'DELETE FROM menu_item WHERE id = $1';
+
+    // Execute the UPDATE query
+    const deleteResult = await db.query(deleteMenuItemQuery, [deletedMenuItem.id]);
+
+    // Check if the update was successful
+    if (deleteResult.rowCount !== 1) {
+        throw new Error('Error updating menu item');
+    }
+}

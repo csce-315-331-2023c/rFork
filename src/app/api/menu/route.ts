@@ -1,6 +1,6 @@
 import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
-import { addMenuItem, updateMenuItem } from '../../../api/menu';
+import { addMenuItem, deleteMenuItem, updateMenuItem } from '../../../api/menu';
 
 export async function GET(request: NextRequest) {
     const tag = request.nextUrl.searchParams.get('tag');
@@ -29,14 +29,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: NextRequest) {
     const data = await req.json();
-    const id = req.nextUrl.searchParams.get('edit');
-    if(id){
+    const edit_id = req.nextUrl.searchParams.get('edit');
+    const delete_id = req.nextUrl.searchParams.get('delete');
+    if(edit_id){
         return await updateMenuItem(data).then(() => {
             return NextResponse.json({ message: "sucesfully updated item", data })
         }).catch((error) => {
             return NextResponse.json({ message: "frickalik updating menu item failed", data, error }, { status: 500 })
         });
-    }else{
+    }else if(delete_id){
+        return await deleteMenuItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully deleted item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik deleting menu item failed", data, error }, { status: 500 })
+        });
+    }{
         return await addMenuItem(data).then(() => {
             return NextResponse.json({ message: "sucesfully added item", data })
         }).catch((error) => {

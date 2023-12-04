@@ -42,8 +42,6 @@ export default function Table({ dataType, api, backgroundColor }: {
         usetEditId(id);
     }
 
-
-
     return (
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
@@ -126,8 +124,32 @@ export default function Table({ dataType, api, backgroundColor }: {
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
+                                    />
+                                    <TextButton
+                                    text='Edit Ingredients'
+                                    onPress={async () => {
+                                        const menuItem: MenuItem = {
+                                            id: editId,
+                                            name: uname,
+                                            price: uprice,
+                                            ingredients: [],
+                                            validExtras: [],
+                                            description: udesc,
+                                            imageURI: uimageURI
+                                        }
+                                        console.log(menuItem); 
+                                        await fetch(`/api/menu?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(menuItem) })
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log(data);
+                                            })
+                                            .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
 
-                                    /></td>
+                                    }}
+                                    color='#FF9638'
+                                    hoverColor='#FFC38E'
+
+                                /></td>
                             </tr> :
                             <tr key={index} style={{ border: '1px solid black', background: backgroundColor }}>
                                 <td>{menuItem.id}</td>
@@ -139,7 +161,31 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td >{menuItem.description}</td>
                                 <td>
                                     <button onClick={() => handleEdit(menuItem.id)}>edit</button>
-                                    <button>delete</button>
+                                    <TextButton
+                                        text='Delete'
+                                        onPress={async () => {
+                                            const item: MenuItem = {
+                                                id: menuItem.id,
+                                                name: menuItem.name,
+                                                price: menuItem.price,
+                                                ingredients: [],
+                                                validExtras: [],
+                                                description: menuItem.description,
+                                                imageURI: menuItem.imageURI
+                                            }
+                                            console.log(menuItem); 
+                                            await fetch(`/api/menu?delete=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(menuItem) })
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    console.log(data);
+                                                })
+                                                .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+                                            //window.location.reload();
+                                        }}
+                                        color='#FF9638'
+                                        hoverColor='#FFC38E'
+
+                                    />
                                 </td>
                             </tr>
                     ))}
