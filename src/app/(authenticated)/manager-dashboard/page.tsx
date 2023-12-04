@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import "../../css/index.css"
-import ImageButton from '../../components/ImageButton'
-import { MenuItem } from '../../types';
-import PageLoading from '../../components/PageLoading';
+import "../../../css/index.css"
+import ImageButton from '../../../components/ImageButton';
+import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
-import TextButton from '../../components/TextButton';
+import TextButton from '../../../components/TextButton';
+import AuthSessionHeader from '../../../components/AuthSessionHeader';
 
 export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
@@ -18,22 +18,19 @@ export default function ManagerDashboard() {
 
     return (
         <div className='flex flex-col h-screen'>
-            {/* Header */}
-            <nav className='h-10 bg-slate-300'>
-                <Link href='/'>
-                    <TextButton text='Logout' customClassName='a' color='#DD3311' hoverColor='#FF3311' />
-                </Link>
-            </nav>
+            <AuthSessionHeader />
             {/* Slide Menus */}
             <div className='grid grid-rows-2 grid-cols-2 flex-1'>
                 <div className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
-                    <ImageButton
-                        imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
-                        customClassName='flex-1 flex flex-col items-center justify-center border-[#888] border-2'
-                        color='#FFF'
-                        hoverColor='#CCC'
-                        altText='View Statistics Button Image'
-                    />
+                    <Link href='/manager-dashboard/reports'>
+                        <ImageButton
+                            imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
+                            customClassName='flex-1 flex flex-col items-center justify-center border-[#888] border-2 h-full'
+                            color='#FFF'
+                            hoverColor='#CCC'
+                            altText='View Statistics Button Image'
+                        />
+                    </Link>
                     <Link href='/manager-dashboard/inventory-items'>
                         <ImageButton
                             imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/35909/cardboard-box-clipart-xl.png'

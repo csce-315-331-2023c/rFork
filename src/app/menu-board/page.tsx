@@ -60,7 +60,7 @@ export default function MenuBoard() {
                 indicators={false}
             >
                 {
-                    featuredItems.map((item) => {
+                    featuredItems.map((item, index) => {
                         return (
                             <Carousel.Item key={`Carousel ${item.name}`}>
                                 <div className='flex flex-row items-center justify-center'>
