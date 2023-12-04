@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
 import ImageButton from '../../components/ImageButton'
-import { MenuItem, Order } from '../../types';
+import { Languages, MenuItem, Order } from '../../types';
 import PageLoading from '../../components/PageLoading';
 import TextButton from '../../components/TextButton';
 import Popup from '../../components/Popup';
-import { IoCartOutline, IoLanguageOutline } from "react-icons/io5"
+import { IoLanguageOutline } from "react-icons/io5"
 import { Dropdown } from 'react-bootstrap';
 import { translatePage } from '../../api/translate';
+import 'bootstrap/dist/css/bootstrap.css'
 
 export default function Kiosk() {
     // User flow hooks
@@ -29,7 +30,6 @@ export default function Kiosk() {
     const [soups, setSoups] = useState<Array<MenuItem>>([]);
     const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
 
-
     // Temporary/Volatile data for user selecting experience
     const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
@@ -39,6 +39,9 @@ export default function Kiosk() {
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
     const [orderInfo, setOrderInfo] = useState<Order>();
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
+
+    // MISC Hooks
+    const [language, setLanguage] = useState('en');
 
     useEffect(() => {
         getMenuItemCategory("Sweet Crepes").then((data) => {
@@ -61,6 +64,10 @@ export default function Kiosk() {
             document.body.removeChild(script);
         }
     }, []);
+
+    useEffect(() => {
+        translatePage(language);
+    }, [language, showCheckoutPopup, showCustomizationPopup, selectedItemList]);
 
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
         return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
@@ -103,13 +110,12 @@ export default function Kiosk() {
                 case Direction.BOTH:
                     setBorderClasses("border-black border-x-2");
                     break;
-                default:
-                    break;
             }
         }, [borderDirection]);
 
         return (
             <button
+                id='google-translate-element'
                 onClick={onPress}
                 className={`border-gray-700 px-4 h-full flex-1 text-xl ${extraClasses} ${borderClasses}`}
                 onMouseEnter={() => setExtraClasses("underline bg-[#3332]")}
@@ -134,7 +140,6 @@ export default function Kiosk() {
 
     return (
         <div className='flex flex-col h-screen'>
-            <script>console.log("test")</script>
             {/* Navbar */}
             <header className='h-[10%] w-full flex flex-row items-center justify-start px-6 py-2 bg-[#d6e3ff]'>
                 <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' />
@@ -143,14 +148,32 @@ export default function Kiosk() {
                 <KioskNavButton onPress={() => { setSelectedItemList(waffles); setCategoryTitle("Waffles"); }} borderDirection={Direction.RIGHT} text='Waffles' />
                 <KioskNavButton onPress={() => { setSelectedItemList(soups); setCategoryTitle("Soups (Seasonal)"); }} borderDirection={Direction.RIGHT} text='Soups' />
                 <KioskNavButton onPress={() => { setSelectedItemList(drinks); setCategoryTitle("Drinks"); }} borderDirection={Direction.NONE} text='Drinks' />
-                <button className='flex flex-col items-center hover:bg-[#3333] p-2 h-full' onClick={() => translatePage("de")}>
-                    <IoLanguageOutline fontSize={"2.5rem"} />
-                </button>
+                <Dropdown>
+                    <Dropdown.Toggle className='flex flex-col justify-center items-center hover:bg-[#3333] hover:cursor-pointer p-2 h-full'>
+                        <IoLanguageOutline fontSize={"2.5rem"} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {
+                            Object.keys(Languages).map((language) => {
+                                return (
+                                    <Dropdown.Item key={language} onClick={() => {
+                                        if (language == "English") {
+                                            location.reload();
+                                        }
+                                        setLanguage((Languages as any)[language]);
+                                    }}>
+                                        {language}
+                                    </Dropdown.Item>
+                                )
+                            })
+                        }
+                    </Dropdown.Menu>
+                </Dropdown>
             </header>
 
             {/* Menu Content */}
             <div className='px-10 py-2 flex-1 h-4 overflow-y-auto'>
-                <h1 className='text-4xl underline m-2'>{categoryTitle}</h1>
+                <h1 id='google-translate-element' className='text-4xl underline m-2'>{categoryTitle}</h1>
                 <div className='grid grid-cols-4 gap-4'>
                     {selectedItemList.map((menuItem) => {
                         return (
