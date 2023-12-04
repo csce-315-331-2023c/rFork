@@ -37,7 +37,28 @@ export async function product_excess(){
 }
 
 export async function restock_report(): Promise<InventoryItem[]>{
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item WHERE stock < reorder_threshold ORDER BY id ASC) t';
 
+    const result = await db.query(query);
+
+    let inventoryItems: InventoryItem[] = [];
+    for (let row of result.rows) {
+        const { 
+            f1: id, 
+            f2: item_name, 
+            f3: current_qty,
+            f4: reorder_threshold
+        } = row.row_to_json.row;
+        
+        inventoryItems.push({
+            id: id,
+            name: item_name,
+            currentStock: current_qty,
+            reorderThreshold: reorder_threshold
+        });
+    }
+
+    return inventoryItems;
 }
 
 export async function sells_together(start: Date, end: Date): Promise<Order[]>{
