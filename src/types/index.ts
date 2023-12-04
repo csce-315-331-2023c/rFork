@@ -10,6 +10,8 @@ export type MenuItem = {
     price: number;
     ingredients: Ingredient[];
     validExtras: Ingredient[];
+    description?: string;
+    imageURI?: string;
 };
 
 export type Tag = string;
@@ -55,37 +57,37 @@ export type usageReport = {
 }
 
 export const Languages = {
-    english : "en",
-    spanish : "es",
-    french : "fr",
-    german : "de",
-    italian : "it",
-    japanese : "ja",
-    korean : "ko",
-    chinese : "zh-CN",
-    russian : "ru",
-    portuguese : "pt",
-    arabic : "ar",
-    turkish : "tr",
-    polish : "pl",
-    dutch : "nl",
-    romanian : "ro",
-    hungarian : "hu",
-    czech : "cs",
-    indonesian : "id",
-    swedish : "sv",
-    danish : "da",
-    hebrew : "he",
-    norwegian : "no",
-    slovak : "sk",
-    bulgarian : "bg",
-    finnish : "fi",
-    vietnamese : "vi",
-    thai : "th",
-    greek : "el",
-    ukrainian : "uk",
-    catalan : "ca",
-    chineseTaiwan : "zh-TW",
+    "English": "en",
+    "Spanish": "es",
+    "French": "fr",
+    "German": "de",
+    "Italian": "it",
+    "Japanese": "ja",
+    "Korean": "ko",
+    "Russian": "ru",
+    "Portuguese": "pt",
+    "Arabic": "ar",
+    "Turkish": "tr",
+    "Polish": "pl",
+    "Dutch": "nl",
+    "Romanian": "ro",
+    "Hungarian": "hu",
+    "Czech": "cs",
+    "Indonesian": "id",
+    "Swedish": "sv",
+    "Danish": "da",
+    "Hebrew": "he",
+    "Norwegian": "no",
+    "Slovak": "sk",
+    "Bulgarian": "bg",
+    "Finnish": "fi",
+    "Vietnamese": "vi",
+    "Thai": "th",
+    "Greek": "el",
+    "Ukrainian": "uk",
+    "Catalan": "ca",
+    "ChineseSimplified": "zh-CN",
+    "ChineseTraditional": "zh-TW",
 };
 
 export type WeatherCondition = {

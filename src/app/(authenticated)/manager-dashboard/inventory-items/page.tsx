@@ -1,7 +1,7 @@
 'use client'
 import { CChart } from '@coreui/react-chartjs'
 import React, { useEffect, useState } from 'react'
-import { InventoryItem, MenuItem } from '../../../types';
+import { InventoryItem, MenuItem } from '../../../../types';
 
 export default function InventoryItemView() {
     const [inventoryNames, setInventoryNames] = useState<Array<string>>([]);

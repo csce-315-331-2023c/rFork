@@ -28,8 +28,7 @@ export default function ImageButton({ text, price, imageURI, onPress, color, hov
                 className='object-scale-down w-auto max-h-44'
                 src={imageURI ?? 'https://static.vecteezy.com/system/resources/previews/025/065/282/original/crepe-with-ai-generated-free-png.png'}
             />
-            <p>{text ? `${text}${price ? ` - $${(price).toFixed(2)}` : ''}` : ''}</p>
-            <p className=''>{ }</p>
+            <p id='google-translate-element'>{text ? `${text}${price ? ` - $${(price).toFixed(2)}` : ''}` : ''}</p>
         </button>
     )
 }

@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import "../../css/index.css"
 import ImageButton from '../../components/ImageButton'
-import { MenuItem, Order } from '../../types';
+import { Languages, MenuItem, Order } from '../../types';
 import PageLoading from '../../components/PageLoading';
 import TextButton from '../../components/TextButton';
 import Popup from '../../components/Popup';
-import { redirect } from 'next/navigation';
+import { IoLanguageOutline } from "react-icons/io5"
+import { Dropdown } from 'react-bootstrap';
+import { translatePage } from '../../api/translate';
+import 'bootstrap/dist/css/bootstrap.css'
 
 export default function Kiosk() {
     // User flow hooks
@@ -27,40 +30,51 @@ export default function Kiosk() {
     const [soups, setSoups] = useState<Array<MenuItem>>([]);
     const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
 
-
     // Temporary/Volatile data for user selecting experience
     const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
+    const [categoryTitle, setCategoryTitle] = useState<string>("Sweet Crepes");
 
     // Final order info data
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
     const [orderInfo, setOrderInfo] = useState<Order>();
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
+    // MISC Hooks
+    const [language, setLanguage] = useState('en');
+
     useEffect(() => {
-        fetch(`/api/menu?tag=${encodeURIComponent("Sweet Crepes")}`).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (typeof data == "object") {
-                setSweetCrepes(data);
-                setSelectedItemList(data);
-            }
-        }).catch((err) => {
-            alert(`An issue occured fetching from the database: ${err}`);
+        getMenuItemCategory("Sweet Crepes").then((data) => {
+            setSweetCrepes(data);
+            setSelectedItemList(data);
+            setLoading(false);
         });
-
-        fetch(`/api/menu?tag=${encodeURIComponent("Savory Crepes")}`).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (typeof data == "object") {
-                setSavoryCrepes(data);
-            }
-        }).catch((err) => {
-            alert(`An issue occured fetching from the database: ${err}`);
-        });
-
-        setLoading(false);
+        getMenuItemCategory("Savory Crepes").then((data) => setSavoryCrepes(data));
+        getMenuItemCategory("Waffles").then((data) => setWaffles(data));
+        getMenuItemCategory("Soups").then((data) => setSoups(data));
+        getMenuItemCategory("Drinks").then((data) => setDrinks(data));
     }, []);
+
+    useEffect(() => {
+        translatePage(language);
+    }, [language, showCheckoutPopup, showCustomizationPopup, selectedItemList]);
+
+    async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
+        return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    return data;
+                }
+                else {
+                    throw new Error("Endpoint did not return array");
+                }
+            })
+            .catch((err) => {
+                console.error(`Issue fetching items with tag tag '${tag}' from database: ${err}`)
+                return [];
+            })
+    }
 
     if (loading) return <PageLoading />;
 
@@ -86,13 +100,12 @@ export default function Kiosk() {
                 case Direction.BOTH:
                     setBorderClasses("border-black border-x-2");
                     break;
-                default:
-                    break;
             }
         }, [borderDirection]);
 
         return (
             <button
+                id='google-translate-element'
                 onClick={onPress}
                 className={`border-gray-700 px-4 h-full flex-1 text-xl ${extraClasses} ${borderClasses}`}
                 onMouseEnter={() => setExtraClasses("underline bg-[#3332]")}
@@ -117,20 +130,40 @@ export default function Kiosk() {
 
     return (
         <div className='flex flex-col h-screen'>
-
             {/* Navbar */}
             <header className='h-[10%] w-full flex flex-row items-center justify-start px-6 py-2 bg-[#d6e3ff]'>
-                <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' />
-                <KioskNavButton onPress={() => setSelectedItemList(sweetCrepes)} borderDirection={Direction.RIGHT} text='Sweet Crepes' />
-                <KioskNavButton onPress={() => setSelectedItemList(savoryCrepes)} borderDirection={Direction.RIGHT} text='Savory Crepes' />
-                <KioskNavButton onPress={() => setSelectedItemList(waffles)} borderDirection={Direction.RIGHT} text='Waffles' />
-                <KioskNavButton onPress={() => setSelectedItemList(soups)} borderDirection={Direction.RIGHT} text='Soups' />
-                <KioskNavButton onPress={() => setSelectedItemList(drinks)} borderDirection={Direction.NONE} text='Drinks' />
+                <img src='https://www.sweetparis.com/assets/logos/sweet-paris-logo.svg' className='max-h-16 mr-6' alt='' />
+                <KioskNavButton onPress={() => { setSelectedItemList(sweetCrepes); setCategoryTitle("Sweet Crepes"); }} borderDirection={Direction.RIGHT} text='Sweet Crepes' />
+                <KioskNavButton onPress={() => { setSelectedItemList(savoryCrepes); setCategoryTitle("Savory Crepes"); }} borderDirection={Direction.RIGHT} text='Savory Crepes' />
+                <KioskNavButton onPress={() => { setSelectedItemList(waffles); setCategoryTitle("Waffles"); }} borderDirection={Direction.RIGHT} text='Waffles' />
+                <KioskNavButton onPress={() => { setSelectedItemList(soups); setCategoryTitle("Soups (Seasonal)"); }} borderDirection={Direction.RIGHT} text='Soups' />
+                <KioskNavButton onPress={() => { setSelectedItemList(drinks); setCategoryTitle("Drinks"); }} borderDirection={Direction.NONE} text='Drinks' />
+                <Dropdown className='hover:bg-[#3333]'>
+                    <Dropdown.Toggle variant='Secondary' className='flex flex-col justify-center items-center hover:cursor-pointer p-2 h-full'>
+                        <IoLanguageOutline fontSize={"2.5rem"} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {
+                            Object.keys(Languages).map((language) => {
+                                return (
+                                    <Dropdown.Item key={language} onClick={() => {
+                                        if (language == "English") {
+                                            location.reload();
+                                        }
+                                        setLanguage((Languages as any)[language]);
+                                    }}>
+                                        {language}
+                                    </Dropdown.Item>
+                                )
+                            })
+                        }
+                    </Dropdown.Menu>
+                </Dropdown>
             </header>
 
             {/* Menu Content */}
             <div className='px-10 py-2 flex-1 h-4 overflow-y-auto'>
-                <h1 className='text-4xl underline'>Items</h1>
+                <h1 id='google-translate-element' className='text-4xl underline m-2'>{categoryTitle}</h1>
                 <div className='grid grid-cols-4 gap-4'>
                     {selectedItemList.map((menuItem) => {
                         return (
@@ -143,6 +176,7 @@ export default function Kiosk() {
                                 }}
                                 price={menuItem.price}
                                 color='#FFF'
+                                imageURI={menuItem.imageURI}
                             />
                         )
                     })}
@@ -159,7 +193,7 @@ export default function Kiosk() {
                     />
                     <TextButton
                         customClassName='flex-1 py-2 h-full text-2xl'
-                        text={`Checkout/Edit Order (${cartItems.length})`}
+                        text={`Checkout/Edit Order`}
                         onPress={() => setShowCheckoutPopup(true)}
                         color='#FF9638'
                         hoverColor='#FFC38E'
