@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { product_usage, product_sales, product_excess, restock_report, sells_together } from '../../../api/reports'
 import "../../../css/index.css"
 
-export default function reportView() {
+export default function ReportView() {
 
     enum r {
         product_usage,
