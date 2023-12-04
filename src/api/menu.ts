@@ -41,20 +41,22 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
     }
 
     // get all menu items, create id->item map
-    const menuItemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name, price_cents) FROM menu_item) t';
+    const menuItemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name, price_cents, description, img_uri) FROM menu_item) t';
 
     const menuItemResult = await db.query(menuItemQuery);
 
     let menuItemsMap: Map<number, MenuItem> = new Map();
     for (let row of menuItemResult.rows) {
-        const { f1: id, f2: item_name, f3: price } = row.row_to_json.row;
+        const { f1: id, f2: item_name, f3: price, f4: description, f5: imageURI } = row.row_to_json.row;
 
         menuItemsMap.set(id, {
             id: id,
             name: item_name,
             price: price / 100, // convert cents to dollars
             ingredients: [],
-            validExtras: []
+            validExtras: [],
+            description,
+            imageURI,
         });
     }
 
@@ -72,20 +74,22 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
 }
 
 export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
-    const query = 'SELECT row_to_json(t) FROM (SELECT (mi.id, mi.name, mi.price_cents) FROM menu_item mi INNER JOIN menu_item_tag mit ON mi.id = mit.menu_item_id WHERE mit.tag_name = $1) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (mi.id, mi.name, mi.price_cents, mi.description, mi.img_uri) FROM menu_item mi INNER JOIN menu_item_tag mit ON mi.id = mit.menu_item_id WHERE mit.tag_name = $1) t';
 
     const result = await db.query(query, [tag]);
 
     let menuItems: MenuItem[] = [];
     for (let row of result.rows) {
-        const { f1: id, f2: name, f3: price } = row.row_to_json.row;
+        const { f1: id, f2: name, f3: price, f4: description, f5: imageURI } = row.row_to_json.row;
 
         menuItems.push({
             id: id,
             name: name,
             price: price / 100, // convert cents to dollars
             ingredients: [],
-            validExtras: []
+            validExtras: [],
+            description,
+            imageURI
         });
     }
 
