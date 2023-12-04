@@ -16,35 +16,69 @@ export default function reportView() {
     const [reportType, setReportType] = useState<r>(r.product_usage);
 
     useEffect(() => {
-        fetch('/api/reports?reports=product_usage').then(res => res.json()).then(d => {
+        fetch('/api/reports?reports=product_usage&start=0&end=1701660672190').then(res => res.json()).then(d => {
             setData(d);
         })
     }, []);
 
     const [data, setData] = useState<Array<any>>([]);
-    console.log(data);
     return (
 
         <div className="justify-center h-screen">
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => setReportType(r.product_usage)}>Product Usage</button>
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                setReportType(r.product_sales);
+                fetch('/api/reports?reports=product_usage&start=0&end=1701660672190').then(res => res.json()).then(d => {
+                    setData(d);
+                    setReportType(r.product_usage);
+                })
+            }}>Product Usage</button>
+            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
                 fetch('/api/reports?reports=product_sales&start=0&end=1701660672190').then(res => res.json()).then(d => {
                     setData(d);
+                    setReportType(r.product_sales);
                 })
             }}>Product Sales</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => setReportType(r.product_excess)}>Product Excess</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => setReportType(r.restock_report)}>Restock Report</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => setReportType(r.sells_together)}>Sells Together</button>
+            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
+                fetch('/api/reports?reports=product_excess&start=0').then(res => res.json()).then(d => {
+                    setData(d);
+                    setReportType(r.product_excess);
+                })
+            }}>Product Excess</button>
+            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
+                fetch('/api/reports?reports=restock_report').then(res => res.json()).then(d => {
+                    setData(d);
+                    setReportType(r.restock_report);
+                })
+            }}>Restock Report</button>
+            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
+                fetch('/api/reports?reports=sells_together&start=0&end=1701660672190').then(res => res.json()).then(d => {
+                    setData(d);
+                    setReportType(r.sells_together);
+                })
+            }}>Sells Together</button>
             {
                 reportType == r.product_usage &&
                 <div>
                     <table>
                         <thead>
                             <tr>
-
+                                <th className='px-10'>Item ID</th>
+                                <th className='px-10'>Item Name</th>
+                                <th className='px-10'>Quantity Used</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            {
+                                data.map((row, index) => {
+                                    return (
+                                        <tr key={`sales ${index}`}>
+                                            <td className='px-10'>{row.id}</td>
+                                            <td className='px-10'>{row.name}</td>
+                                            <td className='px-10'>{row.quantity}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
                     </table>
                 </div>
             }
@@ -80,6 +114,31 @@ export default function reportView() {
             {
                 reportType == r.product_excess &&
                 <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className='px-10'>Item ID</th>
+                                <th className='px-10'>Item Name</th>
+                                <th className='px-10'>Current Stock</th>
+                                <th className='px-10'>Reorder Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                data.map((row, index) => {
+                                    return (
+
+                                        <tr key={`sales ${index}`}>
+                                            <td className='px-10'>{row.id}</td>
+                                            <td className='px-10'>{row.name}</td>
+                                            <td className='px-10'>{row.currentStock}</td>
+                                            <td className='px-10'>{row.reorderThreshold}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
             }
             {
@@ -121,7 +180,7 @@ export default function reportView() {
                                 <th className='px-10'>Item ID 1</th>
                                 <th className='px-10'>Item ID 2</th>
                                 <th className='px-10'>Number of Times Ordered Together</th>
-                                <th className='px-10'>Reorder Threshold</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -129,10 +188,9 @@ export default function reportView() {
                                 data.map((row, index) => {
                                     return (
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id}</td>
-                                            <td className='px-10'>{row.name}</td>
-                                            <td className='px-10'>{row.currentStock}</td>
-                                            <td className='px-10'>{row.reorderThreshold}</td>
+                                            <td className='px-10'>{row.id1}</td>
+                                            <td className='px-10'>{row.id2}</td>
+                                            <td className='px-10'>{row.quantity}</td>
                                         </tr>
                                     )
                                 })

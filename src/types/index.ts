@@ -41,6 +41,19 @@ export type Employee = {
     role: string;
 };
 
+
+export type itemReport = {
+    id1: number;
+    id2: number;
+    quantity: number;
+}
+
+export type usageReport = {
+    id: number;
+    name: string;
+    quantity: number;
+}
+
 export const Languages = {
     english : "en",
     spanish : "es",
