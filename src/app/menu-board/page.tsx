@@ -46,14 +46,6 @@ export default function MenuBoard() {
             })
     }
 
-    useEffect(() => {
-        fetch("/api/menu").then(async (result) => {
-            const allMenuItems = await result.json();
-            setMenuItems(allMenuItems);
-            setLoading(false);
-        });
-    }, []);
-
     if (loading) return <PageLoading />;
 
     return (
@@ -70,7 +62,7 @@ export default function MenuBoard() {
                 {
                     featuredItems.map((item, index) => {
                         return (
-                            <Carousel.Item key={index}>
+                            <Carousel.Item key={`Carousel ${item.name}`}>
                                 <div className='flex flex-row items-center justify-center'>
                                     <img className='h-72 rounded-xl mx-4' src={item.imageURI} alt={item.name} />
                                     <div className='mx-4'>

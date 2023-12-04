@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /** Interface representing a color. Include r (red), g (green), b (blue) values and an optional a (alpha) value representing opacity. */
 export interface ColorValues {
     r: number
@@ -74,3 +76,8 @@ export const calculateHexLuminosity = (color: string): number => {
     const colorRGBAVals = hexToRGBA(color);
     return colorRGBAVals ? calculateRGBLuminosity(colorRGBAVals) : 255;
 };
+
+export const randomColorHex = (): string => {
+    return RGBAToHex({ r: crypto.randomBytes(1)[0], g: crypto.randomBytes(1)[0], b: crypto.randomBytes(1)[0] });
+}
+

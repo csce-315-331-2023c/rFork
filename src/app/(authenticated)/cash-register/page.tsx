@@ -6,6 +6,7 @@ import TextButton from '../../../components/TextButton';
 import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
 import AuthSessionHeader from '../../../components/AuthSessionHeader';
+import { randomColorHex } from '../../../helpers/colorUtils';
 
 export default function CashRegister() {
     // Data Hooks
@@ -15,6 +16,10 @@ export default function CashRegister() {
     const [tax, setTax] = useState<number>(0);
     const [tip, setTip] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
+
+    const [tipMultiplier, setTipMultiplier] = useState<number>(0);
+    const [discountMultiplier, setDiscountMultiplier] = useState<number>(1);
+    const taxMultiplier = 0.05;
 
     // Lists of different tagged menu items
     const [sweetCrepes, setSweetCrepes] = useState<Array<MenuItem>>([]);
@@ -37,14 +42,16 @@ export default function CashRegister() {
 
     // Component Constants
     const discountButtons = [
-        (<TextButton text='-5%' key={0} />),
-        (<TextButton text='-10%' key={1} />),
+        (<TextButton text='0%' key={"Discount 0"} onPress={() => { setDiscountMultiplier(1); updateOrderTotal(cartItems, tipMultiplier, 1) }} />),
+        (<TextButton text='-5%' key={"Discount 1"} onPress={() => { setDiscountMultiplier(0.95); updateOrderTotal(cartItems, tipMultiplier, 0.95) }} />),
+        (<TextButton text='-10%' key={"Discount 2"} onPress={() => { setDiscountMultiplier(0.90); updateOrderTotal(cartItems, tipMultiplier, 0.90) }} />),
     ];
 
     const tipButtons = [
-        (<TextButton text='10%' key={0} />),
-        (<TextButton text='15%' key={1} />),
-        (<TextButton text='20%' key={2} />),
+        (<TextButton text='0%' key={"Tip 0"} onPress={() => { setTipMultiplier(0); updateOrderTotal(cartItems, 0); }} />),
+        (<TextButton text='10%' key={"Tip 1"} onPress={() => { setTipMultiplier(0.1); updateOrderTotal(cartItems, 0.1); }} />),
+        (<TextButton text='15%' key={"Tip 2"} onPress={() => { setTipMultiplier(0.15); updateOrderTotal(cartItems, 0.15); }} />),
+        (<TextButton text='20%' key={"Tip 3"} onPress={() => { setTipMultiplier(0.2); updateOrderTotal(cartItems, 0.2); }} />),
     ];
     // Closure Functions
 
@@ -75,13 +82,15 @@ export default function CashRegister() {
             })
     }
 
-    function updateOrderTotal(updatedCartItems: MenuItem[]) {
+    function updateOrderTotal(updatedCartItems: MenuItem[], tipMulti: number = tipMultiplier, discountMulti: number = discountMultiplier) {
         let updatedSubtotal = 0;
         updatedCartItems.forEach((menuItem) => {
             updatedSubtotal += menuItem.price;
         });
-        console.log(updatedSubtotal);
         setSubtotal(updatedSubtotal);
+        setTip(updatedSubtotal * tipMulti);
+        setTax(updatedSubtotal * taxMultiplier);
+        setTotal((updatedSubtotal * (1 + tipMulti + taxMultiplier)) * discountMulti);
     }
 
     function addToOrder(menuItem: MenuItem) {
@@ -105,11 +114,13 @@ export default function CashRegister() {
      * @param menuItemList List of menu items to display
      */
     function createMiddleMenuItemContent(menuItemList: MenuItem[]) {
-        const middleContent = menuItemList.map((item) => {
+        const middleContent = menuItemList.map((item, index) => {
             return (<TextButton
-                key={item.name}
+                color={randomColorHex()}
+                key={`${item.name}${index}`}
                 text={item.name}
                 onPress={() => {
+                    setSelectedItem(item);
                     let bottomContent = item.ingredients.map((ingredient) => {
                         return (
                             <TextButton
@@ -122,7 +133,7 @@ export default function CashRegister() {
                         key={"Add to Order"}
                         text={`Add to Order`}
                         color='#0077FF'
-                        onPress={() => addToOrder(item)}
+                        onPress={() => { addToOrder(item); setSelectedItem(undefined); }}
                     />;
 
                     bottomContent = [...bottomContent, addToOrderButton]
@@ -183,12 +194,17 @@ export default function CashRegister() {
                             </ul>
                             <ul>
                                 <li>{`\$${subtotal.toFixed(2)}`}</li>
-                                <li>{`\$${tax.toFixed(2)}`}</li>
-                                <li>{`\$${tip.toFixed(2)}`}</li>
+                                <li>{`\$${tax.toFixed(2)} (5%)`}</li>
+                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier)*100}%)` : ""}`}</li>
                                 <li>{`\$${total.toFixed(2)}`}</li>
                             </ul>
                         </div>
-                        <TextButton text='Cancel Order' onPress={() => setCartItems([])} />
+                        <TextButton text='Cancel Order' onPress={() => {
+                            setCartItems([]);
+                            setSelectedItem(undefined);
+                            setMiddleRightChildren(null);
+                            setBottomRightChildren(null);
+                        }} />
                         <TextButton
                             text='Pay'
                             color='#3de8e0'
@@ -206,10 +222,13 @@ export default function CashRegister() {
                                 }
                                 await fetch("/api/orders", { method: "POST", body: JSON.stringify(order) })
                                     .then((response) => response.json())
-                                    .then((data) => {
+                                    .then(() => {
                                         setCartItems([]);
                                     })
                                     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+                                setSelectedItem(undefined);
+                                setMiddleRightChildren(null);
+                                setBottomRightChildren(null);
                             }}
                         />
                     </div>
@@ -223,26 +242,35 @@ export default function CashRegister() {
                             onPress={() => createMiddleMenuItemContent(sweetCrepes)}
                             key={"sweetCrepeButton"}
                             color='#FFF3B9'
+                            hoverColor='#fffde0'
                         />
                         <TextButton
                             text='Savory Crepes'
                             onPress={() => createMiddleMenuItemContent(savoryCrepes)}
                             key={"savoryCrepeButton"}
+                            color='#f53e1d'
+                            hoverColor='#ff765e'
                         />
                         <TextButton
                             text='Waffles'
                             onPress={() => createMiddleMenuItemContent(waffles)}
                             key={"waffleButton"}
+                            color='#fabb0f'
+                            hoverColor='#ffe294'
                         />
                         <TextButton
                             text='Soups'
                             onPress={() => createMiddleMenuItemContent(soups)}
                             key={"soupsButton"}
+                            color='#d411f2'
+                            hoverColor='#ef95fc'
                         />
                         <TextButton
                             text='Drinks'
                             onPress={() => createMiddleMenuItemContent(drinks)}
                             key={"drinkButton"}
+                            color='#38fff2'
+                            hoverColor='#d4faf7'
                         />
                         <TextButton
                             text='Discounts'
@@ -263,13 +291,13 @@ export default function CashRegister() {
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>Options</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Options`}</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {middleRightChildren}
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>Add-ons</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Add-ons${selectedItem ? ` (${selectedItem?.name})` : ""}`}</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {bottomRightChildren}
                     </div>
