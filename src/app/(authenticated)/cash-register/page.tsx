@@ -18,6 +18,7 @@ export default function CashRegister() {
     const [total, setTotal] = useState<number>(0);
 
     const [tipMultiplier, setTipMultiplier] = useState<number>(0);
+    const [discountMultiplier, setDiscountMultiplier] = useState<number>(1);
     const taxMultiplier = 0.05;
 
     // Lists of different tagged menu items
@@ -41,15 +42,16 @@ export default function CashRegister() {
 
     // Component Constants
     const discountButtons = [
-        (<TextButton text='-5%' key={"Discount 0"} />),
-        (<TextButton text='-10%' key={"Discount 1"} />),
+        (<TextButton text='0%' key={"Discount 0"} onPress={() => { setDiscountMultiplier(1); updateOrderTotal(cartItems, tipMultiplier, 1) }} />),
+        (<TextButton text='-5%' key={"Discount 1"} onPress={() => { setDiscountMultiplier(0.95); updateOrderTotal(cartItems, tipMultiplier, 0.95) }} />),
+        (<TextButton text='-10%' key={"Discount 2"} onPress={() => { setDiscountMultiplier(0.90); updateOrderTotal(cartItems, tipMultiplier, 0.90) }} />),
     ];
 
     const tipButtons = [
-        (<TextButton text='0%' key={"Tip 0"} onPress={() => { setTipMultiplier(0); updateOrderTotal(cartItems); }} />),
-        (<TextButton text='10%' key={"Tip 1"} onPress={() => { setTipMultiplier(0.1); updateOrderTotal(cartItems); }} />),
-        (<TextButton text='15%' key={"Tip 2"} onPress={() => { setTipMultiplier(0.15); updateOrderTotal(cartItems); }} />),
-        (<TextButton text='20%' key={"Tip 3"} onPress={() => { setTipMultiplier(0.2); updateOrderTotal(cartItems); }} />),
+        (<TextButton text='0%' key={"Tip 0"} onPress={() => { setTipMultiplier(0); updateOrderTotal(cartItems, 0); }} />),
+        (<TextButton text='10%' key={"Tip 1"} onPress={() => { setTipMultiplier(0.1); updateOrderTotal(cartItems, 0.1); }} />),
+        (<TextButton text='15%' key={"Tip 2"} onPress={() => { setTipMultiplier(0.15); updateOrderTotal(cartItems, 0.15); }} />),
+        (<TextButton text='20%' key={"Tip 3"} onPress={() => { setTipMultiplier(0.2); updateOrderTotal(cartItems, 0.2); }} />),
     ];
     // Closure Functions
 
@@ -80,16 +82,15 @@ export default function CashRegister() {
             })
     }
 
-    function updateOrderTotal(updatedCartItems: MenuItem[]) {
+    function updateOrderTotal(updatedCartItems: MenuItem[], tipMulti: number = tipMultiplier, discountMulti: number = discountMultiplier) {
         let updatedSubtotal = 0;
         updatedCartItems.forEach((menuItem) => {
             updatedSubtotal += menuItem.price;
         });
-        console.log(updatedSubtotal);
         setSubtotal(updatedSubtotal);
-        setTip(updatedSubtotal * tipMultiplier);
+        setTip(updatedSubtotal * tipMulti);
         setTax(updatedSubtotal * taxMultiplier);
-        setTotal(updatedSubtotal * (1 + tipMultiplier + taxMultiplier));
+        setTotal((updatedSubtotal * (1 + tipMulti + taxMultiplier)) * discountMulti);
     }
 
     function addToOrder(menuItem: MenuItem) {
@@ -193,8 +194,8 @@ export default function CashRegister() {
                             </ul>
                             <ul>
                                 <li>{`\$${subtotal.toFixed(2)}`}</li>
-                                <li>{`\$${tax.toFixed(2)}`}</li>
-                                <li>{`\$${tip.toFixed(2)}`}</li>
+                                <li>{`\$${tax.toFixed(2)} (5%)`}</li>
+                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier)*100}%)` : ""}`}</li>
                                 <li>{`\$${total.toFixed(2)}`}</li>
                             </ul>
                         </div>
