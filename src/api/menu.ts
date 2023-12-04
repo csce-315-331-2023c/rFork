@@ -142,3 +142,82 @@ export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
 
     return menuItems;
 }
+
+export async function addMenuItem(MenuItem: MenuItem): Promise<void> {
+    // restaurant_order - date, total
+
+    const MenuItemQuery = 'INSERT INTO menu_item (name, price_cents, img_uri, description) VALUES ($1, $2, $3, $4) RETURNING id';
+
+
+    const MenuItemResult = await db.query(MenuItemQuery, [MenuItem.name, MenuItem.price, MenuItem.imageURI, MenuItem.description]);
+    
+    if (MenuItemResult.rowCount !== 1) {
+        throw new Error('Error inserting order');
+    }
+    
+    MenuItem.id = MenuItemResult.rows[0].id;
+
+}
+
+export async function updateMenuItem(updatedMenuItem: MenuItem): Promise<void> {
+
+    const updateMenuItemQuery = 'UPDATE menu_item SET name = $1, price_cents = $2, img_uri = $3, description = $4 WHERE id = $5';
+
+
+    const updateResult = await db.query(updateMenuItemQuery, [updatedMenuItem.name, updatedMenuItem.price, updatedMenuItem.imageURI, updatedMenuItem.description, updatedMenuItem.id]);
+
+    // Check if the update was successful
+    if (updateResult.rowCount !== 1) {
+        throw new Error('Error updating menu item');
+    }
+}
+
+export async function deleteMenuItem(deletedMenuItem: MenuItem): Promise<void> {
+    const deleteMenuItemQuery = 'DELETE FROM menu_item WHERE id = $1';
+
+    const deleteResult = await db.query(deleteMenuItemQuery, [deletedMenuItem.id]);
+
+    // Check if the delete was successful
+    if (deleteResult.rowCount !== 1) {
+        throw new Error('Error deleting menu item');
+    }
+}
+
+
+export async function getAllMenuItemTags(){
+    const getMenuItemTags = 'SELECT * FROM menu_item_tag';
+
+    const result = await db.query(getMenuItemTags);
+
+    return result;
+
+}
+
+export async function addMenuTag(MenuItem: MenuItem, newTag: string): Promise<void> {
+    // restaurant_order - date, total
+
+    const addMenuTagQuery = 'INSERT INTO menu_item_tag (menu_item_id, tag_name) VALUES ($1, $2)';
+
+
+    const MenuTagResult = await db.query(addMenuTagQuery, [MenuItem.id, newTag]);
+    
+    if (MenuTagResult.rowCount !== 1) {
+        throw new Error('Error inserting new tag');
+    }
+    
+    
+
+}
+
+export async function updateMenuTag(updatedMenuItem: MenuItem, newTag: string): Promise<void> {
+
+    const updateMenuTagQuery = 'UPDATE menu_item_tag SET menu_item_id = $1, tag_name = $2 WHERE id = $3';
+
+
+    const updateResult = await db.query(updateMenuTagQuery, [updatedMenuItem.id, newTag, updatedMenuItem.id]);
+
+    // Check if the update was successful
+    if (updateResult.rowCount !== 1) {
+        throw new Error('Error updating menu item');
+    }
+}

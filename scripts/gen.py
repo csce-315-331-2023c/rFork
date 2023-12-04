@@ -79,7 +79,7 @@ def main():
     #in hindsight since everything is dependent on something else there's not much of a need to use a function that can generate random csv's that are unrelated based on a generic template
     with open('orders.csv',"w") as orders_outfile, open('order_item.csv',"w") as order_item_outfile, open('order_item_ingredient.csv',"w") as order_item_ingredient_outfile:
         orders_csvwriter = csv.writer(orders_outfile)
-        orders_headers = ["id", "create_time", "subtotal_cents","tip_cents","employee_id"]
+        orders_headers = ["id", "create_time", "subtotal_cents","tip_cents","employee_id", "is_finished"]
         orders_csvwriter.writerow(orders_headers)
 
         order_item_csvwriter = csv.writer(order_item_outfile)
@@ -116,7 +116,7 @@ def main():
             employee = choice(ruleSet["employees"])
             
             #create order row
-            orders_csvwriter.writerow([i,random_date(ruleSet["start"],ruleSet["end"]),subtotal_cents,tip,employee])
+            orders_csvwriter.writerow([i,random_date(ruleSet["start"],ruleSet["end"]),subtotal_cents,tip,employee, True])
             
             #write the list of menu items
             for menu_item in random_menu_items:
