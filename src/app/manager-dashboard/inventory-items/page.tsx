@@ -3,45 +3,13 @@ import { CChart } from '@coreui/react-chartjs'
 import React, { useEffect, useState } from 'react'
 import { InventoryItem, MenuItem } from '../../../types';
 import TextButton from '../../../components/TextButton';
+
 const testMenuItem: MenuItem = {
     name: "TEST MENU ITEM",
     price: 12.50,
     ingredients: [{ itemId: 0, itemName: "[MENU ITEM INGREDIENT]", quantity: 5 }],
     validExtras: [],
 }
-
-// function addItemButton({ text, onPress }: { text: string, onPress: () => any }): React.JSX.Element {
-//     const [extraClasses, setExtraClasses] = useState<string>("");
-//     const [borderClasses, setBorderClasses] = useState<string>("");
-
-//     useEffect(() => {
-//         switch (borderDirection) {
-//             case Direction.LEFT:
-//                 setBorderClasses("border-black border-l-2");
-//                 break;
-//             case Direction.RIGHT:
-//                 setBorderClasses("border-black border-r-2");
-//                 break;
-//             case Direction.BOTH:
-//                 setBorderClasses("border-black border-x-2");
-//                 break;
-//             default:
-//                 break;
-//         }
-//     }, []);
-
-//     return (
-//         <button
-//             onClick={onPress}
-//             className={`border-gray-700 px-4 h-full flex-1 text-xl ${extraClasses} ${borderClasses}`}
-//             onMouseEnter={() => setExtraClasses("underline bg-[#3332]")}
-//             onMouseLeave={() => setExtraClasses("")}
-//         >
-//             {text}
-//         </button>
-//     );
-// }
-
 
 export default function InventoryItemView() {
     const [inventoryNames, setInventoryNames] = useState<Array<string>>([]);

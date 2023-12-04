@@ -1,5 +1,6 @@
-import { getAllMenuItems, getMenuItemByTag } from '../../../api'
+import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
+import { addMenuItem } from '../../../api/menu';
 
 export async function GET(request: NextRequest) {
     const tag = request.nextUrl.searchParams.get('tag');
@@ -24,4 +25,14 @@ export async function GET(request: NextRequest) {
                 return NextResponse.json({ message: 'Something went wrong', error }, { status: 500 });
             });
     }
+}
+
+export async function POST(req: NextRequest) {
+    const data = await req.json()
+
+    return await addMenuItem(data).then(() => {
+        return NextResponse.json({ message: "sucesfully added item", data })
+    }).catch((error) => {
+        return NextResponse.json({ message: "frickalik adding menu item failed", data, error }, { status: 500 })
+    });
 }

@@ -142,3 +142,19 @@ export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
 
     return menuItems;
 }
+
+export async function addMenuItem(MenuItem: MenuItem): Promise<void> {
+    // restaurant_order - date, total
+
+    const MenuItemQuery = 'INSERT INTO menu_item (name, price_cents, img_uri, description) VALUES ($1, $2, $3, $4) RETURNING id';
+
+
+    const MenuItemResult = await db.query(MenuItemQuery, [MenuItem.name, MenuItem.price, MenuItem.imageURI, MenuItem.description]);
+    
+    if (MenuItemResult.rowCount !== 1) {
+        throw new Error('Error inserting order');
+    }
+    
+    MenuItem.id = MenuItemResult.rows[0].id;
+
+}
