@@ -8,7 +8,7 @@ export default function AuthSessionHeader() {
 
     useEffect(() => {
         if (status === "unauthenticated") {
-            signIn().then(() => {
+            signIn('google').then(() => {
                 console.log("Signed in!");
                 console.log(session);
             });
