@@ -8,7 +8,9 @@ export async function GET(request: NextRequest) {
 
     switch(report){
         case 'product_usage':
-            return NextResponse.json(await product_usage());
+            const startDate3 = new Date(parseInt(start));
+            const endDate3 = new Date(parseInt(end));
+            return NextResponse.json(await product_usage(startDate3, endDate3));
             
         case 'product_sales':
             const startDate = new Date(parseInt(start));
@@ -16,7 +18,8 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(await product_sales(startDate, endDate));
 
         case 'product_excess':
-            return NextResponse.json(await product_excess());
+            const startDate4 = new Date(parseInt(start));
+            return NextResponse.json(await product_excess(startDate4));
 
         case 'restock_report':
             return NextResponse.json(await restock_report());
