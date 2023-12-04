@@ -1,6 +1,6 @@
 import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
-import { addMenuItem } from '../../../api/menu';
+import { addMenuItem, updateMenuItem } from '../../../api/menu';
 
 export async function GET(request: NextRequest) {
     const tag = request.nextUrl.searchParams.get('tag');
@@ -28,11 +28,20 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    const data = await req.json()
-
-    return await addMenuItem(data).then(() => {
-        return NextResponse.json({ message: "sucesfully added item", data })
-    }).catch((error) => {
-        return NextResponse.json({ message: "frickalik adding menu item failed", data, error }, { status: 500 })
-    });
+    const data = await req.json();
+    const id = req.nextUrl.searchParams.get('edit');
+    if(id){
+        return await updateMenuItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully updated item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik updating menu item failed", data, error }, { status: 500 })
+        });
+    }else{
+        return await addMenuItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully added item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik adding menu item failed", data, error }, { status: 500 })
+        });
+    }
+    
 }

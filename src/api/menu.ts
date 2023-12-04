@@ -158,3 +158,18 @@ export async function addMenuItem(MenuItem: MenuItem): Promise<void> {
     MenuItem.id = MenuItemResult.rows[0].id;
 
 }
+
+export async function updateMenuItem(updatedMenuItem: MenuItem): Promise<void> {
+    // Assuming updatedMenuItem has the 'id' property to identify the menu item
+    
+    // Construct the UPDATE query
+    const updateMenuItemQuery = 'UPDATE menu_item SET name = $1, price_cents = $2, img_uri = $3, description = $4 WHERE id = $5';
+
+    // Execute the UPDATE query
+    const updateResult = await db.query(updateMenuItemQuery, [updatedMenuItem.name, updatedMenuItem.price, updatedMenuItem.imageURI, updatedMenuItem.description, updatedMenuItem.id]);
+
+    // Check if the update was successful
+    if (updateResult.rowCount !== 1) {
+        throw new Error('Error updating menu item');
+    }
+}
