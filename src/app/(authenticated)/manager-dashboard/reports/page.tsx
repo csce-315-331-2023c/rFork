@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { product_usage, product_sales, product_excess, restock_report, sells_together } from '../../../../api/reports'
 import "../../../../css/index.css"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function ReportView() {
 
