@@ -24,39 +24,45 @@ export default function ReportView() {
     }, []);
 
     const [data, setData] = useState<Array<any>>([]);
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
     return (
 
         <div className="justify-center h-screen">
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch('/api/reports?reports=product_usage&start=0&end=1701660672190').then(res => res.json()).then(d => {
+                fetch(`/api/reports?reports=product_usage&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                     setData(d);
                     setReportType(r.product_usage);
                 })
             }}>Product Usage</button>
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch('/api/reports?reports=product_sales&start=0&end=1701660672190').then(res => res.json()).then(d => {
+                fetch(`/api/reports?reports=product_sales&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                     setData(d);
                     setReportType(r.product_sales);
                 })
             }}>Product Sales</button>
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch('/api/reports?reports=product_excess&start=0').then(res => res.json()).then(d => {
+                fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
                     setData(d);
                     setReportType(r.product_excess);
                 })
             }}>Product Excess</button>
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch('/api/reports?reports=restock_report').then(res => res.json()).then(d => {
+                fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
                     setData(d);
                     setReportType(r.restock_report);
                 })
             }}>Restock Report</button>
             <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch('/api/reports?reports=sells_together&start=0&end=1701660672190').then(res => res.json()).then(d => {
+                fetch(`/api/reports?reports=sells_together&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                     setData(d);
                     setReportType(r.sells_together);
                 })
             }}>Sells Together</button>
+            <DatePicker isClearable placeholderText="Select Start Date" selected={startDate} onChange={(date) => setStartDate(date as Date)} />
+            <DatePicker isClearable placeholderText="Select End Date" selected={endDate} onChange={(date) => setEndDate(date as Date)} />
             {
                 reportType == r.product_usage &&
                 <div>
