@@ -21,6 +21,6 @@ export async function findEmployee(lastName: string, firstName: string): Promise
         id: id,
         firstName: first_name,
         lastName: last_name,
-        role: role
+        role: role === true ? 'manager' : 'employee'
     };
 }

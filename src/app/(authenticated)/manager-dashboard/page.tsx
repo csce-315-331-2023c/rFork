@@ -6,13 +6,23 @@ import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
 import TextButton from '../../../components/TextButton';
 import AuthSessionHeader from '../../../components/AuthSessionHeader';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { rSession } from '../../../types';
 
 export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         setLoading(false);
     }, []);
+
+    useEffect(() => {
+        console.log(session?.user);
+        if (session && (session as rSession)?.user?.employee?.role !== "manager") {
+            signOut({ callbackUrl: '/unauthorized' });
+        }
+    }, [session, status]);
 
     if (loading) return <PageLoading />;
 
