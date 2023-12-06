@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-    const history = req.nextUrl.searchParams.get('transaction') || '';
+    const history = req.nextUrl.searchParams.get('history') || '';
 
     switch(history){
         case 'getAll':

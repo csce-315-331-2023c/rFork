@@ -47,13 +47,15 @@ export default function ManagerDashboard() {
                         hoverColor='#CCC'
                         altText='View Menu Items Button Image'
                     />
+                    <Link href='/manager-dashboard/transaction-history'>
                     <ImageButton
                         imageURI='https://cdn-icons-png.flaticon.com/512/8118/8118496.png'
-                        customClassName='flex-1 flex flex-col items-center justify-center border-[#888] border-2'
+                        customClassName='flex-1 flex flex-col h-full w-full items-center justify-center border-[#888] border-2'
                         color='#FFF'
                         hoverColor='#CCC'
                         altText='View Transaction History Button Image'
                     />
+                    </Link>
                     <p className='text-center text-lg'>View Statistics</p>
                     <p className='text-center text-lg'>Inventory Items</p>
                     <p className='text-center text-lg'>Menu Items</p>
