@@ -225,9 +225,11 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item ID 1</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item ID 2</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Number of Times Ordered Together</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4">Item ID 1</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4">Item ID 2</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4">Item Name 1</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4">Item Name 2</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4">Number of Times Ordered Together</th>
 
                                 </tr>
                             </thead>
@@ -238,6 +240,8 @@ export default function ReportView() {
                                             <tr key={`sales ${index}`}>
                                                 <td className="border text-center px-8 py-4">{row.id1}</td>
                                                 <td className="border text-center px-8 py-4">{row.id2}</td>
+                                                <td className="border text-center px-8 py-4">{row.name1}</td>
+                                                <td className="border text-center px-8 py-4">{row.name2}</td>
                                                 <td className="border text-center px-8 py-4">{row.quantity}</td>
                                             </tr>
                                         )
@@ -285,11 +289,11 @@ export default function ReportView() {
                                         break;
                                     case r.product_excess:
                                         setLoading(true);
-                                        fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
+                                        fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
                                             setLoading(false);
                                             setData(d);
                                             setEmpty(d.length == 0);
-                                            setReportType(r.restock_report);
+                                            setReportType(r.product_excess);
                                         })
                                         break;
                                     case r.sells_together:

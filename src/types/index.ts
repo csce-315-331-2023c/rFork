@@ -64,6 +64,8 @@ export type rSession = Session & {
 export type itemReport = {
     id1: number;
     id2: number;
+    name1: string;
+    name2: string;
     quantity: number;
 }
 

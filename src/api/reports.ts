@@ -148,7 +148,7 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
         INNER JOIN orders ON order_item.order_id = orders.id
         WHERE create_time BETWEEN $1 AND $2) AS t1
         INNER JOIN order_item ON t1.order_id = order_item.order_id
-        WHERE t1.id != order_item.id
+        WHERE t1.id != order_item.id AND t1.menu_item_id != order_item.menu_item_id
         GROUP BY id1, id2
         ORDER BY count DESC) t  
     `;
@@ -157,6 +157,16 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
     // inner join above with order_item again on orderid is the same
     // where id.1 != id.2 & order_id2 == order_id1
     // select least(id1, id2), greatest(id1, id2), count(*)/2 AS count
+
+    const itemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name) FROM menu_item) t';
+    const itemResult = await db.query(itemQuery);
+
+    let itemMap: Map<number, string> = new Map();
+    for(let row of itemResult.rows){
+        const{f1: id, f2: name} = row.row_to_json.row; 
+        itemMap.set(id, name); 
+    }
+
     let itemReports: itemReport[] = [];
     for (let row of result.rows){
 
@@ -169,6 +179,8 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
         itemReports.push({
             id1: id1,
             id2: id2,
+            name1: itemMap.get(id1) || 'NA',
+            name2: itemMap.get(id2) || 'NA',
             quantity: count,
         });
     }
