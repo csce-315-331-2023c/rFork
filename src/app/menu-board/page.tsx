@@ -28,6 +28,11 @@ export default function MenuBoard() {
         getMenuItemCategory("Drinks").then((data) => setDrinks(data));
         getMenuItemCategory("Featured").then((data) => setFeaturedItems(data));
         setLoading(false);
+
+        fetch("/api/weather").then(res => res.json()).then(data => {
+            setWeatherData(data);
+        });
+
     }, []);
 
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
@@ -118,8 +123,17 @@ export default function MenuBoard() {
                         </div>
                     ))}
                 </div>
-                <div className="flex flex-col flex-1 items-center px-10 h-full justify-between">
-
+                <div className="flex flex-col flex-1 items-center px-10 h-full justify-center">
+                        <div className='text-3xl pb-0'>
+                            {weatherData?.weather[0].description}
+                        </div>
+                        <img className= '' src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@4x.png`} alt="The Weather Icon" />
+                        <div className='text-4xl pb-3'>
+                            {(((weatherData?.temperature ?? 0) - 273.15) * 9/5 + 32).toFixed(2) + "°F"}
+                        </div>
+                        <div className='text-2xl pb-0'>
+                            {"Feels Like: " + (((weatherData?.feelsLike ?? 0) - 273.15) * 9/5 + 32).toFixed(2) + "°F"}
+                        </div>
                 </div>
             </div>
         </div>
