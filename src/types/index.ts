@@ -1,3 +1,6 @@
+import { Session, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
+
 export type Ingredient = {
     itemId: number;
     itemName: string;
@@ -41,8 +44,20 @@ export type Employee = {
     id?: number;
     firstName: string;
     lastName: string;
-    role: string;
+    role: "employee" | "manager";
 };
+
+export type rUser = User & {
+    employee?: Employee;
+};
+
+export type rToken = JWT & {
+    employee?: Employee;
+};
+
+export type rSession = Session & {
+    user?: rUser;
+}; 
 
 
 export type itemReport = {
