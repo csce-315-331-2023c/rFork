@@ -153,7 +153,6 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
         ORDER BY count DESC) t  
     `;
     const result = await db.query(query, [start, end]);
-    console.log(result);
     // inner join orders with order_item
     // inner join above with order_item again on orderid is the same
     // where id.1 != id.2 & order_id2 == order_id1
