@@ -32,6 +32,7 @@ export default function CashRegister() {
 
     // Temporary/Volatile data for user selecting experience
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
+    const [selectedItemToggles, setSelectedItemToggles] = useState<Array<boolean>>([]);
 
     // Final order info data
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
@@ -149,12 +150,25 @@ export default function CashRegister() {
                 text={item.name}
                 onPress={() => {
                     setSelectedItem(item);
+
+                    const updatedItemtoggles: Array<boolean> = [];
+                    for (let i = 0; i < item.ingredients.length; i++) {
+                        updatedItemtoggles.push(true);
+                    }
+                    setSelectedItemToggles(updatedItemtoggles);
+
                     let bottomContent = item.ingredients.map((ingredient) => {
+                        console.log("hello")
                         return (
                             <TextButton
                                 toggleable
                                 key={ingredient.itemName}
                                 text={`Remove ${ingredient.itemName}`}
+                                onPress={() => {
+                                    const updatedItemtoggles = [...selectedItemToggles];
+                                    updatedItemtoggles[index] = !updatedItemtoggles[index];
+                                    setSelectedItemToggles(updatedItemtoggles);
+                                }}
                             />
                         )
                     });
@@ -225,6 +239,7 @@ export default function CashRegister() {
                                                         text='X'
                                                         color='#F77'
                                                         hoverColor='#F00'
+                                                        onPress={() => removeFromOrder(index)}
                                                     />
                                                 </td>
                                             </tr>

@@ -36,7 +36,6 @@ export default function TextButton({ text, onPress, color, hoverColor, customCla
                     onPress();
                 }
                 if (toggleable) {
-                    console.log("HIIII", toggled);
                     setToggled(!toggled);
                 }
             }}

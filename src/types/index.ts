@@ -12,6 +12,7 @@ export type MenuItem = {
     validExtras: Ingredient[];
     description?: string;
     imageURI?: string;
+    removedIngredients?: Ingredient[];
 };
 
 export type Tag = string;
