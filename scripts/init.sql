@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS menu_item_ingredients(
 
 CREATE TABLE IF NOT EXISTS menu_item_tag( 
     id SERIAL PRIMARY KEY,
-    menu_item_id INT REFERENCES menu_item(id),
+    FOREIGN KEY menu_item_id REFERENCES menu_item(id) ON DELETE CASCADE,
     tag_name VARCHAR(128)
 );
 
@@ -54,13 +54,13 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS order_item (
     id SERIAL PRIMARY KEY,
     order_id INT REFERENCES orders(id),
-    menu_item_id INT REFERENCES menu_item(id)
+    FOREIGN KEY menu_item_id REFERENCES menu_item(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS order_item_ingredient (
     id SERIAL PRIMARY KEY,
     order_item_id INT REFERENCES menu_item(id),
-    inventory_item_id INT REFERENCES inventory_item(id),
+    FOREIGN KEY inventory_item_id REFERENCES inventory_item(id) ON DELETE CASCADE,
     quantity INT,
     is_extra BOOLEAN
 );
