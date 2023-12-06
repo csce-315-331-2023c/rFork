@@ -188,10 +188,11 @@ export default function CashRegister() {
                         <table className='w-full'>
                             <thead className=''>
                                 <tr>
-                                    <td className='w-[50%]'>Item Name</td>
+                                    <td className='w-[40%]'>Item Name</td>
                                     <td className=''>Price</td>
                                     <td className=''>Qty</td>
                                     <td className=''>Total</td>
+                                    <td className='text-center'>Delete</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,7 +201,7 @@ export default function CashRegister() {
                                         return (
                                             <tr key={`${item.name}${index}`}>
                                                 <td className='pr-2'>{item.name}</td>
-                                                <td className='pr-2'>{`$${item.price}`}</td>
+                                                <td className='pr-2'>{`$${item.price.toFixed(2)}`}</td>
                                                 <td className='pr-2'>
                                                     <Dropdown>
                                                         <Dropdown.Toggle variant='primary'>
@@ -217,7 +218,15 @@ export default function CashRegister() {
                                                         </Dropdown.Menu>
                                                     </Dropdown>
                                                 </td>
-                                                <td>{`$${item.price}`}</td>
+                                                <td>{`$${(item.price * cartItemCounts.at(index)!).toFixed(2)}`}</td>
+                                                <td>
+                                                    <TextButton
+                                                        customClassName='w-[50%] ml-[25%] rounded-md h-full'
+                                                        text='X'
+                                                        color='#F77'
+                                                        hoverColor='#F00'
+                                                    />
+                                                </td>
                                             </tr>
                                         )
                                     })
