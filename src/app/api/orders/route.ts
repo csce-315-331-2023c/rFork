@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { submitOrder } from "../../../api"
+import { submitOrder, getAll, getNotFinished } from "../../../api"
 
 
 export async function POST(req: NextRequest) {
@@ -10,4 +10,19 @@ export async function POST(req: NextRequest) {
     }).catch((error) => {
         return NextResponse.json({ message: "You done goofed", data, error }, { status: 500 })
     });
+}
+
+export async function GET(req: NextRequest) {
+    const history = req.nextUrl.searchParams.get('history') || '';
+
+    switch(history){
+        case 'getAll':
+            return NextResponse.json(await getAll());
+
+        case 'getNotFinished':
+            return NextResponse.json(await getNotFinished());
+        
+        default:
+            return NextResponse.json({ message: "Invalid get type" }, { status: 400 });
+    }
 }
