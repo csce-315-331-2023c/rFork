@@ -30,48 +30,48 @@ export default function ReportView() {
 
     return (
 
-        <div className="justify-center h-screen">
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch(`/api/reports?reports=product_usage&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
-                    setData(d);
-                    setReportType(r.product_usage);
-                })
-            }}>Product Usage</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch(`/api/reports?reports=product_sales&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
-                    setData(d);
-                    setReportType(r.product_sales);
-                })
-            }}>Product Sales</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
-                    setData(d);
-                    setReportType(r.product_excess);
-                })
-            }}>Product Excess</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
-                    setData(d);
-                    setReportType(r.restock_report);
-                })
-            }}>Restock Report</button>
-            <button className="bg-gray-100 p-8 border-red-800 border-8" onClick={() => {
-                fetch(`/api/reports?reports=sells_together&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
-                    setData(d);
-                    setReportType(r.sells_together);
-                })
-            }}>Sells Together</button>
-            <DatePicker isClearable placeholderText="Select Start Date" selected={startDate} onChange={(date) => setStartDate(date as Date)} />
-            <DatePicker isClearable placeholderText="Select End Date" selected={endDate} onChange={(date) => setEndDate(date as Date)} />
+        <div className="grid grid-cols-3 gap-4 p-4">
+            <div className="flex flex-col items-start p-4">
+                <button aria-label="Product Usage" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    fetch(`/api/reports?reports=product_usage&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
+                        setData(d);
+                        setReportType(r.product_usage);
+                    })
+                }}>Product Usage</button>
+                <button aria-label="Product Sales" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    fetch(`/api/reports?reports=product_sales&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
+                        setData(d);
+                        setReportType(r.product_sales);
+                    })
+                }}>Product Sales</button>
+                <button aria-label="Product Excess" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
+                        setData(d);
+                        setReportType(r.product_excess);
+                    })
+                }}>Product Excess</button>
+                <button aria-label="Restock Report" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
+                        setData(d);
+                        setReportType(r.restock_report);
+                    })
+                }}>Restock Report</button>
+                <button aria-label="Sells Together" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    fetch(`/api/reports?reports=sells_together&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
+                        setData(d);
+                        setReportType(r.sells_together);
+                    })
+                }}>Sells Together</button>
+            </div>
             {
                 reportType == r.product_usage &&
                 <div>
                     <table>
                         <thead>
                             <tr>
-                                <th className='px-10'>Item ID</th>
-                                <th className='px-10'>Item Name</th>
-                                <th className='px-10'>Quantity Used</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Quantity Used</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,9 +79,9 @@ export default function ReportView() {
                                 data.map((row, index) => {
                                     return (
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id}</td>
-                                            <td className='px-10'>{row.name}</td>
-                                            <td className='px-10'>{row.quantity}</td>
+                                            <td className="border text-center px-8 py-4">{row.id}</td>
+                                            <td className="border text-center px-8 py-4">{row.name}</td>
+                                            <td className="border text-center px-8 py-4">{row.quantity}</td>
                                         </tr>
                                     )
                                 })
@@ -96,10 +96,10 @@ export default function ReportView() {
                     <table>
                         <thead>
                             <tr>
-                                <th className='px-10'>Order ID</th>
-                                <th className='px-10'>Timestamp</th>
-                                <th className='px-10'>Order Total</th>
-                                <th className='px-10'>Submitted By</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Order ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Timestamp</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Order Total</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Submitted By</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,10 +107,10 @@ export default function ReportView() {
                                 data.map((row, index) => {
                                     return (
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id}</td>
-                                            <td className='px-10'>{row.timestamp}</td>
-                                            <td className='px-10'>{`\$${row.total.toFixed(2)}`}</td>
-                                            <td className='px-10'>{row.submittedBy}</td>
+                                            <td className="border text-center px-8 py-4">{row.id}</td>
+                                            <td className="border text-center px-8 py-4">{row.timestamp}</td>
+                                            <td className="border text-center px-8 py-4">{`\$${row.total.toFixed(2)}`}</td>
+                                            <td className="border text-center px-8 py-4">{row.submittedBy}</td>
                                         </tr>
                                     )
                                 })
@@ -125,10 +125,10 @@ export default function ReportView() {
                     <table>
                         <thead>
                             <tr>
-                                <th className='px-10'>Item ID</th>
-                                <th className='px-10'>Item Name</th>
-                                <th className='px-10'>Current Stock</th>
-                                <th className='px-10'>Reorder Threshold</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Current Stock</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Reorder Threshold</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,10 +137,10 @@ export default function ReportView() {
                                     return (
 
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id}</td>
-                                            <td className='px-10'>{row.name}</td>
-                                            <td className='px-10'>{row.currentStock}</td>
-                                            <td className='px-10'>{row.reorderThreshold}</td>
+                                            <td className="border text-center px-8 py-4">{row.id}</td>
+                                            <td className="border text-center px-8 py-4">{row.name}</td>
+                                            <td className="border text-center px-8 py-4">{row.currentStock}</td>
+                                            <td className="border text-center px-8 py-4">{row.reorderThreshold}</td>
                                         </tr>
                                     )
                                 })
@@ -155,10 +155,10 @@ export default function ReportView() {
                     <table>
                         <thead>
                             <tr>
-                                <th className='px-10'>Item ID</th>
-                                <th className='px-10'>Item Name</th>
-                                <th className='px-10'>Current Stock</th>
-                                <th className='px-10'>Reorder Threshold</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Current Stock</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Reorder Threshold</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -167,10 +167,10 @@ export default function ReportView() {
                                     return (
 
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id}</td>
-                                            <td className='px-10'>{row.name}</td>
-                                            <td className='px-10'>{row.currentStock}</td>
-                                            <td className='px-10'>{row.reorderThreshold}</td>
+                                            <td className="border text-center px-8 py-4">{row.id}</td>
+                                            <td className="border text-center px-8 py-4">{row.name}</td>
+                                            <td className="border text-center px-8 py-4">{row.currentStock}</td>
+                                            <td className="border text-center px-8 py-4">{row.reorderThreshold}</td>
                                         </tr>
                                     )
                                 })
@@ -185,10 +185,10 @@ export default function ReportView() {
                     <table>
                         <thead>
                             <tr>
-                                <th className='px-10'>Item ID 1</th>
-                                <th className='px-10'>Item ID 2</th>
-                                <th className='px-10'>Number of Times Ordered Together</th>
-                                
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item ID 1</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Item ID 2</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4">Number of Times Ordered Together</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -196,9 +196,9 @@ export default function ReportView() {
                                 data.map((row, index) => {
                                     return (
                                         <tr key={`sales ${index}`}>
-                                            <td className='px-10'>{row.id1}</td>
-                                            <td className='px-10'>{row.id2}</td>
-                                            <td className='px-10'>{row.quantity}</td>
+                                            <td className="border text-center px-8 py-4">{row.id1}</td>
+                                            <td className="border text-center px-8 py-4">{row.id2}</td>
+                                            <td className="border text-center px-8 py-4">{row.quantity}</td>
                                         </tr>
                                     )
                                 })
@@ -207,6 +207,12 @@ export default function ReportView() {
                     </table>
                 </div>
             }
+            <div className="flex flex-col">
+                <h2 className="text-left py-3 text-2xl">Start Date</h2>
+                <DatePicker isClearable placeholderText="Select Start Date" selected={startDate} onChange={(date) => setStartDate(date as Date)}>Start Date</DatePicker>
+                <h2 className="text-left py-3 pt-8 text-2xl">End Date</h2>
+                <DatePicker isClearable placeholderText="Select End Date" selected={endDate} onChange={(date) => setEndDate(date as Date)}>End Date</DatePicker>
+            </div>
         </div>
     )
 }
