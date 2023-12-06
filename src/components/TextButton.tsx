@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { calculateHexLuminosity } from '../helpers/colorUtils';
 
-export default function TextButton({ text, onPress, color, hoverColor, customClassName }:
+export default function TextButton({ text, onPress, color, hoverColor, customClassName, toggleable }:
     {
         text?: string,
         onPress?: () => void,
@@ -9,9 +9,12 @@ export default function TextButton({ text, onPress, color, hoverColor, customCla
         hoverColor?: string,
         textColor?: string,
         customClassName?: string,
+        toggleable?: boolean
     }) {
     const [hover, setHover] = useState<boolean>(false);
     const [textColor, setTextColor] = useState<string>("#000");
+
+    const [toggled, setToggled] = useState<boolean>(false);
 
     useEffect(() => {
         const luminosity = hover ? calculateHexLuminosity(hoverColor ?? "#DDD") : calculateHexLuminosity(color ?? "#999");
@@ -25,13 +28,22 @@ export default function TextButton({ text, onPress, color, hoverColor, customCla
 
     return (
         <button
+            aria-label={`${text} button`}
             id='google-translate-element'
             className={customClassName ? customClassName : 'h-full w-full text-center text-lg rounded-xl drop-shadow-md'}
-            onClick={onPress ?? (() => console.log("Button Pressed"))}
+            onClick={() => {
+                if (onPress) {
+                    onPress();
+                }
+                if (toggleable) {
+                    console.log("HIIII", toggled);
+                    setToggled(!toggled);
+                }
+            }}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             style={{
-                backgroundColor: hover ? (hoverColor ?? "#DDD") : (color ?? "#999"),
+                backgroundColor: hover || toggled ? (hoverColor ?? "#DDD") : (color ?? "#999"),
                 color: textColor ?? "#000",
             }}
         >

@@ -124,6 +124,7 @@ export default function CashRegister() {
                     let bottomContent = item.ingredients.map((ingredient) => {
                         return (
                             <TextButton
+                                toggleable
                                 key={ingredient.itemName}
                                 text={`Remove ${ingredient.itemName}`}
                             />
@@ -195,7 +196,7 @@ export default function CashRegister() {
                             <ul>
                                 <li>{`\$${subtotal.toFixed(2)}`}</li>
                                 <li>{`\$${tax.toFixed(2)} (5%)`}</li>
-                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier)*100}%)` : ""}`}</li>
+                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier) * 100}%)` : ""}`}</li>
                                 <li>{`\$${total.toFixed(2)}`}</li>
                             </ul>
                         </div>

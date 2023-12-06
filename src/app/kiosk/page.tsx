@@ -110,6 +110,7 @@ export default function Kiosk() {
                 className={`border-gray-700 px-4 h-full flex-1 text-xl ${extraClasses} ${borderClasses}`}
                 onMouseEnter={() => setExtraClasses("underline bg-[#3332]")}
                 onMouseLeave={() => setExtraClasses("")}
+                aria-label={`Select ${text} Category`}
             >
                 {text}
             </button>
@@ -220,7 +221,7 @@ export default function Kiosk() {
                     <div className='flex-1 grid grid-cols-3 grid-rows-6 gap-2 p-2'>
                         {selectedItem && selectedItem.ingredients.map((ingredient) => {
                             return (
-                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemName}`} />
+                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemName}`} toggleable />
                             )
                         })}
                     </div>
