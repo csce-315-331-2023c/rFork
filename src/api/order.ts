@@ -68,3 +68,59 @@ export async function submitOrder(order: Order): Promise<void> {
         throw new Error('Error inserting menu item order ingredients');
     }
 }
+
+export async function getAll(): Promise<Order[]>{
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders ORDER by id DESC) t';
+    const result = await db.query(query);
+
+    let orders: Order[] = [];
+    for (let row of result.rows) {
+        const {
+            f1: id,
+            f2: create_time,
+            f3: subtotal,
+            f4: tip,
+            f5: employee_id,
+            f6: is_finished
+        } = row.row_to_json.row;
+
+        orders.push({
+            id: id,
+            timestamp: create_time,
+            total: (subtotal + tip)/100,
+            submittedBy: employee_id,
+            items: [],
+            isFinished: is_finished
+        });
+    }
+
+    return orders;
+}
+
+export async function getAllNotFinished(): Promise<Order[]>{
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished = false ORDER by id DESC) t';
+    const result = await db.query(query);
+
+    let orders: Order[] = [];
+    for (let row of result.rows) {
+        const {
+            f1: id,
+            f2: create_time,
+            f3: subtotal,
+            f4: tip,
+            f5: employee_id,
+            f6: is_finished
+        } = row.row_to_json.row;
+
+        orders.push({
+            id: id,
+            timestamp: create_time,
+            total: (subtotal + tip)/100,
+            submittedBy: employee_id,
+            items: [],
+            isFinished: is_finished
+        });
+    }
+
+    return orders;
+}

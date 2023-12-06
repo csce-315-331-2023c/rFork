@@ -29,7 +29,7 @@ export type Order = {
     items: MenuItem[];
     total: number;
     submittedBy: Employee | Customer;
-    isFinished: boolean;
+    isFinished?: boolean;
 };
 
 export type Customer = {
