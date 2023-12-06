@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import "../../../css/index.css";
-import { MenuItem, Order } from '../../../types';
+import { Ingredient, MenuItem, Order } from '../../../types';
 import TextButton from '../../../components/TextButton';
 import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
@@ -32,7 +32,6 @@ export default function CashRegister() {
 
     // Temporary/Volatile data for user selecting experience
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
-    const [selectedItemToggles, setSelectedItemToggles] = useState<Array<boolean>>([]);
 
     // Final order info data
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
@@ -144,6 +143,12 @@ export default function CashRegister() {
      */
     function createMiddleMenuItemContent(menuItemList: MenuItem[]) {
         const middleContent = menuItemList.map((item, index) => {
+
+            const toggleList: boolean[] = [];
+            for (let i = 0; i < item.ingredients.length; i++) {
+                toggleList.push(true);
+            }
+
             return (<TextButton
                 color={randomColorHex()}
                 key={`${item.name}${index}`}
@@ -151,23 +156,16 @@ export default function CashRegister() {
                 onPress={() => {
                     setSelectedItem(item);
 
-                    const updatedItemtoggles: Array<boolean> = [];
-                    for (let i = 0; i < item.ingredients.length; i++) {
-                        updatedItemtoggles.push(true);
-                    }
-                    setSelectedItemToggles(updatedItemtoggles);
+                    console.log(item.ingredients)
 
-                    let bottomContent = item.ingredients.map((ingredient) => {
-                        console.log("hello")
+                    let bottomContent = item.ingredients.map((ingredient, ingredientIndex) => {
                         return (
                             <TextButton
                                 toggleable
                                 key={ingredient.itemName}
                                 text={`Remove ${ingredient.itemName}`}
                                 onPress={() => {
-                                    const updatedItemtoggles = [...selectedItemToggles];
-                                    updatedItemtoggles[index] = !updatedItemtoggles[index];
-                                    setSelectedItemToggles(updatedItemtoggles);
+                                    toggleList[ingredientIndex] = !toggleList[ingredientIndex];
                                 }}
                             />
                         )
@@ -176,7 +174,30 @@ export default function CashRegister() {
                         key={"Add to Order"}
                         text={`Add to Order`}
                         color='#0077FF'
-                        onPress={() => { addToOrder(item); setSelectedItem(undefined); }}
+                        onPress={() => {
+                            const ingredientList: Ingredient[] = [];
+                            const removedIngredientList: Ingredient[] = [];
+
+                            item.ingredients.forEach((ingredient, ingredientIndex) => {
+                                if (toggleList[ingredientIndex]) {
+                                    ingredientList.push(ingredient);
+                                }
+                                else {
+                                    removedIngredientList.push(ingredient);
+                                }
+                            });
+
+                            const copiedItem: MenuItem = {
+                                ...item,
+                                ingredients: ingredientList,
+                                removedIngredients: removedIngredientList,
+                            }
+
+                            console.log(copiedItem);
+
+                            addToOrder(copiedItem);
+                            setSelectedItem(undefined);
+                        }}
                     />;
 
                     bottomContent = [...bottomContent, addToOrderButton]
@@ -190,7 +211,6 @@ export default function CashRegister() {
 
     if (loading) return (<PageLoading />);
 
-    // HTML Rendering
     return (
         <div className='flex flex-col h-screen'>
             <AuthSessionHeader />
@@ -213,36 +233,53 @@ export default function CashRegister() {
                                 {
                                     cartItems.map((item, index) => {
                                         return (
-                                            <tr key={`${item.name}${index}`}>
-                                                <td className='pr-2'>{item.name}</td>
-                                                <td className='pr-2'>{`$${item.price.toFixed(2)}`}</td>
-                                                <td className='pr-2'>
-                                                    <Dropdown>
-                                                        <Dropdown.Toggle variant='primary'>
-                                                            {cartItemCounts.at(index)}
-                                                        </Dropdown.Toggle>
+                                            <>
+                                                <tr key={`${item.name}${index}`}>
+                                                    <td className='pr-2'><strong>{item.name}</strong></td>
+                                                    <td className='pr-2'>{`$${item.price.toFixed(2)}`}</td>
+                                                    <td className='pr-2'>
+                                                        <Dropdown>
+                                                            <Dropdown.Toggle variant='primary'>
+                                                                {cartItemCounts.at(index)}
+                                                            </Dropdown.Toggle>
 
-                                                        <Dropdown.Menu>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(1, index)}>1</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(2, index)}>2</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(3, index)}>3</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(4, index)}>4</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(5, index)}>5</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => modifyOrderAmount(6, index)}>6</Dropdown.Item>
-                                                        </Dropdown.Menu>
-                                                    </Dropdown>
-                                                </td>
-                                                <td>{`$${(item.price * cartItemCounts.at(index)!).toFixed(2)}`}</td>
-                                                <td>
-                                                    <TextButton
-                                                        customClassName='w-[50%] ml-[25%] rounded-md h-full'
-                                                        text='X'
-                                                        color='#F77'
-                                                        hoverColor='#F00'
-                                                        onPress={() => removeFromOrder(index)}
-                                                    />
-                                                </td>
-                                            </tr>
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(1, index)}>1</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(2, index)}>2</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(3, index)}>3</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(4, index)}>4</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(5, index)}>5</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(6, index)}>6</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                    </td>
+                                                    <td>{`$${(item.price * cartItemCounts.at(index)!).toFixed(2)}`}</td>
+                                                    <td>
+                                                        <TextButton
+                                                            customClassName='w-[50%] ml-[25%] rounded-md h-full'
+                                                            text='X'
+                                                            color='#F77'
+                                                            hoverColor='#F00'
+                                                            onPress={() => removeFromOrder(index)}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <ul>
+                                                            {
+                                                                item.removedIngredients?.map((item) => {
+                                                                    return (
+                                                                        <li>
+                                                                            {`No ${item.itemName}`}
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </>
                                         )
                                     })
                                 }
@@ -295,8 +332,6 @@ export default function CashRegister() {
                                         role: "Employee",
                                     }
                                 }
-
-                                console.log(order);
 
                                 await fetch("/api/orders", { method: "POST", body: JSON.stringify(order) })
                                     .then((response) => response.json())
@@ -378,7 +413,7 @@ export default function CashRegister() {
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Add-ons${selectedItem ? ` (${selectedItem?.name})` : ""}`}</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Modifications${selectedItem ? ` (${selectedItem?.name})` : ""}`}</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {bottomRightChildren}
                     </div>
