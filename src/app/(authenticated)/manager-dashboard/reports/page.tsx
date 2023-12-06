@@ -109,9 +109,9 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Quantity Used</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Quantity Used">Quantity Used</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,10 +136,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Order ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Timestamp</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Order Total</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Submitted By</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order ID">Order ID</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Timestamp">Timestamp</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order Total">Order Total</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Submitted By">Submitted By</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,10 +165,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Current Stock</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Reorder Threshold</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,10 +195,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Current Stock</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4">Reorder Threshold</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
+                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,11 +225,11 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-4 py-4">Item ID 1</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4">Item ID 2</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4">Item Name 1</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4">Item Name 2</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4">Number of Times Ordered Together</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 1">Item ID 1</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 2">Item ID 2</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item Name 1">Item Name 1</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for item Name2">Item Name 2</th>
+                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Number of Times Ordered Together">Number of Times Ordered Together</th>
 
                                 </tr>
                             </thead>

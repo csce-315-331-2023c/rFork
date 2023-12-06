@@ -61,11 +61,11 @@ export default function TranscationHistory() {
                     <table>
                         <thead>
                             <tr>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order ID</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Time</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Total</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Submitted By</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Status</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order ID'>Order ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Time'>Order Time</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Total'>Order Total</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Submitted By'>Submitted By</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Status'>Order Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,11 +92,11 @@ export default function TranscationHistory() {
                     <table>
                         <thead>
                             <tr>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order ID</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Time</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Total</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Submitted By</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4">Order Status</th>
+                            <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order ID'>Order ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Time'>Order Time</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Total'>Order Total</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Submitted By'>Submitted By</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Status'>Order Status</th>
                             </tr>
                         </thead>
                         <tbody>
