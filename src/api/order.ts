@@ -97,7 +97,7 @@ export async function getAll(): Promise<Order[]>{
     return orders;
 }
 
-export async function getAllNotFinished(): Promise<Order[]>{
+export async function getNotFinished(): Promise<Order[]>{
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished = false ORDER by id DESC) t';
     const result = await db.query(query);
 
