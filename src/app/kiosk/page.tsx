@@ -117,16 +117,28 @@ export default function Kiosk() {
         );
     }
 
-    function addToOrder(menuItem: MenuItem) {
+    function addToOrder(menuItem: MenuItem): void {
         const updatedCartItems = cartItems;
         updatedCartItems.push({ ...menuItem });
         setCartItems(updatedCartItems);
     }
 
-    function removeFromOrder(index: number) {
+    function removeFromOrder(index: number): void {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
+    }
+
+    function isDrink(menuItem: MenuItem | undefined): boolean {
+        if (!menuItem) {
+            return false;
+        }
+        for (let i = 0; i < drinks.length; i++) {
+            if (drinks.at(i)?.id == menuItem.id) {
+                return true;
+            }
+        }
+        return false
     }
 
     return (
@@ -206,7 +218,7 @@ export default function Kiosk() {
             <Popup
                 show={showCustomizationPopup}
             >
-                <div className='flex flex-col h-[90%] w-[60%] bg-white rounded-lg overflow-hidden'>
+                <div className='flex flex-col h-[95%] w-[90%] bg-white rounded-lg overflow-hidden'>
                     <header className='flex flex-row justify-between items-center bg-[#d6e3ff] p-2'>
                         <div className='h-10 w-10'></div>
                         <h2 className='text-2xl'>{selectedItem?.name}</h2>
@@ -218,12 +230,21 @@ export default function Kiosk() {
                             hoverColor='#FF3344'
                         />
                     </header>
-                    <div className='flex-1 grid grid-cols-3 grid-rows-6 gap-2 p-2'>
-                        {selectedItem && selectedItem.ingredients.map((ingredient) => {
+                    <div className='flex-1 flex flex-col justify-center overflow-clip'>
+                        <img className='w-full' src={selectedItem?.imageURI}></img>
+                    </div>
+                    <div className='h-[65%] grid grid-cols-3 grid-rows-6 gap-2 p-2'>
+                        {selectedItem && !isDrink(selectedItem) ? selectedItem.ingredients.map((ingredient) => {
                             return (
-                                <TextButton key={ingredient.itemId} text={`Remove ${ingredient.itemName}`} toggleable />
+                                <TextButton
+                                    key={ingredient.itemId}
+                                    text={`Remove ${ingredient.itemName}`}
+                                    toggleable
+
+                                />
                             )
-                        })}
+                        }) : <p className='text-center text-4xl'>No Modifications are allowed</p>
+                        }
                     </div>
                     <footer className='h-[10%] flex flex-row p-2 gap-10'>
                         <TextButton text='Cancel' onPress={() => setShowCustomizationPopup(false)} />
@@ -262,14 +283,16 @@ export default function Kiosk() {
                                             <tr key={`${item.name} ${index}`} className='mb-4'>
                                                 <td key={`${item.name} ${index} 0`}>{item.name}</td>
                                                 <td key={`${item.name} ${index} 1`}>{`$${item.price}`}</td>
-                                                <TextButton
-                                                    text='X'
-                                                    onPress={() => {
-                                                        removeFromOrder(index);
-                                                    }}
-                                                    color='#AAA'
-                                                    hoverColor='#F88'
-                                                />
+                                                <td key={`${item.name} ${index} 2`}>
+                                                    <TextButton
+                                                        text='X'
+                                                        onPress={() => {
+                                                            removeFromOrder(index);
+                                                        }}
+                                                        color='#AAA'
+                                                        hoverColor='#F88'
+                                                    />
+                                                </td>
                                             </tr>
                                         );
                                     })}
