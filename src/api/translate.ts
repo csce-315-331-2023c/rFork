@@ -4,6 +4,12 @@ import 'dotenv/config';
 const key = process.env.TRANSLATE_API_KEY;
 const defaultLanguage: string = "en";
 
+/**
+ * Translates text into a targeted language 
+ * @param text text to be translated
+ * @param newLanguage target language to translate into
+ * @returns 
+ */
 export async function translate(text: string, newLanguage: string) {
     const Url = `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${defaultLanguage}&target=${newLanguage}&q=${encodeURIComponent(text)}`;
     return fetch(Url).then(async (result) => {
@@ -11,7 +17,11 @@ export async function translate(text: string, newLanguage: string) {
     })
 }
 
-
+/**
+ * Translates the webpage into the targeted language
+ * @param newLanguage target language to translate into
+ * @returns 
+ */
 export async function translatePage(newLanguage: string) {
     if (newLanguage == defaultLanguage) {
         return;

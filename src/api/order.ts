@@ -1,6 +1,12 @@
 import { Ingredient, Order } from "../types";
 import db from "./index";
 
+/**
+ * Inserts an order into the order database, finds appropriate items to insert into order_items database,
+ * and also inserts needed ingredients into order_item_ingredients database
+ * @param order The order of the customer
+ * @returns void
+ */
 export async function submitOrder(order: Order): Promise<void> {
     // restaurant_order - date, total
     const orderQuery = 'INSERT INTO orders (create_time, subtotal_cents, employee_id) VALUES ($1, $2, $3) RETURNING id';
@@ -69,6 +75,10 @@ export async function submitOrder(order: Order): Promise<void> {
     }
 }
 
+/**
+ * Returns a list of all orders in the orders database, sorted by id
+ * @returns list of Order
+ */
 export async function getAll(): Promise<Order[]>{
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders ORDER by id DESC) t';
     const result = await db.query(query);
@@ -97,6 +107,10 @@ export async function getAll(): Promise<Order[]>{
     return orders;
 }
 
+/**
+ * Returns a list of all orders from the orders database, where is_finished is false
+ * @returns list of Order
+ */
 export async function getNotFinished(): Promise<Order[]>{
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished = false ORDER by id DESC) t';
     const result = await db.query(query);
