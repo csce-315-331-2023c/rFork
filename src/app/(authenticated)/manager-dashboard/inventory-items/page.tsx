@@ -3,6 +3,7 @@ import { CChart } from '@coreui/react-chartjs'
 import React, { useEffect, useState } from 'react'
 import { InventoryItem, MenuItem } from '../../../../types';
 import TextButton from '../../../../components/TextButton';
+import TableInventoryItems from '../../../../components/TableInventoryItems';
 
 const testMenuItem: MenuItem = {
     name: "TEST MENU ITEM",
@@ -33,7 +34,7 @@ export default function InventoryItemView() {
                 setInventoryNames(itemNames);
                 setInventoryAmounts(itemAmounts);
                 setInventoryRestockAmounts(itemRestockAmounts);
-            }   
+            }
             else {
                 alert("Data Malformed");
             }
@@ -60,30 +61,12 @@ export default function InventoryItemView() {
                     ]
                 }}
             />
-
-
-<footer className='h-[10%] flex flex-row p-2 gap-10'>
-                        <TextButton
-                            text='Add an egg'
-                            onPress={async () => {
-                                const inventoryItem: InventoryItem = {
-                                    id: 100,
-                                    name: "super duper booper",
-                                    currentStock: 500,
-                                    reorderThreshold: 300
-                                }
-                                await fetch("/api/inventory", { method: "POST", body: JSON.stringify(inventoryItem) })
-                                    .then((response) => response.json())
-                                    .then((data) => {
-                                        console.log(data);
-                                    })
-                                    .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-            
-                            }}
-                            color='#FF9638'
-                            hoverColor='#FFC38E'
-                        />
-                    </footer>
+            <TableInventoryItems
+                dataType='menu-items'
+                backgroundColor='rgb(130,233,199)'
+            />
         </div>
+
+
     )
 }

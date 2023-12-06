@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import TextButton from './TextButton';
 import { InventoryItem, MenuItem } from '../types';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import 'bootstrap/dist/css/bootstrap.css'
 
-
-export default function Table({ dataType, api, backgroundColor }: {
+export default function TableInventoryItems({ dataType, api, backgroundColor }: {
     dataType?: string,
     api?: string, // endpoint
     backgroundColor?: string
@@ -20,18 +16,15 @@ export default function Table({ dataType, api, backgroundColor }: {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [imageURI, setImageURI] = useState('');
-    const [desc, setDescription] = useState('');
-    const [tag, setTag] = useState('');
 
     //handle updating/editing values
     const [editId, usetEditId] = useState<number>(-1);
     const [uname, usetName] = useState<string>('');
     const [uprice, usetPrice] = useState<string>('');
     const [uimageURI, usetImageURI] = useState<string>('');
-    const [udesc, usetDescription] = useState<string>('');
-    const [utag, usetTag] = useState<string>('');
+    
 
-    const fetchMenuItems = async () => {
+    const fetchInventoryItems = async () => {
         try {
             const result = await fetch("/api/menu");
             const allItems = await result.json();
@@ -43,31 +36,10 @@ export default function Table({ dataType, api, backgroundColor }: {
         }
     };
 
-    const fetchMenuTags = async () => {
-
-        try {
-            const result = await fetch("/api/menu?tag=all");
-            const tagItems = await result.json();
-
-            //console.log(tagItems);
-            //console.log("Fetched tags:", tagItems.rows);
-            setTagData(tagItems.rows);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    // Function to get the tag name by menu item ID
-    const getTagNameByMenuItemId = (itemId: number) => {
-        const tagInfo = tagData.find(tagItem => tagItem.menu_item_id === itemId);
-
-        return tagInfo ? tagInfo.tag_name : 'N/A';
-    };
-
-    //initially set page and get data   
+    //initially set page and get data
     useEffect(() => {
-        fetchMenuItems();
-        fetchMenuTags();
+        fetchInventoryItems();
+      
     }, []);
 
 
@@ -75,19 +47,17 @@ export default function Table({ dataType, api, backgroundColor }: {
         usetEditId(id);
     }
 
-
+   
 
     return (
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <input type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
-                    <input type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.value)} />
-                    <input type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
-                    <input type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
-                    <input type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
+                    <input type="text" placeholder='Enter Stock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.value)} />
+                    <input type="text" placeholder='Enter Restock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
                     <TextButton
-                        text='Add a Menu Item'
+                        text='Add an Inventory Item'
                         onPress={async () => {
                             //create new menu item 
                             console.log(data);
@@ -95,7 +65,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                             event?.preventDefault();
                             console.log(highestId);
                             const newMenuItem: MenuItem = {
-                                id: highestId + 1, //the new id is just 1 higher than the current highest lol (need to do this so we can key the menu tag item)
+                                id: highestId +1, //the new id is just 1 higher than the current highest lol (need to do this so we can key the menu tag item)
                                 name: name,
                                 price: Number(price),
                                 ingredients: [],
@@ -105,18 +75,15 @@ export default function Table({ dataType, api, backgroundColor }: {
                             }
                             console.log(newMenuItem);
                             //adds a new menu item
-                            fetch("/api/menu", { method: "POST", body: JSON.stringify(newMenuItem) })
+                            await fetch("/api/menu", { method: "POST", body: JSON.stringify(newMenuItem) })
                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-                            //make seperate request to add a menu tag
-                            fetch(`/api/menu?add-tag=${encodeURIComponent(tag)} `, { method: "POST", body: JSON.stringify(newMenuItem) })
-                                .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-                            console.log(tag);
+                           
                             fetchMenuItems();
-                            fetchMenuTags();
+                           
                         }}
                         color='#FF9638'
                         hoverColor='#FFC38E'
-
+                        
                     />
                 </form>
             </div>
@@ -129,11 +96,9 @@ export default function Table({ dataType, api, backgroundColor }: {
                 <thead>
                     <tr style={{ border: '1px solid black', background: backgroundColor }}>
                         <th>ID</th>
-                        <th>Entree Name</th>
-                        <th>Price</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Tag Name</th>
+                        <th>Item Name</th>
+                        <th>Stock</th>
+                        <th>Reorder Threshold</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -145,83 +110,21 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
                                 <td><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.value)} /></td>
                                 <td><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetImageURI(e.target.value)} /></td>
-                                <td><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
-                                <td>
-                                    <Dropdown>
-                                        <Dropdown.toggle>
-
-                                        </Dropdown.toggle>
-
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item onClick={() => modifyOrder(0)}></Dropdown.Item>
-
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </td>
                                 <td>
                                     <TextButton
                                         text='Update'
                                         onPress={async () => {
-                                            let updatedName = uname;
-                                            let updatedPrice = uprice;
-                                            let updatedDescription = udesc;
-                                            let updatedImageURI = uimageURI;
-                                            let updatedTag = utag;
-                                            console.log(uname);
-                                            if (uname == '' || uname == menuItem.name) {
-                                                updatedName = menuItem.name;
-                                            }
-                                            if (uprice == '' || uprice == menuItem.price) {
-                                                updatedPrice = menuItem.price;
-                                            }
-                                            if (uimageURI == '' || uimageURI == menuItem.imageURI) {
-                                                updatedImageURI = menuItem.imageURI;
-                                            }
-                                            if (udesc == '' || udesc == menuItem.desc) {
-                                                updatedDescription = menuItem.desc;
-                                            }
-                                            // if (utag == '' || utag == menuItem.tag) {
-                                            //     updatedTag = menuItem.tag;
-                                            // }
-
-                                            //hacky code to fix updatedPrice if it's a decimal or integer
-                                            if (!Number.isInteger(Number(uprice))) {
-                                                updatedPrice = String(Number(updatedPrice) * 100);//convert decimal string back to cents for database
-                                            }
-                                            console.log(uname);
-                                            const updatedItem: MenuItem = {
-                                                id: menuItem.id,
-                                                name: updatedName,
-                                                price: Number(updatedPrice),
-                                                ingredients: [],
-                                                validExtras: [],
-                                                description: updatedDescription,
-                                                imageURI: updatedImageURI
-                                            }
-                                            await fetch(`/api/menu?edit=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(updatedItem) })
-                                                .then((response) => response.json())
-                                                .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-                                            //location.reload();
-
-                                        }}
-                                        color='#FF9638'
-                                        hoverColor='#FFC38E'
-                                    />
-                                    <TextButton
-                                        text='Edit Ingredients'
-
-                                        onPress={async () => {
-                                            const updatedItem: MenuItem = {
+                                            const menuItem: MenuItem = {
                                                 id: editId,
                                                 name: uname,
-                                                price: Number(parseFloat(price).toFixed),
+                                                price: Number(uprice),
                                                 ingredients: [],
                                                 validExtras: [],
                                                 description: udesc,
                                                 imageURI: uimageURI
                                             }
-                                            //console.log(menuItem); 
-                                            await fetch(`/api/menu?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(updatedItem) })
+                                            console.log(menuItem);
+                                            await fetch(`/api/menu?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(menuItem) })
                                                 .then((response) => response.json())
                                                 .then((data) => {
                                                     //console.log(data);
@@ -231,7 +134,6 @@ export default function Table({ dataType, api, backgroundColor }: {
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
-
                                     /></td>
                             </tr> :
                             <tr key={`Table Row ${index}`} style={{ border: '1px solid black', background: backgroundColor }}>
@@ -241,8 +143,6 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td>
                                     <img src={menuItem.imageURI} style={{ maxWidth: '100px', maxHeight: '100px' }} alt={menuItem.name} />
                                 </td>
-                                <td >{menuItem.description}</td>
-                                <td>{getTagNameByMenuItemId(menuItem.id)}</td>
                                 <td>
                                     <button onClick={() => handleEdit(menuItem.id)}>edit</button>
                                     <TextButton
@@ -266,7 +166,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();
                                             fetchMenuItems();
-                                            fetchMenuTags();
+                                 
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'

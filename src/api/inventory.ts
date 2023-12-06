@@ -1,4 +1,4 @@
-import InventoryItemView from "../app/manager-dashboard/inventory-items/page";
+import InventoryItemView from "../app/(authenticated)/manager-dashboard/inventory-items/page";
 import { InventoryItem } from "../types";
 import db from "./index";
 
