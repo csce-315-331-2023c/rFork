@@ -75,6 +75,13 @@ export default function Table({ dataType, api, backgroundColor }: {
         usetEditId(id);
     }
 
+    const handleTagChange = (menuItem: MenuItem, newTagName: string) => {
+        console.log(menuItem);
+        console.log(newTagName);
+        fetch(`/api/menu?update-tag=${encodeURIComponent(newTagName)}`, { method: "POST", body: JSON.stringify(menuItem) })
+        .then((response) => response.json())
+        .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+    }
 
 
     return (
@@ -88,8 +95,14 @@ export default function Table({ dataType, api, backgroundColor }: {
                     <input type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
                     <TextButton
                         text='Add a Menu Item'
+
                         onPress={async () => {
+                            let newPrice = price;
                             //create new menu item 
+                            //hacked price to handle integers vs strings vs decimal conversion
+                            if (!Number.isInteger(Number(newPrice))) {
+                                newPrice = String(Number(newPrice) * 100);//convert decimal string back to cents for database
+                            }
                             console.log(data);
                             const highestId = Math.max(...data.map(item => item.id), 0);
                             event?.preventDefault();
@@ -97,7 +110,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                             const newMenuItem: MenuItem = {
                                 id: highestId + 1, //the new id is just 1 higher than the current highest lol (need to do this so we can key the menu tag item)
                                 name: name,
-                                price: Number(price),
+                                price: Number(newPrice),
                                 ingredients: [],
                                 validExtras: [],
                                 description: desc,
@@ -148,13 +161,16 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
                                 <td>
                                     <Dropdown>
-                                        <Dropdown.toggle>
-
-                                        </Dropdown.toggle>
+                                        <Dropdown.Toggle>
+                                    
+                                        </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item onClick={() => modifyOrder(0)}></Dropdown.Item>
-
+                                            <Dropdown.Item onClick={() => handleTagChange(menuItem,"Sweet Crepes")}>Sweet Crepes</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleTagChange(menuItem,"Savory Crepes")}>Savory Crepes</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleTagChange(menuItem,"Waffles")}>Waffles</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleTagChange(menuItem,"Soups")}>Soups</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleTagChange(menuItem,"Drinks")}>Drinks</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </td>
@@ -244,25 +260,13 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td >{menuItem.description}</td>
                                 <td>{getTagNameByMenuItemId(menuItem.id)}</td>
                                 <td>
-                                    <button onClick={() => handleEdit(menuItem.id)}>edit</button>
+                                    <button onClick={() => handleEdit(menuItem.id)}>edit</button> 
                                     <TextButton
                                         text='Delete'
                                         onPress={async () => {
-                                            const item: MenuItem = {
-                                                id: menuItem.id,
-                                                name: menuItem.name,
-                                                price: menuItem.price,
-                                                ingredients: [],
-                                                validExtras: [],
-                                                description: menuItem.description,
-                                                imageURI: menuItem.imageURI
-                                            }
                                             //console.log(menuItem); 
                                             await fetch(`/api/menu?delete=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(menuItem) })
                                                 .then((response) => response.json())
-                                                .then((data) => {
-                                                    //console.log(data);
-                                                })
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();
                                             fetchMenuItems();

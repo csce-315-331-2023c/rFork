@@ -211,7 +211,7 @@ export async function addMenuTag(MenuItem: MenuItem, newTag: string): Promise<vo
 
 export async function updateMenuTag(updatedMenuItem: MenuItem, newTag: string): Promise<void> {
 
-    const updateMenuTagQuery = 'UPDATE menu_item_tag SET menu_item_id = $1, tag_name = $2 WHERE id = $3';
+    const updateMenuTagQuery = 'UPDATE menu_item_tag SET menu_item_id = $1, tag_name = $2 WHERE menu_item_id = $3';
 
 
     const updateResult = await db.query(updateMenuTagQuery, [updatedMenuItem.id, newTag, updatedMenuItem.id]);

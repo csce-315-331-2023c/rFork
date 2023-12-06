@@ -28,7 +28,6 @@ export async function getAllInventoryItems(): Promise<InventoryItem[]> {
 }
 
 export async function addInventoryItem(inventoryItem: InventoryItem): Promise<void> {
-    // restaurant_order - date, total
 
     const inventoryItemQuery = 'INSERT INTO inventory_item (id, item_name, stock, reorder_threshold) VALUES ($1, $2, $3, $4) RETURNING id';
 
