@@ -37,7 +37,6 @@ export default function Kiosk() {
 
     // Final order info data
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
-    const [orderInfo, setOrderInfo] = useState<Order>();
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
 
     // MISC Hooks
