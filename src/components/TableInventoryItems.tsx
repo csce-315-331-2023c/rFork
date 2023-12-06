@@ -102,26 +102,35 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                             <tr key={`Table Row ${index}`}>
                                 <td>{inventoryItem.id}</td>
                                 <td><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td><input type="text" placeholder={inventoryItem.stock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
+                                <td><input type="text" placeholder={inventoryItem.currentStock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
                                 <td><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
                                 <td>
                                     <TextButton
                                         text='Update'
                                         onPress={async () => {
+                                            let updatedName = uname;
+                                            let updatedStock = uStock;
+                                            let updatedReorderthreshold= uReorderThreshold;
+                                            console.log(uname);
+                                            if (uname == '' || uname == inventoryItem.name) {
+                                                updatedName = inventoryItem.name;
+                                            }
+                                            if (uStock == '' || uStock == inventoryItem.price) {
+                                                updatedStock = inventoryItem.currentStock;
+                                            }
+                                            if (uReorderThreshold == '' || uReorderThreshold == inventoryItem.reorderThreshold) {
+                                                updatedReorderthreshold = inventoryItem.reorderThreshold;
+                                            }
+
                                             const updateInventoryItem: InventoryItem = {
-                                                id: editId,
-                                                name: uname,
-                                                currentStock: Number(uStock),
-                                                reorderThreshold: Number(uReorderThreshold)
+                                                id: inventoryItem.id,
+                                                name: updatedName,
+                                                currentStock: Number(updatedStock),
+                                                reorderThreshold: Number(updatedReorderthreshold)
                                             }
                                             console.log(updateInventoryItem);
-                                            // await fetch(`/api/?edit=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(menuItem) })
-                                            //     .then((response) => response.json())
-                                            //     .then((data) => {
-                                            //         //console.log(data);
-                                            //     })
-                                            //     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-
+                                            await fetch(`/api/inventory?update=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(updateInventoryItem) })
+                                            location.reload();
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
@@ -137,11 +146,11 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                     <TextButton
                                         text='Delete'
                                         onPress={async () => {
-                                            await fetch(`/api/menu?delete=${encodeURIComponent(inventoryItem.id)}`, { method: "POST", body: JSON.stringify(inventoryItem) })
+                                            await fetch(`/api/inventory?delete=${encodeURIComponent(inventoryItem.id)}`, { method: "POST", body: JSON.stringify(inventoryItem) })
                                                 .then((response) => response.json())
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();
-            
+                                            location.reload();
                                  
                                         }}
                                         color='#FF9638'

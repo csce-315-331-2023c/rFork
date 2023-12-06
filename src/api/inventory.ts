@@ -41,3 +41,28 @@ export async function addInventoryItem(inventoryItem: InventoryItem): Promise<vo
     inventoryItem.id = inventoryItemResult.rows[0].id;
 
 }
+
+export async function updateInventoryItem(updatedInventoryItem: InventoryItem): Promise<void> {
+
+    const updateInventoryItemQuery = 'UPDATE inventory_item SET item_name = $1, stock = $2, reorder_threshold = $3 WHERE id = $4';
+
+
+    const updateResult = await db.query(updateInventoryItemQuery, [updatedInventoryItem.name, updatedInventoryItem.currentStock, updatedInventoryItem.reorderThreshold, updatedInventoryItem.id]);
+
+    // Check if the update was successful
+    if (updateResult.rowCount !== 1) {
+        throw new Error('Error updating menu item');
+    }
+}
+
+export async function deleteInventoryItem(deletedInventoryItem: InventoryItem): Promise<void> {
+    const deleteInventoryItemQuery = 'DELETE FROM inventory_item WHERE id = $1';
+
+    const deleteResult = await db.query(deleteInventoryItemQuery, [deletedInventoryItem.id]);
+
+    // Check if the delete was successful
+    if (deleteResult.rowCount !== 1) {
+        throw new Error('Error deleting menu item');
+    }
+}
+

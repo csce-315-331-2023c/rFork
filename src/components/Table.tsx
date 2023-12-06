@@ -217,7 +217,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                             await fetch(`/api/menu?edit=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(updatedItem) })
                                                 .then((response) => response.json())
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-                                            //location.reload();
+                                            location.reload();
 
                                         }}
                                         color='#FF9638'

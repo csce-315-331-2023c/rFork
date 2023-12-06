@@ -1,6 +1,6 @@
 import { getAllInventoryItems } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
-import { addInventoryItem } from '../../../api/inventory'
+import { addInventoryItem, updateInventoryItem, deleteInventoryItem } from '../../../api/inventory'
 import { Result } from 'postcss'
 
 export async function GET() {
@@ -13,10 +13,27 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     const data = await req.json()
+    const delete_id = req.nextUrl.searchParams.get('delete');
+    const update_tag =  req.nextUrl.searchParams.get('update');
+    if (update_tag) {
+        return await updateInventoryItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully updated item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik updating inventory item failed", data, error }, { status: 500 })
+        });
+    } else if (delete_id) {
+        return await deleteInventoryItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully deleted inventory item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik deleting menu item failed", data, error }, { status: 500 })
+        });
+    }
+    else {
+        return await addInventoryItem(data).then(() => {
+            return NextResponse.json({ message: "sucesfully added item", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik", data, error }, { status: 500 })
+        });
+    }
 
-    return await addInventoryItem(data).then(() => {
-        return NextResponse.json({ message: "sucesfully added item", data })
-    }).catch((error) => {
-        return NextResponse.json({ message: "frickalik", data, error }, { status: 500 })
-    });
 }
