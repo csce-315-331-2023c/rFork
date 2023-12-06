@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Crepes',
+  title: 'Sweet Paris',
   description: 'Crepe Restaurant GUI',
 }
 

@@ -42,6 +42,26 @@ export default function Kiosk() {
     // MISC Hooks
     const [language, setLanguage] = useState('en');
 
+    // 
+    const [subtotal, setSubtotal] = useState<number>(0);
+    const [tax, setTax] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
+    const taxMultiplier = 0.05;
+
+    function updateOrderTotal(updatedCartItems: MenuItem[] = cartItems) {
+        let updatedSubtotal = 0;
+        updatedCartItems.forEach((menuItem) => {
+            updatedSubtotal += menuItem.price;
+        });
+        setSubtotal(updatedSubtotal);
+        setTax(updatedSubtotal * taxMultiplier);
+        setTotal(updatedSubtotal + updatedSubtotal * taxMultiplier);
+    }
+
+    useEffect(() => {
+        updateOrderTotal();
+    }, [cartItems]);
+
     useEffect(() => {
         getMenuItemCategory("Sweet Crepes").then((data) => {
             setSweetCrepes(data);
@@ -120,6 +140,7 @@ export default function Kiosk() {
         const updatedCartItems = cartItems;
         updatedCartItems.push({ ...menuItem });
         setCartItems(updatedCartItems);
+        updateOrderTotal(updatedCartItems)
     }
 
     function removeFromOrder(index: number): void {
@@ -177,10 +198,10 @@ export default function Kiosk() {
             <div className='px-10 py-2 flex-1 h-4 overflow-y-auto'>
                 <h1 id='google-translate-element' className='text-4xl underline m-2'>{categoryTitle}</h1>
                 <div className='grid grid-cols-4 gap-4'>
-                    {selectedItemList.map((menuItem) => {
+                    {selectedItemList.map((menuItem, index) => {
                         return (
                             <ImageButton
-                                key={menuItem.name}
+                                key={`${menuItem.name} ${index}`}
                                 text={menuItem.name}
                                 onPress={() => {
                                     setSelectedItem(menuItem);
@@ -207,8 +228,8 @@ export default function Kiosk() {
                         customClassName='flex-1 py-2 h-full text-2xl'
                         text={`Checkout/Edit Order`}
                         onPress={() => setShowCheckoutPopup(true)}
-                        color='#FF9638'
-                        hoverColor='#FFC38E'
+                        color='#006aff'
+                        hoverColor='#80ddff'
                     />
                 </div>
             </footer>
@@ -232,7 +253,15 @@ export default function Kiosk() {
                     <div className='flex-1 flex flex-col justify-center overflow-clip'>
                         <img className='w-full' src={selectedItem?.imageURI}></img>
                     </div>
-                    <div className='h-[65%] grid grid-cols-3 grid-rows-6 gap-2 p-2'>
+                    <div className='flex flex-row justify-between h-[5%]'>
+                        <p className='p-1 text-lg'>{selectedItem?.description}</p>
+                        <div className='m-1 p-1 h-full bg-purple-600 rounded-lg text-white'>
+                            <p className='text-lg text-center' aria-description={`Price of ${selectedItem?.name}`}>
+                                {`$${selectedItem?.price.toFixed(2)}`}
+                            </p>
+                        </div>
+                    </div>
+                    <div className='h-[60%] grid grid-cols-3 grid-rows-6 gap-2 p-2'>
                         {selectedItem && !isDrink(selectedItem) ? selectedItem.ingredients.map((ingredient) => {
                             return (
                                 <TextButton
@@ -242,7 +271,7 @@ export default function Kiosk() {
 
                                 />
                             )
-                        }) : <p className='text-center text-4xl'>No Modifications are allowed</p>
+                        }) : <p className='text-center text-4xl col-span-3' aria-description='Information about specific item'>No modifications are allowed for this item.</p>
                         }
                     </div>
                     <footer className='h-[10%] flex flex-row p-2 gap-10'>
@@ -255,8 +284,8 @@ export default function Kiosk() {
                                 }
                                 setShowCustomizationPopup(false);
                             }}
-                            color='#FF9638'
-                            hoverColor='#FFC38E'
+                            color='#006aff'
+                            hoverColor='#80ddff'
                         />
                     </footer>
                 </div>
@@ -266,30 +295,32 @@ export default function Kiosk() {
             >
                 <div className='flex flex-col h-full w-full bg-white'>
                     <div className='flex flex-col flex-1'>
+                        <div className='flex flex-row justify-end items-center'>
+                            <p aria-description='Total cost of order' className='text-xl pr-6'>{`$${total.toFixed(2)} ($${tax.toFixed(2)} tax)`}</p>
+                        </div>
                         {
                             cartItems.length > 0 &&
-                            (<table className='text-lg'>
+                            (<table className='text-lg mx-4'>
                                 <thead>
                                     <tr className='border-black border-b-2'>
-                                        <td>Item Name</td>
-                                        <td>Item Price</td>
-                                        <td></td>
+                                        <td id='google-translate-element' className='text-xl' aria-description='Name Column'><strong>Name</strong></td>
+                                        <td id='google-translate-element' className='text-xl' aria-description='Price Column'><strong>Price</strong></td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {cartItems.map((item, index) => {
                                         return (
-                                            <tr key={`${item.name} ${index}`} className='mb-4'>
-                                                <td key={`${item.name} ${index} 0`}>{item.name}</td>
-                                                <td key={`${item.name} ${index} 1`}>{`$${item.price}`}</td>
-                                                <td key={`${item.name} ${index} 2`}>
+                                            <tr key={`${item.name} ${index}`} className='mb-4 h-4'>
+                                                <td id='google-translate-element' key={`${item.name} ${index} 0`} className='text-2xl' aria-description='Name of a cart item'>{item.name}</td>
+                                                <td id='google-translate-element' key={`${item.name} ${index} 1`} className='text-2xl' aria-description='Price of a cart item'>{`$${item.price.toFixed(2)}`}</td>
+                                                <td key={`${item.name} ${index} 21342`}>
                                                     <TextButton
                                                         text='X'
                                                         onPress={() => {
                                                             removeFromOrder(index);
                                                         }}
                                                         color='#AAA'
-                                                        hoverColor='#F88'
+                                                        hoverColor='#F44'
                                                     />
                                                 </td>
                                             </tr>
@@ -297,7 +328,7 @@ export default function Kiosk() {
                                     })}
                                 </tbody>
                             </table>) ||
-                            <p>There are no items to display</p>
+                            <p id='google-translate-element' className='text-center text-4xl'>There are no items to display</p>
                         }
                     </div>
                     <footer className='h-[10%] flex flex-row p-2 gap-10'>
@@ -325,8 +356,8 @@ export default function Kiosk() {
                                 setShowCheckoutPopup(false);
                                 setCartItems([]);
                             }}
-                            color='#FF9638'
-                            hoverColor='#FFC38E'
+                            color='#006aff'
+                            hoverColor='#80ddff'
                         />
                     </footer>
                 </div>
