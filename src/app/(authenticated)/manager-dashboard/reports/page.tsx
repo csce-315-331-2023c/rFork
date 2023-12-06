@@ -34,31 +34,31 @@ export default function ReportView() {
             <AuthSessionHeader />
             <div className="grid grid-cols-3 gap-4 p-4">
                 <div className="flex flex-col items-start p-4">
-                    <button aria-label="Product Usage" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Product Usage" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         fetch(`/api/reports?reports=product_usage&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                             setData(d);
                             setReportType(r.product_usage);
                         })
                     }}>Product Usage</button>
-                    <button aria-label="Product Sales" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Product Sales" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         fetch(`/api/reports?reports=product_sales&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                             setData(d);
                             setReportType(r.product_sales);
                         })
                     }}>Product Sales</button>
-                    <button aria-label="Product Excess" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Product Excess" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
                             setData(d);
                             setReportType(r.product_excess);
                         })
                     }}>Product Excess</button>
-                    <button aria-label="Restock Report" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Restock Report" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
                             setData(d);
                             setReportType(r.restock_report);
                         })
                     }}>Restock Report</button>
-                    <button aria-label="Sells Together" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Sells Together" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         fetch(`/api/reports?reports=sells_together&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                             setData(d);
                             setReportType(r.sells_together);
