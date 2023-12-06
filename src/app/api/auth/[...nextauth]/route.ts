@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { findEmployee } from "../../../../api/employee";
+import { rSession, rToken, rUser } from "../../../../types";
 
 const handler = NextAuth({
     providers: [
@@ -10,7 +11,7 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ profile }) {
+        async signIn({ user, profile }) {
             const lastName = (profile as any).family_name;
             const firstName = (profile as any).given_name;
 
@@ -20,7 +21,25 @@ const handler = NextAuth({
                 return "/unauthorized";
             }
 
+            if (employee.role === "manager") {
+                (user as rUser).employee = employee;
+            }
+            
             return true;
+        },
+        async jwt({ token, user }) {
+            if ((user as rUser)?.employee) {
+                token.employee = (user as rUser).employee;
+            }
+            token.user = user;
+            return token;
+        },
+        async session({ session, token, user }) {
+            if ((token as rToken)?.employee && (session as rSession)?.user) {
+                (session as rSession)!.user!.employee = (token as rToken).employee;
+            }
+            return session;
+
         }
     }
 })
