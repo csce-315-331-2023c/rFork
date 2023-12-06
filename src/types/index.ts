@@ -29,6 +29,7 @@ export type Order = {
     items: MenuItem[];
     total: number;
     submittedBy: Employee | Customer;
+    isFinished: boolean;
 };
 
 export type Customer = {
