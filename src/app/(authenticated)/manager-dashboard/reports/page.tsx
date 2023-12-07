@@ -51,7 +51,7 @@ export default function ReportView() {
                             setReportType(r.product_usage);
                         })
                     }}>Product Usage</button>
-                    <button aria-label="Product Sales" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button id='google-translate-element' aria-label="Product Sales" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         setLoading(true);
                         fetch(`/api/reports?reports=product_sales&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                             setLoading(false);
@@ -60,7 +60,7 @@ export default function ReportView() {
                             setReportType(r.product_sales);
                         })
                     }}>Product Sales</button>
-                    <button aria-label="Product Excess" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button id='google-translate-element' aria-label="Product Excess" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         setLoading(true);
                         fetch(`/api/reports?reports=product_excess&start=${startDate.getTime()}`).then(res => res.json()).then(d => {
                             setLoading(false);
@@ -69,7 +69,7 @@ export default function ReportView() {
                             setReportType(r.product_excess);
                         })
                     }}>Product Excess</button>
-                    <button aria-label="Restock Report" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button id='google-translate-element' aria-label="Restock Report" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         setLoading(true);
                         fetch(`/api/reports?reports=restock_report`).then(res => res.json()).then(d => {
                             setLoading(false);
@@ -78,7 +78,7 @@ export default function ReportView() {
                             setReportType(r.restock_report);
                         })
                     }}>Restock Report</button>
-                    <button aria-label="Sells Together" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button id='google-translate-element' aria-label="Sells Together" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
                         setLoading(true);
                         fetch(`/api/reports?reports=sells_together&start=${startDate.getTime()}&end=${endDate.getTime()}`).then(res => res.json()).then(d => {
                             setLoading(false);
@@ -90,13 +90,13 @@ export default function ReportView() {
                 </div>
                 {
                     empty &&
-                    <div className="flex flex-col items-center p-4">
+                    <div className="flex flex-col items-center p-4" id='google-translate-element'>
                         No Data
                     </div>
                 }
                 {
                     loading &&
-                    <div className="flex flex-col items-center p-4">
+                    <div className="flex flex-col items-center p-4" id='google-translate-element'>
                         <Spinner animation="border" role="status" className="item-center w-full">
                             <span className="visually-hidden">Loading...</span>
                         </Spinner>
@@ -109,9 +109,9 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Quantity Used">Quantity Used</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Quantity Used">Quantity Used</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,10 +136,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order ID">Order ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Timestamp">Timestamp</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order Total">Order Total</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Submitted By">Submitted By</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order ID">Order ID</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Timestamp">Timestamp</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Order Total">Order Total</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Submitted By">Submitted By</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,10 +165,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,10 +195,10 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
-                                    <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item ID">Item ID</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Item Name">Item Name</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Current Stock">Current Stock</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Reorder Threshold">Reorder Threshold</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,11 +225,11 @@ export default function ReportView() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 1">Item ID 1</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 2">Item ID 2</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item Name 1">Item Name 1</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for item Name2">Item Name 2</th>
-                                    <th className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Number of Times Ordered Together">Number of Times Ordered Together</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 1">Item ID 1</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item ID 2">Item ID 2</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Item Name 1">Item Name 1</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for item Name2">Item Name 2</th>
+                                    <th id='google-translate-element' className="bg-blue-100 border text-center px-4 py-4" aria-descrpiton="Column for Number of Times Ordered Together">Number of Times Ordered Together</th>
 
                                 </tr>
                             </thead>
@@ -254,17 +254,18 @@ export default function ReportView() {
                 { (reportType == r.product_usage || reportType == r.product_sales || reportType == r.product_excess ||reportType == r.sells_together) && 
                     <div className="flex flex-col items-center">
                         <div className="w-full">
-                            <h2 className="text-left py-3 text-2xl">Start Date</h2>
-                            <DatePicker isClearable placeholderText="Select Start Date" selected={startDate} onChange={(date) => setStartDate(date as Date)}>Start Date</DatePicker>
+                            <h2 className="text-left py-3 text-2xl" id='google-translate-element'>Start Date</h2>
+                            <DatePicker id='google-translate-element' isClearable placeholderText="Select Start Date" selected={startDate} onChange={(date) => setStartDate(date as Date)}>Start Date</DatePicker>
                             {
                                 reportType != r.product_excess &&
                                 <div>
-                                    <h2 className="text-left py-3 pt-8 text-2xl">End Date</h2>
-                                    <DatePicker isClearable placeholderText="Select End Date" selected={endDate} onChange={(date) => setEndDate(date as Date)}>End Date</DatePicker>
+                                    <h2 className="text-left py-3 pt-8 text-2xl" id='google-translate-element'>End Date</h2>
+                                    <DatePicker id='google-translate-element' isClearable placeholderText="Select End Date" selected={endDate} onChange={(date) => setEndDate(date as Date)}>End Date</DatePicker>
                                 </div>
                             }
                         </div>
                         <button
+                            id='google-translate-element'
                             aria-label="Serach Again"
                             className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 mx-8 rounded mb-2 w-full"
                             onClick={() => {
