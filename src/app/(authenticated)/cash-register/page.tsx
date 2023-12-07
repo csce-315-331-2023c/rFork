@@ -268,9 +268,9 @@ export default function CashRegister() {
                                                     <td>
                                                         <ul>
                                                             {
-                                                                item.removedIngredients?.map((item) => {
+                                                                item.removedIngredients?.map((item, index) => {
                                                                     return (
-                                                                        <li>
+                                                                        <li key={index}>
                                                                             {`No ${item.itemName}`}
                                                                         </li>
                                                                     )
