@@ -21,7 +21,7 @@ export default function ManagerDashboard() {
             <AuthSessionHeader />
             {/* Slide Menus */}
             <div className='grid grid-rows-2 grid-cols-2 flex-1'>
-                <div className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
+                <div id='google-translate-element' className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
                     <Link href='/manager-dashboard/reports'>
                         <ImageButton
                             imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
@@ -57,10 +57,10 @@ export default function ManagerDashboard() {
                         hoverColor='#CCC'
                         altText='View Transaction History Button Image'
                     />
-                    <p className='text-center text-lg'>View Statistics</p>
-                    <p className='text-center text-lg'>Inventory Items</p>
-                    <p className='text-center text-lg'>Menu Items</p>
-                    <p className='text-center text-lg'>Transaction History</p>
+                    <p id='google-translate-element' className='text-center text-lg'>View Statistics</p>
+                    <p id='google-translate-element' className='text-center text-lg'>Inventory Items</p>
+                    <p id='google-translate-element' className='text-center text-lg'>Menu Items</p>
+                    <p id='google-translate-element' className='text-center text-lg'>Transaction History</p>
                 </div>
                 <div className='bg-black row-span-2 col-span-1'></div>
                 <div className='bg-red-500 row-span-1 col-span-1'></div>

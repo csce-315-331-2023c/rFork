@@ -52,7 +52,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <input type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
+                    <input  type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
                     <input type="text" placeholder='Enter Stock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setStock(e.target.value)} />
                     <input type="text" placeholder='Enter Restock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setReorderThreshold(e.target.value)} />
                     <TextButton
@@ -89,22 +89,22 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
             }}>
                 <thead>
                     <tr style={{ border: '1px solid black', background: backgroundColor }}>
-                        <th>ID</th>
-                        <th>Item Name</th>
-                        <th>Stock</th>
-                        <th>Reorder Threshold</th>
-                        <th>Action</th>
+                        <th id='google-translate-element'>ID</th>
+                        <th id='google-translate-element'>Item Name</th>
+                        <th id='google-translate-element'>Stock</th>
+                        <th id='google-translate-element'>Reorder Threshold</th>
+                        <th id='google-translate-element'>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((inventoryItem, index) => (
                         inventoryItem.id === editId ?
                             <tr key={`Table Row ${index}`}>
-                                <td>{inventoryItem.id}</td>
-                                <td><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td><input type="text" placeholder={inventoryItem.currentStock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
-                                <td><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
-                                <td>
+                                <td id='google-translate-element'>{inventoryItem.id}</td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.stock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
+                                <td id='google-translate-element'>
                                     <TextButton
                                         text='Update'
                                         onPress={async () => {
@@ -116,7 +116,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                                 updatedName = inventoryItem.name;
                                             }
                                             if (uStock == '' || uStock == inventoryItem.price) {
-                                                updatedStock = inventoryItem.currentStock;
+                                                updatedStock = inventoryItem.stock;
                                             }
                                             if (uReorderThreshold == '' || uReorderThreshold == inventoryItem.reorderThreshold) {
                                                 updatedReorderthreshold = inventoryItem.reorderThreshold;
@@ -130,18 +130,23 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                             }
                                             console.log(updateInventoryItem);
                                             await fetch(`/api/inventory?update=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(updateInventoryItem) })
-                                            location.reload();
+                                            //     .then((response) => response.json())
+                                            //     .then((data) => {
+                                            //         //console.log(data);
+                                            //     })
+                                            //     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
                                     /></td>
                             </tr> :
                             <tr key={`Table Row ${index}`} style={{ border: '1px solid black', background: backgroundColor }}>
-                                <td>{inventoryItem.id}</td>
-                                <td>{inventoryItem.name}</td>
-                                <td>{inventoryItem.currentStock}</td>
-                                <td>{inventoryItem.reorderThreshold}</td>
-                                <td>
+                                <td id='google-translate-element'>{inventoryItem.id}</td>
+                                <td id='google-translate-element'>{inventoryItem.name}</td>
+                                <td id='google-translate-element'>{inventoryItem.currentStock}</td>
+                                <td id='google-translate-element'>{inventoryItem.reorderThreshold}</td>
+                                <td id='google-translate-element'>
                                     <button onClick={() => handleEdit(inventoryItem.id)}>edit</button>
                                     <TextButton
                                         text='Delete'
@@ -150,7 +155,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                                 .then((response) => response.json())
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();
-                                            location.reload();
+            
                                  
                                         }}
                                         color='#FF9638'

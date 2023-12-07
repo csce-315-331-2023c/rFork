@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { InventoryItem, MenuItem } from '../../../../types';
 import TextButton from '../../../../components/TextButton';
 import TableInventoryItems from '../../../../components/TableInventoryItems';
-
+import AuthSessionHeader from '../../../../components/AuthSessionHeader';
 const testMenuItem: MenuItem = {
     name: "TEST MENU ITEM",
     price: 12.50,
@@ -43,6 +43,7 @@ export default function InventoryItemView() {
 
     return (
         <div>
+             <AuthSessionHeader />
             <CChart
                 type='bar'
                 data={{

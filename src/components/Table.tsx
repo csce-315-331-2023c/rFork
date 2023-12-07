@@ -5,7 +5,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import 'bootstrap/dist/css/bootstrap.css'
 
-
 export default function Table({ dataType, api, backgroundColor }: {
     dataType?: string,
     api?: string, // endpoint
@@ -88,12 +87,12 @@ export default function Table({ dataType, api, backgroundColor }: {
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <input type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
-                    <input type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.value)} />
-                    <input type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
-                    <input type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
-                    <input type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
-                    <TextButton
+                    <input id='google-translate-element' type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
+                    <TextButton 
                         text='Add a Menu Item'
 
                         onPress={async () => {
@@ -141,25 +140,25 @@ export default function Table({ dataType, api, backgroundColor }: {
             }}>
                 <thead>
                     <tr style={{ border: '1px solid black', background: backgroundColor }}>
-                        <th>ID</th>
-                        <th>Entree Name</th>
-                        <th>Price</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Tag Name</th>
-                        <th>Action</th>
+                        <th id='google-translate-element'>ID</th>
+                        <th id='google-translate-element'>Entree Name</th>
+                        <th id='google-translate-element'>Price</th>
+                        <th id='google-translate-element'>Image</th>
+                        <th id='google-translate-element'>Description</th>
+                        <th id='google-translate-element'>Tag Name</th>
+                        <th id='google-translate-element'>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((menuItem, index) => (
                         menuItem.id === editId ?
                             <tr key={`Table Row ${index}`}>
-                                <td>{menuItem.id}</td>
-                                <td><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.value)} /></td>
-                                <td><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetImageURI(e.target.value)} /></td>
-                                <td><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
-                                <td>
+                                <td id='google-translate-element'>{menuItem.id}</td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetImageURI(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
+                                <td id='google-translate-element'>
                                     <Dropdown>
                                         <Dropdown.Toggle>
                                     
@@ -174,7 +173,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </td>
-                                <td>
+                                <td id='google-translate-element'>
                                     <TextButton
                                         text='Update'
                                         onPress={async () => {
@@ -251,15 +250,15 @@ export default function Table({ dataType, api, backgroundColor }: {
                                     /></td>
                             </tr> :
                             <tr key={`Table Row ${index}`} style={{ border: '1px solid black', background: backgroundColor }}>
-                                <td>{menuItem.id}</td>
-                                <td>{menuItem.name}</td>
-                                <td>${menuItem.price.toFixed(2)}</td>
+                                <td id='google-translate-element'>{menuItem.id}</td>
+                                <td id='google-translate-element'>{menuItem.name}</td>
+                                <td id='google-translate-element'>${menuItem.price.toFixed(2)}</td>
                                 <td>
                                     <img src={menuItem.imageURI} style={{ maxWidth: '100px', maxHeight: '100px' }} alt={menuItem.name} />
                                 </td>
-                                <td >{menuItem.description}</td>
-                                <td>{getTagNameByMenuItemId(menuItem.id)}</td>
-                                <td>
+                                <td id='google-translate-element'>{menuItem.description}</td>
+                                <td id='google-translate-element'>{getTagNameByMenuItemId(menuItem.id)}</td>
+                                <td id='google-translate-element'>
                                     <button onClick={() => handleEdit(menuItem.id)}>edit</button> 
                                     <TextButton
                                         text='Delete'
@@ -281,6 +280,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                     ))}
                 </tbody>
             </table>
+            
         </div>
     );
 }
