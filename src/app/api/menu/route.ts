@@ -60,8 +60,6 @@ export async function POST(req: NextRequest) {
     const delete_id = req.nextUrl.searchParams.get('delete');
     const add_tag =  req.nextUrl.searchParams.get('add-tag');
     const update_tag =  req.nextUrl.searchParams.get('update-tag');
-    console.log(delete_id);
-
 
     if (edit_id) {
         return await updateMenuItem(data).then(() => {

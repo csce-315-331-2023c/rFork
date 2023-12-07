@@ -146,10 +146,10 @@ export async function getMenuItemByTag(tag: Tag): Promise<MenuItem[]> {
 export async function addMenuItem(MenuItem: MenuItem): Promise<void> {
     // restaurant_order - date, total
 
-    const MenuItemQuery = 'INSERT INTO menu_item (name, price_cents, img_uri, description) VALUES ($1, $2, $3, $4) RETURNING id';
+    const MenuItemQuery = 'INSERT INTO menu_item (id, name, price_cents, img_uri, description) VALUES ($1, $2, $3, $4, $5) RETURNING id';
 
 
-    const MenuItemResult = await db.query(MenuItemQuery, [MenuItem.name, MenuItem.price, MenuItem.imageURI, MenuItem.description]);
+    const MenuItemResult = await db.query(MenuItemQuery, [MenuItem.id, MenuItem.name, MenuItem.price, MenuItem.imageURI, MenuItem.description]);
     
     if (MenuItemResult.rowCount !== 1) {
         throw new Error('Error inserting order');
@@ -211,7 +211,7 @@ export async function addMenuTag(MenuItem: MenuItem, newTag: string): Promise<vo
 
 export async function updateMenuTag(updatedMenuItem: MenuItem, newTag: string): Promise<void> {
 
-    const updateMenuTagQuery = 'UPDATE menu_item_tag SET menu_item_id = $1, tag_name = $2 WHERE id = $3';
+    const updateMenuTagQuery = 'UPDATE menu_item_tag SET menu_item_id = $1, tag_name = $2 WHERE menu_item_id = $3';
 
 
     const updateResult = await db.query(updateMenuTagQuery, [updatedMenuItem.id, newTag, updatedMenuItem.id]);
