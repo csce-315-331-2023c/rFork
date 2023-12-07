@@ -33,9 +33,11 @@ export default function AuthSessionHeader() {
                         <div id="google-translate-element" style={{ marginLeft: "5px" }}>Back to Home Screen</div>
                     </div>
                 </button>
-                <div className="flex flex-row space-x-10">
+                <div className="flex flex-row items-center space-x-10">
                     <Dropdown className='hover:bg-[#3333]'>
-                        <Dropdown.Toggle id='google-translate-element'>Language</Dropdown.Toggle>
+                        <Dropdown.Toggle variant='Secondary' className='flex flex-col justify-center items-center hover:cursor-pointer p-2 h-full'>
+                            <IoLanguageOutline fontSize={"2.5rem"} />
+                        </Dropdown.Toggle>
                         <Dropdown.Menu>
                             {
                                 Object.keys(Languages).map((language) => {

@@ -239,7 +239,7 @@ export default function CashRegister() {
                                                     <td className='pr-2'>{`$${item.price.toFixed(2)}`}</td>
                                                     <td className='pr-2'>
                                                         <Dropdown>
-                                                            <Dropdown.Toggle variant='primary'>
+                                                            <Dropdown.Toggle className='text-black' variant='primary'>
                                                                 {cartItemCounts.at(index)}
                                                             </Dropdown.Toggle>
 
