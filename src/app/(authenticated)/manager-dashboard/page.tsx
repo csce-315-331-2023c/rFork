@@ -89,10 +89,10 @@ export default function ManagerDashboard() {
                     <table className="w-full">
                         <thead>
                             <tr>
-                                <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Employee ID" id='google-translate-element'>Employee ID</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Employee First Name" id='google-translate-element'>Employee First Name</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Employee Last Name" id='google-translate-element'>Employee Last Name</th>
-                                <th className="bg-blue-100 border text-center px-8 py-4" aria-descrpiton="Column for Employee Role" id='google-translate-element'>Employee Role</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description="Column for Employee ID" id='google-translate-element'>Employee ID</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description="Column for Employee First Name" id='google-translate-element'>Employee First Name</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description="Column for Employee Last Name" id='google-translate-element'>Employee Last Name</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4" aria-description="Column for Employee Role" id='google-translate-element'>Employee Role</th>
                             </tr>
                         </thead>
                         <tbody>

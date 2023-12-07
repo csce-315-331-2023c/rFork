@@ -35,7 +35,7 @@ export default function AuthSessionHeader() {
                 </button>
                 <div className="flex flex-row items-center space-x-10">
                     <Dropdown className='hover:bg-[#3333]'>
-                        <Dropdown.Toggle variant='Secondary' className='flex flex-col justify-center items-center hover:cursor-pointer p-2 h-full'>
+                        <Dropdown.Toggle variant='Secondary' className='text-black flex flex-col justify-center items-center hover:cursor-pointer p-2 h-full'>
                             <IoLanguageOutline fontSize={"2.5rem"} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
