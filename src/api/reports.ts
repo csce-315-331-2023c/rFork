@@ -3,6 +3,12 @@ import 'dotenv/config';
 import db from "./index";
 import { InventoryItem, MenuItem, Order, itemReport, usageReport } from "../types";
 
+/**
+ * Returns a list of usage report for every item that was used in between the start and end date, sorted by id
+ * @param start start date as Date object
+ * @param end end date as Date object
+ * @returns list of usageReport
+ */
 export async function product_usage(start: Date, end: Date): Promise<usageReport[]> {
     const query = `SELECT row_to_json(t) FROM (SELECT
         i.id AS inventory_item_id,
@@ -40,6 +46,12 @@ export async function product_usage(start: Date, end: Date): Promise<usageReport
     return usageReports;
 }
 
+/**
+ * Returns a list of Orders within the provided dates, sorted by when the order was created
+ * @param start start date as Date object
+ * @param end end date as Date object
+ * @returns list of Orders
+ */
 export async function product_sales(start: Date, end: Date): Promise<Order[]> {
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, employee_id) FROM orders WHERE create_time BETWEEN $1 AND $2 ORDER BY create_time DESC) t';
     const result = await db.query(query, [start, end]);
@@ -65,6 +77,11 @@ export async function product_sales(start: Date, end: Date): Promise<Order[]> {
     return orders;
 }
 
+/**
+ * Returns a list of all inventory items that have stock greater than the order threshold at the given date
+ * @param start start date as Date object
+ * @returns 
+ */
 export async function product_excess(start: Date): Promise<InventoryItem[]> {
     const query = `SELECT row_to_json(t) FROM (SELECT(
             i.id,
@@ -113,6 +130,10 @@ export async function product_excess(start: Date): Promise<InventoryItem[]> {
     return inventoryItems;
 }
 
+/**
+ * Returns a list of inventory items that have a current stock below the reorder threshold
+ * @returns list of InventoryItem
+ */
 export async function restock_report(): Promise<InventoryItem[]> {
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item WHERE stock < reorder_threshold ORDER BY id ASC) t';
     const result = await db.query(query);
@@ -137,6 +158,12 @@ export async function restock_report(): Promise<InventoryItem[]> {
     return inventoryItems;
 }
 
+/**
+ * Returns a list of item reports sorted by the number of items ordered together (in the same order)
+ * @param start start date as Date object
+ * @param end end date as Date object
+ * @returns 
+ */
 export async function sells_together(start: Date, end: Date): Promise<itemReport[]> {
     const query = `SELECT row_to_json(t) FROM(
         SELECT DISTINCT 
@@ -148,16 +175,25 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
         INNER JOIN orders ON order_item.order_id = orders.id
         WHERE create_time BETWEEN $1 AND $2) AS t1
         INNER JOIN order_item ON t1.order_id = order_item.order_id
-        WHERE t1.id != order_item.id
+        WHERE t1.id != order_item.id AND t1.menu_item_id != order_item.menu_item_id
         GROUP BY id1, id2
         ORDER BY count DESC) t  
     `;
     const result = await db.query(query, [start, end]);
-    console.log(result);
     // inner join orders with order_item
     // inner join above with order_item again on orderid is the same
     // where id.1 != id.2 & order_id2 == order_id1
     // select least(id1, id2), greatest(id1, id2), count(*)/2 AS count
+
+    const itemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name) FROM menu_item) t';
+    const itemResult = await db.query(itemQuery);
+
+    let itemMap: Map<number, string> = new Map();
+    for(let row of itemResult.rows){
+        const{f1: id, f2: name} = row.row_to_json.row; 
+        itemMap.set(id, name); 
+    }
+
     let itemReports: itemReport[] = [];
     for (let row of result.rows){
 
@@ -170,13 +206,14 @@ export async function sells_together(start: Date, end: Date): Promise<itemReport
         itemReports.push({
             id1: id1,
             id2: id2,
+            name1: itemMap.get(id1) || 'NA',
+            name2: itemMap.get(id2) || 'NA',
             quantity: count,
         });
     }
 
     return itemReports;
 }
-
 
 
 

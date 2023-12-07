@@ -3,6 +3,12 @@ import axios from "axios";
 
 const BASE_URL = 'https://api.openweathermap.org/data/3.0/onecall';
 
+/**
+ * Gets the current weather at the location of the specified coordinates
+ * @param lat lattitude
+ * @param lon longitude
+ * @returns WeatherInformation object
+ */
 export async function fetchWeather(lat: number, lon: number): Promise<WeatherInformation> {
     const apiKey = process.env.WEATHER_API_KEY;
     if (!apiKey) {

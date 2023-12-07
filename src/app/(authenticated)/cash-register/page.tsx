@@ -1,12 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import "../../../css/index.css";
-import { MenuItem, Order } from '../../../types';
+import { Ingredient, MenuItem, Order } from '../../../types';
 import TextButton from '../../../components/TextButton';
 import PageLoading from '../../../components/PageLoading';
 import Link from 'next/link';
 import AuthSessionHeader from '../../../components/AuthSessionHeader';
 import { randomColorHex } from '../../../helpers/colorUtils';
+import { Dropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css'
 
 export default function CashRegister() {
     // Data Hooks
@@ -29,29 +31,30 @@ export default function CashRegister() {
     const [drinks, setDrinks] = useState<Array<MenuItem>>([]);
 
     // Temporary/Volatile data for user selecting experience
-    const [selectedItemList, setSelectedItemList] = useState<Array<MenuItem>>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | undefined>();
 
     // Final order info data
     const [showCheckoutPopup, setShowCheckoutPopup] = useState<boolean>(false);
     const [orderInfo, setOrderInfo] = useState<Order>();
+
     const [cartItems, setCartItems] = useState<Array<MenuItem>>([]);
+    const [cartItemCounts, setCartItemCounts] = useState<Array<number>>([]);
 
     const [middleRightChildren, setMiddleRightChildren] = useState<React.JSX.Element[] | null>(null);
     const [bottomRightChildren, setBottomRightChildren] = useState<React.JSX.Element[] | null>(null);
 
     // Component Constants
     const discountButtons = [
-        (<TextButton text='0%' key={"Discount 0"} onPress={() => { setDiscountMultiplier(1); updateOrderTotal(cartItems, tipMultiplier, 1) }} />),
-        (<TextButton text='-5%' key={"Discount 1"} onPress={() => { setDiscountMultiplier(0.95); updateOrderTotal(cartItems, tipMultiplier, 0.95) }} />),
-        (<TextButton text='-10%' key={"Discount 2"} onPress={() => { setDiscountMultiplier(0.90); updateOrderTotal(cartItems, tipMultiplier, 0.90) }} />),
+        (<TextButton text='0%' key={"Discount 0"} onPress={() => { setDiscountMultiplier(1); updateOrderTotal(cartItems, cartItemCounts, tipMultiplier, 1) }} />),
+        (<TextButton text='-5%' key={"Discount 1"} onPress={() => { setDiscountMultiplier(0.95); updateOrderTotal(cartItems, cartItemCounts, tipMultiplier, 0.95) }} />),
+        (<TextButton text='-10%' key={"Discount 2"} onPress={() => { setDiscountMultiplier(0.90); updateOrderTotal(cartItems, cartItemCounts, tipMultiplier, 0.90) }} />),
     ];
 
     const tipButtons = [
-        (<TextButton text='0%' key={"Tip 0"} onPress={() => { setTipMultiplier(0); updateOrderTotal(cartItems, 0); }} />),
-        (<TextButton text='10%' key={"Tip 1"} onPress={() => { setTipMultiplier(0.1); updateOrderTotal(cartItems, 0.1); }} />),
-        (<TextButton text='15%' key={"Tip 2"} onPress={() => { setTipMultiplier(0.15); updateOrderTotal(cartItems, 0.15); }} />),
-        (<TextButton text='20%' key={"Tip 3"} onPress={() => { setTipMultiplier(0.2); updateOrderTotal(cartItems, 0.2); }} />),
+        (<TextButton text='0%' key={"Tip 0"} onPress={() => { setTipMultiplier(0); updateOrderTotal(cartItems, cartItemCounts, 0); }} />),
+        (<TextButton text='10%' key={"Tip 1"} onPress={() => { setTipMultiplier(0.1); updateOrderTotal(cartItems, cartItemCounts, 0.1); }} />),
+        (<TextButton text='15%' key={"Tip 2"} onPress={() => { setTipMultiplier(0.15); updateOrderTotal(cartItems, cartItemCounts, 0.15); }} />),
+        (<TextButton text='20%' key={"Tip 3"} onPress={() => { setTipMultiplier(0.2); updateOrderTotal(cartItems, cartItemCounts, 0.2); }} />),
     ];
     // Closure Functions
 
@@ -82,10 +85,15 @@ export default function CashRegister() {
             })
     }
 
-    function updateOrderTotal(updatedCartItems: MenuItem[], tipMulti: number = tipMultiplier, discountMulti: number = discountMultiplier) {
+    function updateOrderTotal(updatedCartItems: MenuItem[] = cartItems, updatedCartItemCounts: number[] = cartItemCounts, tipMulti: number = tipMultiplier, discountMulti: number = discountMultiplier) {
         let updatedSubtotal = 0;
-        updatedCartItems.forEach((menuItem) => {
-            updatedSubtotal += menuItem.price;
+        updatedCartItems.forEach((menuItem, index) => {
+            if (updatedCartItemCounts.at(index) !== undefined) {
+                updatedSubtotal += menuItem.price * updatedCartItemCounts.at(index)!;
+            }
+            else {
+                updatedSubtotal += menuItem.price;
+            }
         });
         setSubtotal(updatedSubtotal);
         setTip(updatedSubtotal * tipMulti);
@@ -97,16 +105,36 @@ export default function CashRegister() {
         const updatedCartItems = [...cartItems];
         updatedCartItems.push(menuItem);
         setCartItems(updatedCartItems);
+
+        const updatedCartItemCounts = [...cartItemCounts];
+        updatedCartItemCounts.push(1);
+        setCartItemCounts(updatedCartItemCounts);
+
         setMiddleRightChildren(null);
         setBottomRightChildren(null);
-        updateOrderTotal(updatedCartItems);
+
+        updateOrderTotal(updatedCartItems, updatedCartItemCounts);
+    }
+
+    function modifyOrderAmount(amount: number, index: number) {
+        const updatedCartItemCounts = [...cartItemCounts];
+        updatedCartItemCounts[index] = amount;
+        setCartItemCounts(updatedCartItemCounts);
+
+        updateOrderTotal(cartItems, updatedCartItemCounts);
     }
 
     function removeFromOrder(index: number) {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
-        updateOrderTotal(updatedCartItems);
+
+        const updatedCartItemCounts = [...cartItemCounts];
+        updatedCartItemCounts.splice(index, 1);
+        setCartItemCounts(updatedCartItemCounts);
+
+
+        updateOrderTotal(updatedCartItems, updatedCartItemCounts);
     }
 
     /**
@@ -115,17 +143,30 @@ export default function CashRegister() {
      */
     function createMiddleMenuItemContent(menuItemList: MenuItem[]) {
         const middleContent = menuItemList.map((item, index) => {
+
+            const toggleList: boolean[] = [];
+            for (let i = 0; i < item.ingredients.length; i++) {
+                toggleList.push(true);
+            }
+
             return (<TextButton
                 color={randomColorHex()}
                 key={`${item.name}${index}`}
                 text={item.name}
                 onPress={() => {
                     setSelectedItem(item);
-                    let bottomContent = item.ingredients.map((ingredient) => {
+
+                    console.log(item.ingredients)
+
+                    let bottomContent = item.ingredients.map((ingredient, ingredientIndex) => {
                         return (
                             <TextButton
+                                toggleable
                                 key={ingredient.itemName}
                                 text={`Remove ${ingredient.itemName}`}
+                                onPress={() => {
+                                    toggleList[ingredientIndex] = !toggleList[ingredientIndex];
+                                }}
                             />
                         )
                     });
@@ -133,7 +174,30 @@ export default function CashRegister() {
                         key={"Add to Order"}
                         text={`Add to Order`}
                         color='#0077FF'
-                        onPress={() => { addToOrder(item); setSelectedItem(undefined); }}
+                        onPress={() => {
+                            const ingredientList: Ingredient[] = [];
+                            const removedIngredientList: Ingredient[] = [];
+
+                            item.ingredients.forEach((ingredient, ingredientIndex) => {
+                                if (toggleList[ingredientIndex]) {
+                                    ingredientList.push(ingredient);
+                                }
+                                else {
+                                    removedIngredientList.push(ingredient);
+                                }
+                            });
+
+                            const copiedItem: MenuItem = {
+                                ...item,
+                                ingredients: ingredientList,
+                                removedIngredients: removedIngredientList,
+                            }
+
+                            console.log(copiedItem);
+
+                            addToOrder(copiedItem);
+                            setSelectedItem(undefined);
+                        }}
                     />;
 
                     bottomContent = [...bottomContent, addToOrderButton]
@@ -147,7 +211,6 @@ export default function CashRegister() {
 
     if (loading) return (<PageLoading />);
 
-    // HTML Rendering
     return (
         <div className='flex flex-col h-screen'>
             <AuthSessionHeader />
@@ -159,24 +222,64 @@ export default function CashRegister() {
                         <table className='w-full'>
                             <thead className=''>
                                 <tr>
-                                    <td className='w-[50%]'>Item Name</td>
+                                    <td className='w-[40%]'>Item Name</td>
                                     <td className=''>Price</td>
                                     <td className=''>Qty</td>
                                     <td className=''>Total</td>
+                                    <td className='text-center'>Delete</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     cartItems.map((item, index) => {
                                         return (
-                                            <tr key={`${item.name}${index}`}>
-                                                <td className='pr-2'>{item.name}</td>
-                                                <td className='pr-2'>{`$${item.price}`}</td>
-                                                <td className='pr-2'>
-                                                    <input className='border-[#3d3d3d] border-2' defaultValue={1} />
-                                                </td>
-                                                <td>{`$${item.price}`}</td>
-                                            </tr>
+                                            <>
+                                                <tr key={`${item.name}${index}`}>
+                                                    <td className='pr-2'><strong>{item.name}</strong></td>
+                                                    <td className='pr-2'>{`$${item.price.toFixed(2)}`}</td>
+                                                    <td className='pr-2'>
+                                                        <Dropdown>
+                                                            <Dropdown.Toggle variant='primary'>
+                                                                {cartItemCounts.at(index)}
+                                                            </Dropdown.Toggle>
+
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(1, index)}>1</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(2, index)}>2</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(3, index)}>3</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(4, index)}>4</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(5, index)}>5</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => modifyOrderAmount(6, index)}>6</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                    </td>
+                                                    <td>{`$${(item.price * cartItemCounts.at(index)!).toFixed(2)}`}</td>
+                                                    <td>
+                                                        <TextButton
+                                                            customClassName='w-[50%] ml-[25%] rounded-md h-full'
+                                                            text='X'
+                                                            color='#F77'
+                                                            hoverColor='#F00'
+                                                            onPress={() => removeFromOrder(index)}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <ul>
+                                                            {
+                                                                item.removedIngredients?.map((item) => {
+                                                                    return (
+                                                                        <li>
+                                                                            {`No ${item.itemName}`}
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </>
                                         )
                                     })
                                 }
@@ -188,31 +291,40 @@ export default function CashRegister() {
                         <div className='flex flex-row justify-between px-10'>
                             <ul>
                                 <li>Subtotal:</li>
-                                <li>Tax:</li>
                                 <li>Tip:</li>
+                                <li>Tax:</li>
                                 <li>Total:</li>
                             </ul>
                             <ul>
                                 <li>{`\$${subtotal.toFixed(2)}`}</li>
+                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier) * 100}%)` : ""}`}</li>
                                 <li>{`\$${tax.toFixed(2)} (5%)`}</li>
-                                <li>{`\$${tip.toFixed(2)}${tipMultiplier != 0 ? ` (${(tipMultiplier)*100}%)` : ""}`}</li>
                                 <li>{`\$${total.toFixed(2)}`}</li>
                             </ul>
                         </div>
                         <TextButton text='Cancel Order' onPress={() => {
                             setCartItems([]);
+                            setCartItemCounts([]);
                             setSelectedItem(undefined);
                             setMiddleRightChildren(null);
                             setBottomRightChildren(null);
+                            updateOrderTotal([], []);
                         }} />
                         <TextButton
                             text='Pay'
                             color='#3de8e0'
                             onPress={async () => {
+                                const items: MenuItem[] = []
+                                cartItems.forEach((item, index) => {
+                                    for (let i = 0; i < cartItemCounts.at(index)!; i++) {
+                                        items.push(item);
+                                    }
+                                });
+
                                 const order: Order = {
                                     timestamp: new Date(),
-                                    items: cartItems,
-                                    total: 100,
+                                    items: items,
+                                    total: total,
                                     submittedBy: {
                                         id: 1,
                                         firstName: "KIOSK",
@@ -220,15 +332,19 @@ export default function CashRegister() {
                                         role: "Employee",
                                     }
                                 }
+
                                 await fetch("/api/orders", { method: "POST", body: JSON.stringify(order) })
                                     .then((response) => response.json())
                                     .then(() => {
                                         setCartItems([]);
                                     })
                                     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+                                setCartItems([]);
+                                setCartItemCounts([]);
                                 setSelectedItem(undefined);
                                 setMiddleRightChildren(null);
                                 setBottomRightChildren(null);
+                                updateOrderTotal([], []);
                             }}
                         />
                     </div>
@@ -297,7 +413,7 @@ export default function CashRegister() {
                     </div>
                 </div>
                 <div className='col-span-2 flex flex-col bg-white'>
-                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Add-ons${selectedItem ? ` (${selectedItem?.name})` : ""}`}</h2>
+                    <h2 className='text-center text-2xl border-gray-500 border-y-2'>{`Modifications${selectedItem ? ` (${selectedItem?.name})` : ""}`}</h2>
                     <div className='grid grid-cols-5 grid-rows-3 gap-2 px-4 py-2 flex-1'>
                         {bottomRightChildren}
                     </div>

@@ -15,6 +15,7 @@ export default function ImageButton({ text, price, imageURI, onPress, color, hov
     const [hover, setHover] = useState<boolean>(false);
     return (
         <button
+            aria-label={`${text} button`}
             className={customClassName ?? 'flex flex-col justify-evenly items-center rounded-xl py-4 text-2xl h-60'}
             onClick={onPress ?? (() => console.log("Button Pressed"))}
             onMouseEnter={() => setHover(true)}

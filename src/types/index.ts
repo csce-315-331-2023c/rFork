@@ -1,3 +1,6 @@
+import { Session, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
+
 export type Ingredient = {
     itemId: number;
     itemName: string;
@@ -12,6 +15,7 @@ export type MenuItem = {
     validExtras: Ingredient[];
     description?: string;
     imageURI?: string;
+    removedIngredients?: Ingredient[];
 };
 
 export type Tag = string;
@@ -29,6 +33,7 @@ export type Order = {
     items: MenuItem[];
     total: number;
     submittedBy: Employee | Customer;
+    isFinished?: boolean;
 };
 
 export type Customer = {
@@ -40,13 +45,27 @@ export type Employee = {
     id?: number;
     firstName: string;
     lastName: string;
-    role: string;
+    role: "employee" | "manager";
 };
+
+export type rUser = User & {
+    employee?: Employee;
+};
+
+export type rToken = JWT & {
+    employee?: Employee;
+};
+
+export type rSession = Session & {
+    user?: rUser;
+}; 
 
 
 export type itemReport = {
     id1: number;
     id2: number;
+    name1: string;
+    name2: string;
     quantity: number;
 }
 
@@ -71,23 +90,19 @@ export const Languages = {
     "Polish": "pl",
     "Dutch": "nl",
     "Romanian": "ro",
-    "Hungarian": "hu",
-    "Czech": "cs",
     "Indonesian": "id",
     "Swedish": "sv",
     "Danish": "da",
     "Hebrew": "he",
     "Norwegian": "no",
-    "Slovak": "sk",
     "Bulgarian": "bg",
     "Finnish": "fi",
     "Vietnamese": "vi",
     "Thai": "th",
     "Greek": "el",
     "Ukrainian": "uk",
-    "Catalan": "ca",
-    "ChineseSimplified": "zh-CN",
-    "ChineseTraditional": "zh-TW",
+    "Chinese (Simplified)": "zh-CN",
+    "Chinese (Traditional)": "zh-TW",
 };
 
 export type WeatherCondition = {
