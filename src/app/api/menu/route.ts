@@ -2,6 +2,12 @@ import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
 import { addMenuItem, deleteMenuItem, updateMenuItem, getAllMenuItemTags, addMenuTag, updateMenuTag } from '../../../api/menu';
 
+
+/**
+ * Calls the respective get menu items function based on the tag
+ * @param request NextRequest object
+ * @returns 
+ */
 export async function GET(request: NextRequest) {
     const tag = request.nextUrl.searchParams.get('tag');
     if (tag) {
@@ -43,6 +49,11 @@ export async function GET(request: NextRequest) {
     }
 }
 
+/**
+ * Posts the json information of the requested menu object
+ * @param req NextRequest object
+ * @returns 
+ */
 export async function POST(req: NextRequest) {
     const data = await req.json();
     const edit_id = req.nextUrl.searchParams.get('edit');

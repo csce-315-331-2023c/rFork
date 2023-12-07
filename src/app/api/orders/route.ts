@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitOrder, getAll, getNotFinished } from "../../../api"
 
-
+/**
+ * Posts order information to the website based on request information
+ * @param req NextRequest object
+ * @returns 
+ */
 export async function POST(req: NextRequest) {
     const data = await req.json()
 
@@ -12,6 +16,11 @@ export async function POST(req: NextRequest) {
     });
 }
 
+/**
+ * Gets the json information for the orders 
+ * @param req NextRequest object
+ * @returns 
+ */
 export async function GET(req: NextRequest) {
     const history = req.nextUrl.searchParams.get('history') || '';
 
