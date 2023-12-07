@@ -9,6 +9,9 @@ import { IoLanguageOutline } from "react-icons/io5";
 import { IoIosExit } from "react-icons/io";
 import { translatePage } from "../api/translate";
 
+/**
+ * Launches the authenticator to check if a user is an employee before displaying the page
+ */
 export default function AuthSessionHeader() {
     const { data: session, status } = useSession();
 

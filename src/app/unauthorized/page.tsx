@@ -1,6 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 
+/**
+ * Displays the page for unauthorized users
+ */
 export default function UnauthorizedPage() {
     return (
         <html lang="en">

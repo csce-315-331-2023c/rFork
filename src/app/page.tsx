@@ -4,6 +4,9 @@ import "../css/index.css"
 import Link from 'next/link'
 import 'bootstrap/dist/css/bootstrap.css'
 
+/**
+ * Initializes the four interfaces
+ */
 export default function Initial() {
     // const optionsArray = Object.keys(Languages);
 

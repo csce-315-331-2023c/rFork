@@ -35,6 +35,11 @@ export default function MenuBoard() {
 
     }, []);
 
+    /**
+     * Gets the json information from the api for the menu items that have the given tag
+     * @param tag tag of menu items to retrieve
+     * @returns list of MenuItem
+     */
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
         return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
             .then((response) => response.json())

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { calculateHexLuminosity } from '../helpers/colorUtils';
 
+/**
+ * Component for creating an interactable text button
+ */
 export default function TextButton({ text, onPress, color, hoverColor, customClassName, toggleable }:
     {
         text?: string,

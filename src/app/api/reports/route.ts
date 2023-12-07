@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { product_usage, product_sales, product_excess, restock_report, sells_together } from '../../../api/reports'
 
+/**
+ * Gets report information as a json
+ * @param request 
+ * @returns json of report information
+ */
 export async function GET(request: NextRequest) {
     const report = request.nextUrl.searchParams.get('reports') || '';
     const start = request.nextUrl.searchParams.get('start') || '';

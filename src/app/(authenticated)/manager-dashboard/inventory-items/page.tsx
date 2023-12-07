@@ -12,6 +12,9 @@ const testMenuItem: MenuItem = {
     validExtras: [],
 }
 
+/**
+ * Shows the inventory items from the inventory api for the manager dashboard
+ */
 export default function InventoryItemView() {
     const [inventoryNames, setInventoryNames] = useState<Array<string>>([]);
     const [inventoryAmounts, setInventoryAmounts] = useState<Array<number>>([]);

@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 
-
+/**
+ * The buttons for the menu items that include the image of the item
+ */
 export default function ImageButton({ text, price, imageURI, onPress, color, hoverColor, altText, customClassName }: {
     text?: string,
     altText?: string,

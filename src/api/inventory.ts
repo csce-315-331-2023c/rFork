@@ -2,6 +2,10 @@ import InventoryItemView from "../app/(authenticated)/manager-dashboard/inventor
 import { InventoryItem } from "../types";
 import db from "./index";
 
+/**
+ * Gets all the inventory items from the inventory_item database
+ * @returns list of InventoryItem
+ */
 export async function getAllInventoryItems(): Promise<InventoryItem[]> {
     const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item) t';
 
@@ -27,6 +31,10 @@ export async function getAllInventoryItems(): Promise<InventoryItem[]> {
     return inventoryItems;
 }
 
+/**
+ * Inserts an inventory item into the inventory_item database
+ * @param inventoryItem inventoryitem to insert
+ */
 export async function addInventoryItem(inventoryItem: InventoryItem): Promise<void> {
 
     const inventoryItemQuery = 'INSERT INTO inventory_item (id, item_name, stock, reorder_threshold) VALUES ($1, $2, $3, $4) RETURNING id';
@@ -42,6 +50,10 @@ export async function addInventoryItem(inventoryItem: InventoryItem): Promise<vo
 
 }
 
+/**
+ * Updates an inventory item in the inventory_item database
+ * @param updatedInventoryItem the inventory item to update
+ */
 export async function updateInventoryItem(updatedInventoryItem: InventoryItem): Promise<void> {
 
     const updateInventoryItemQuery = 'UPDATE inventory_item SET item_name = $1, stock = $2, reorder_threshold = $3 WHERE id = $4';
@@ -55,6 +67,10 @@ export async function updateInventoryItem(updatedInventoryItem: InventoryItem): 
     }
 }
 
+/**
+ * Deletes an item from the inven
+ * @param deletedInventoryItem 
+ */
 export async function deleteInventoryItem(deletedInventoryItem: InventoryItem): Promise<void> {
     const deleteInventoryItemQuery = 'DELETE FROM inventory_item WHERE id = $1';
 

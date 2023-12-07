@@ -8,6 +8,9 @@ import AuthSessionHeader from '../../../../components/AuthSessionHeader';
 import 'bootstrap/dist/css/bootstrap.css'
 import Spinner from 'react-bootstrap/Spinner';
 
+/**
+ * Creates the page for reports
+ */
 export default function ReportView() {
 
     enum r {

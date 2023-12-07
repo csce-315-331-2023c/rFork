@@ -10,6 +10,9 @@ import { randomColorHex } from '../../../helpers/colorUtils';
 import { Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'
 
+/**
+ * Runs the cash register interface
+ */
 export default function CashRegister() {
     // Data Hooks
     const [loading, setLoading] = useState<boolean>(true);
@@ -68,6 +71,11 @@ export default function CashRegister() {
         setLoading(false);
     }, []);
 
+    /**
+     * Gets menu items with the given tag from the api
+     * @param tag 
+     * @returns list of MenuItem
+     */
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
         return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
             .then((response) => response.json())
@@ -85,6 +93,13 @@ export default function CashRegister() {
             })
     }
 
+    /**
+     * Updates the total price on an order
+     * @param updatedCartItems 
+     * @param updatedCartItemCounts 
+     * @param tipMulti 
+     * @param discountMulti 
+     */
     function updateOrderTotal(updatedCartItems: MenuItem[] = cartItems, updatedCartItemCounts: number[] = cartItemCounts, tipMulti: number = tipMultiplier, discountMulti: number = discountMultiplier) {
         let updatedSubtotal = 0;
         updatedCartItems.forEach((menuItem, index) => {
@@ -101,6 +116,10 @@ export default function CashRegister() {
         setTotal((updatedSubtotal * (1 + tipMulti + taxMultiplier)) * discountMulti);
     }
 
+    /**
+     * Adds an item to the customer's order
+     * @param menuItem menu item
+     */
     function addToOrder(menuItem: MenuItem) {
         const updatedCartItems = [...cartItems];
         updatedCartItems.push(menuItem);
@@ -116,6 +135,11 @@ export default function CashRegister() {
         updateOrderTotal(updatedCartItems, updatedCartItemCounts);
     }
 
+    /**
+     * Changes the number of items ordered at the specified index of the cart
+     * @param amount amount of items
+     * @param index index of item in cart
+     */
     function modifyOrderAmount(amount: number, index: number) {
         const updatedCartItemCounts = [...cartItemCounts];
         updatedCartItemCounts[index] = amount;
@@ -124,6 +148,10 @@ export default function CashRegister() {
         updateOrderTotal(cartItems, updatedCartItemCounts);
     }
 
+    /**
+     * Removes an item from the cart at the specified index
+     * @param index 
+     */
     function removeFromOrder(index: number) {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);

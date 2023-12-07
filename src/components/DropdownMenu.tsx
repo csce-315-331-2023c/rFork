@@ -3,6 +3,10 @@ import {Dropdown} from 'react-bootstrap'
 import {Languages} from "../types"
 import {translatePage} from "../api/translate"
 
+/**
+ * Drop down menu for the different language translations
+ * @returns 
+ */
 export default function DropDownMenu({options}: {options: Object}) {
     const optionsArray = Object.keys(options);
     return(

@@ -5,6 +5,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import 'bootstrap/dist/css/bootstrap.css'
 
+/**
+ * Creates a table of menu items for reports
+ */
 export default function Table({ dataType, api, backgroundColor }: {
     dataType?: string,
     api?: string, // endpoint
