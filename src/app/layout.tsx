@@ -3,6 +3,9 @@ export const metadata = {
   description: 'Crepe Restaurant GUI',
 }
 
+/**
+ * Root layout of fonts for the gui
+ */
 export default async function RootLayout({ children, }: { children: React.ReactNode }) {
   return (
     <html lang="en">

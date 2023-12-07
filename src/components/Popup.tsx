@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * Creates a subwindow popup above the main page, mainly for the kiosk
+ */
 export default function Popup({ show, onClose, children }: React.PropsWithChildren<{
     show?: boolean,
     onClose?: () => any,

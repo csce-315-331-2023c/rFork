@@ -6,6 +6,9 @@ import "../../../../css/index.css"
 import 'bootstrap/dist/css/bootstrap.css'
 import Spinner from 'react-bootstrap/Spinner';
 
+/**
+ * Gets the order history from the api 
+ */
 export default function TranscationHistory() {
     enum t {
         getAll,

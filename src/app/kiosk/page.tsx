@@ -48,6 +48,10 @@ export default function Kiosk() {
     const [total, setTotal] = useState<number>(0);
     const taxMultiplier = 0.05;
 
+    /**
+     * Updates the total price of the menu items in the cart
+     * @param updatedCartItems list of Menu Item
+     */
     function updateOrderTotal(updatedCartItems: MenuItem[] = cartItems) {
         let updatedSubtotal = 0;
         updatedCartItems.forEach((menuItem) => {
@@ -78,6 +82,11 @@ export default function Kiosk() {
         translatePage(language);
     }, [language, showCheckoutPopup, showCustomizationPopup, selectedItemList]);
 
+    /**
+     * Fetches the menu items from the api with the given tag
+     * @param tag tag of the desired items
+     * @returns list of MenuItem
+     */
     async function getMenuItemCategory(tag: string): Promise<MenuItem[]> {
         return fetch(`/api/menu?tag=${encodeURIComponent(tag)}`)
             .then((response) => response.json())
@@ -104,6 +113,7 @@ export default function Kiosk() {
         NONE,
     }
 
+    
     function KioskNavButton({ text, borderDirection, onPress }: { text: string, borderDirection?: Direction, onPress: () => any }): React.JSX.Element {
         const [extraClasses, setExtraClasses] = useState<string>("");
         const [borderClasses, setBorderClasses] = useState<string>("");
@@ -136,6 +146,10 @@ export default function Kiosk() {
         );
     }
 
+    /**
+     * Adds a menu item to the order
+     * @param menuItem 
+     */
     function addToOrder(menuItem: MenuItem): void {
         const updatedCartItems = cartItems;
         updatedCartItems.push({ ...menuItem });
@@ -143,12 +157,21 @@ export default function Kiosk() {
         updateOrderTotal(updatedCartItems)
     }
 
+    /**
+     * Removes an item from the order
+     * @param index the item index in the order
+     */
     function removeFromOrder(index: number): void {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
     }
 
+    /**
+     * Checks if a menu item is a drink
+     * @param menuItem menu item to check
+     * @returns boolean
+     */
     function isDrink(menuItem: MenuItem | undefined): boolean {
         if (!menuItem) {
             return false;

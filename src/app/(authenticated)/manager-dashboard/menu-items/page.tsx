@@ -4,6 +4,9 @@ import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import Table from '../../../../components/Table';
 import AuthSessionHeader from '../../../../components/AuthSessionHeader';
 
+/**
+ * Shows the menu items
+ */
 export default function InventoryItemView() {
 
     return (

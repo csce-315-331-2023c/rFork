@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import TextButton from './TextButton';
 import { InventoryItem, MenuItem } from '../types';
 
+/**
+ * Creates a table for inventory items
+ */
 export default function TableInventoryItems({ dataType, api, backgroundColor }: {
     dataType?: string,
     api?: string, // endpoint

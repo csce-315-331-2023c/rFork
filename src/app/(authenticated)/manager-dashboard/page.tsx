@@ -10,6 +10,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { rSession } from '../../../types';
 import { getEmployees } from '../../../api/employee';
 
+/**
+ * Initializes the webpage for the manager dashboard
+ */
 export default function ManagerDashboard() {
     const [loading, setLoading] = useState<boolean>(true);
     const { data: session, status } = useSession();
