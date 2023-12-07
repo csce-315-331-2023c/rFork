@@ -37,7 +37,7 @@ export default function TranscationHistory() {
                             setHistoryType(t.getNotFinished);
                         })
                 }}>Get In Flight Orders</button>
-                    <button aria-label="Get All Orders" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 rounded mb-2 w-full" onClick={() => {
+                    <button aria-label="Get All Orders" className="shadow-lg rounded-lg border-blue-300 border-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-16 px-4 mb-2 w-full" onClick={() => {
                         setLoading(true);
                         fetch(`/api/orders?history=getAll`).then(res => res.json()).then(d => {
                             setLoading(false);
@@ -49,7 +49,7 @@ export default function TranscationHistory() {
                 {
                     loading &&
                     <div className="flex flex-col items-center p-4">
-                        <Spinner animation="border" role="status" className="item-center w-full">
+                        <Spinner animation="border" role="status" className="item-center">
                             <span className="visually-hidden">Loading...</span>
                         </Spinner>
                         Loading...

@@ -82,7 +82,9 @@ export default function ManagerDashboard() {
                     <p className='text-center text-lg' id='google-translate-element'>Menu Items</p>
                     <p className='text-center text-lg' id='google-translate-element'>Transaction History</p>
                 </div>
-                <div className='bg-black row-span-2 col-span-1'></div>
+                <div className='row-span-2 col-span-1 flex flex-col justify-center items-center h-full w-full border-black border-l-2'>
+                    <img src='https://images-ext-2.discordapp.net/external/qF9d_Cke88lBsSweSYIeXSnOPfPFe6JPppS26D2_OvA/https/mma.prnewswire.com/media/2032861/Sweet_Paris_Logo.jpg?format=webp&width=421&height=500' />
+                </div>
                 <div className='bg-gray-300 row-span-1 col-span-1 overflow-y-auto h-full'>
                     <table className="w-full">
                         <thead>
