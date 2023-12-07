@@ -80,6 +80,7 @@ export default function Table({ dataType, api, backgroundColor }: {
         fetch(`/api/menu?update-tag=${encodeURIComponent(newTagName)}`, { method: "POST", body: JSON.stringify(menuItem) })
         .then((response) => response.json())
         .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
+        location.reload();
     }
 
 
