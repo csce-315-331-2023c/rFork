@@ -78,7 +78,7 @@ export default function page() {
                         color='#00FF00'
                         onPress={async () => {
                             await fetch(`/api/employees?id=${employee.id}&firstname=${newFirstName}&lastname=${newLastName}&role=${newRole}`, { method: "PATCH" });
-                            location.reload()
+                            location.replace("/manager-dashboard/employee-management");
                         }}
                     />
                     <TextButton

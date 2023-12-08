@@ -70,6 +70,6 @@ export async function createEmployee() {
 }
 
 export async function updateEmployee(lastName: string, firstName: string, id: number, role: string) {
-    const query = "";
-
+    const query = "UPDATE employee SET last_name = $1, first_name = $2, is_manager = $3 WHERE id = $4";
+    await db.query(query, [lastName, firstName, role == "manager", id]);
 }
