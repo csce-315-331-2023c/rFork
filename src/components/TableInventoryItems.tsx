@@ -55,9 +55,9 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <input  type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
-                    <input type="text" placeholder='Enter Stock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setStock(e.target.value)} />
-                    <input type="text" placeholder='Enter Restock' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setReorderThreshold(e.target.value)} />
+                    <input  type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setName(e.target.value)} />
+                    <input type="text" placeholder='Enter Stock' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setStock(e.target.value)} />
+                    <input type="text" placeholder='Enter Restock' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setReorderThreshold(e.target.value)} />
                     <TextButton
                         text='Add an Inventory Item'
                         onPress={async () => {
@@ -104,9 +104,9 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                         inventoryItem.id === editId ?
                             <tr key={`Table Row ${index}`}>
                                 <td id='google-translate-element'>{inventoryItem.id}</td>
-                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.currentStock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetName(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.currentStock} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetStock(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
                                 <td id='google-translate-element'>
                                     <TextButton
                                         text='Update'
@@ -149,7 +149,17 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                 <td id='google-translate-element'>{inventoryItem.currentStock}</td>
                                 <td id='google-translate-element'>{inventoryItem.reorderThreshold}</td>
                                 <td id='google-translate-element'>
-                                    <button onClick={() => handleEdit(inventoryItem.id)}>edit</button>
+                                    {/* <button onClick={() => handleEdit(inventoryItem.id)} style = {{border: "1px solid #000"}}>edit</button> */}
+                                    <TextButton
+                                        text='Edit'
+                                        onPress={async () => {
+                                            handleEdit(inventoryItem.id)
+                                        }}
+                                        color='#FF9638'
+                                        hoverColor='#FFC38E'
+
+                                    />
+                              
                                     <TextButton
                                         text='Delete'
                                         onPress={async () => {

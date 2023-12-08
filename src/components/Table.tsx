@@ -120,11 +120,11 @@ export default function Table({ dataType, api, backgroundColor }: {
         <div style={{ padding: '50px 10%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ margin: '10px', width: '100%' }}>
                 <form action="" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <input id='google-translate-element' type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setName(e.target.value)} />
-                    <input id='google-translate-element' type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setPrice(e.target.value)} />
-                    <input id='google-translate-element' type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setImageURI(e.target.value)} />
-                    <input id='google-translate-element' type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setDescription(e.target.value)} />
-                    <input id='google-translate-element' type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => setTag(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Name' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setName(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Price' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setPrice(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Image Link' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setImageURI(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Description' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setDescription(e.target.value)} />
+                    <input id='google-translate-element' type="text" placeholder='Enter Tag' style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => setTag(e.target.value)} />
                     <TextButton
                         text='Add a Menu Item'
 
@@ -187,10 +187,10 @@ export default function Table({ dataType, api, backgroundColor }: {
                         menuItem.id === editId ?
                             <tr key={`Table Row ${index}`}>
                                 <td id='google-translate-element'>{menuItem.id}</td>
-                                <td id='google-translate-element'><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetPrice(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetImageURI(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetDescription(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetName(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.price} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetPrice(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.imageURI} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetImageURI(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={menuItem.description} style={{ width: '23%', padding: '5px', marginBottom: '10px', border: "1px solid #000" }} onChange={e => usetDescription(e.target.value)} /></td>
                                 <td id='google-translate-element'>
                                     <Dropdown>
                                         <Dropdown.Toggle>
@@ -279,7 +279,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
-
+                                        
                                     /></td>
                                 
                             </tr> :
@@ -294,7 +294,16 @@ export default function Table({ dataType, api, backgroundColor }: {
                                 <td id='google-translate-element'>{menuItem.description}</td>
                                 <td id='google-translate-element'>{getTagNameByMenuItemId(menuItem.id)}</td>
                                 <td id='google-translate-element'>
-                                    <button onClick={() => handleEdit(menuItem.id)}>edit</button>
+                                    {/* <button  style = {{border: "1px solid #000"}} onClick={() => handleEdit(menuItem.id)}>edit</button> */}
+                                    <TextButton
+                                        text='Edit'
+                                        onPress={async () => {
+                                            handleEdit(menuItem.id)
+                                        }}
+                                        color='#FF9638'
+                                        hoverColor='#FFC38E'
+
+                                    />
                                     <TextButton
                                         text='Delete'
                                         onPress={async () => {

@@ -99,6 +99,7 @@ export default function Editor() {
                                         </td>
                                         <td className="border text-center px-8 py-4">
                                             <input className="border text-center px-8 py-4"
+                                                style = {{border: "1px solid #000"}}
                                                 type="number"
                                                 //value="1"
                                                 min ="1"
