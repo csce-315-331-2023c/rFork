@@ -8,7 +8,7 @@ import Popup from '../../../../components/Popup';
 import PageLoading from '../../../../components/PageLoading';
 import 'bootstrap/dist/css/bootstrap.css'
 
-export default function page() {
+export default function Page() {
     const [employees, setEmployees] = useState<Array<Employee>>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -51,7 +51,7 @@ export default function page() {
                     <tbody>
                         {
                             employees.map((employee, index) =>
-                                <tr>
+                                <tr key={`${employee.id} ${index}`}>
                                     <td className='border'>{employee.id}</td>
                                     <td className='border'>{`${employee.firstName} ${employee.lastName}`}</td>
                                     <td className='border'>{employee.role}</td>
