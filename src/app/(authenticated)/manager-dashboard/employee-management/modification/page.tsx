@@ -10,7 +10,7 @@ import { Dropdown } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import TextButton from '../../../../../components/TextButton';
 
-export default function page() {
+export default function Page() {
     const firstName = useSearchParams().get("firstname");
     const lastName = useSearchParams().get("lastname");
     const [employee, setEmployee] = useState<Employee>({ firstName: "unloaded", lastName: "unloaded", role: "employee" });
