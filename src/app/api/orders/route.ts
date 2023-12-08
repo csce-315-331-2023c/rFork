@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { submitOrder, getAll, getNotFinished, changeStatus } from "../../../api/order"
+import { submitOrder, getAll, getNotFinished, changeStatus, deleteOrder } from "../../../api/order"
 
 /**
  * Posts order information to the website based on request information
@@ -24,7 +24,8 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     const history = req.nextUrl.searchParams.get('delete') || '';
-    await changeStatus(parseInt(history))
+    console.log(history);
+    await deleteOrder(parseInt(history))
     return NextResponse.json({ message: "Order deleted" })
 }
 /**

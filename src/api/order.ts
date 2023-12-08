@@ -86,7 +86,7 @@ export async function submitOrder(order: Order): Promise<void> {
  * @returns list of Order
  */
 export async function getAll(): Promise<Order[]>{
-    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished is not null ORDER by id DESC) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished is not null ORDER by id DESC LIMIT 100) t';
     const result = await db.query(query);
 
     let orders: Order[] = [];
