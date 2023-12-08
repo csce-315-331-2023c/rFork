@@ -13,6 +13,8 @@ export async function findEmployee(lastName: string, firstName: string): Promise
 
     const result = await db.query(query, [lastName, firstName]);
 
+    console.log(firstName, lastName)
+
     if (result.rows.length === 0) {
         return null;
     }
@@ -33,7 +35,7 @@ export async function findEmployee(lastName: string, firstName: string): Promise
 }
 
 export async function getEmployees(): Promise<Employee[]>{
-    const query = 'SELECT row_to_json(t) FROM (SELECT (id, first_name, last_name, is_manager) FROM employee ORDER BY id ASC) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, first_name, last_name, is_manager) FROM employee ORDER BY id DESC) t';
     const result = await db.query(query);
 
     const employees: Employee[] = [];
