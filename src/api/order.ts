@@ -8,7 +8,6 @@ import db from "./index";
  * @returns void
  */
 export async function submitOrder(order: Order): Promise<void> {
-    console.log(order);
     try {
         // restaurant_order - date, total
         const orderQuery = 'INSERT INTO orders (create_time, subtotal_cents, employee_id, is_finished) VALUES ($1, $2, $3, $4) RETURNING id';
