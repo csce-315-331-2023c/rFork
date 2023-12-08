@@ -22,6 +22,11 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ message: "Order status changed" })
 }
 
+export async function DELETE(req: NextRequest) {
+    const history = req.nextUrl.searchParams.get('delete') || '';
+    await changeStatus(parseInt(history))
+    return NextResponse.json({ message: "Order deleted" })
+}
 /**
  * Gets the json information for the orders 
  * @param req NextRequest object

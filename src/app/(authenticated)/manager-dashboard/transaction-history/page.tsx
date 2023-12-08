@@ -69,6 +69,7 @@ export default function TranscationHistory() {
                                 <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Total'>Order Total</th>
                                 <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Submitted By'>Submitted By</th>
                                 <th className="bg-blue-100 border text-center px-8 py-4" aria-description='Column for Order Status'>Order Status</th>
+                                <th className="bg-blue-100 border text-center px-8 py-4"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,6 +82,18 @@ export default function TranscationHistory() {
                                             <td className="border text-center px-8 py-4">{`\$${row.total.toFixed(2)}`}</td>
                                             <td className="border text-center px-8 py-4">{row.submittedBy}</td>
                                             <td className="border text-center px-8 py-4">{row.isFinished ? `Complete` : `In Flight`}</td>
+                                            <td className="border">
+                                                <button aria-label="Delete order" className="shadow-lg rouded-lg border-red-500 border-4 bg-red-300 hover:bg-red-700 text-black rounded mb-2 w-full" onClick={() => {
+                                                    setLoading(true);
+                                                    fetch(`/api/orders?delete=${row.id}`,{method: 'DELETE'}).then( () => {
+                                                        fetch(`/api/orders?history=getAll`).then(res => res.json()).then(d => {
+                                                            setLoading(false);
+                                                            setData(d);
+                                                            setHistoryType(t.getAll);
+                                                        })
+                                                    })
+                                                }}>Delete Order</button>
+                                            </td>
                                         </tr>
                                     )
                                 })

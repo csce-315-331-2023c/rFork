@@ -152,3 +152,11 @@ export async function changeStatus(id: number): Promise<void>{
 
     return;
 }
+
+export async function deleteOrder(id: number): Promise<void>{
+    console.log(id);
+    const query = 'DELETE FROM orders WHERE id = $1';
+    console.log(id);
+    await db.query(query, [id]);
+    return;
+}
