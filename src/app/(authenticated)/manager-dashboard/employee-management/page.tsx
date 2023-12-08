@@ -26,6 +26,19 @@ export default function page() {
         <div className='h-screen overflow-y-scroll'>
             <AuthSessionHeader />
             <div className='flex flex-col items-center w-full'>
+                <button
+                    id='google-translate-element'
+                    className='rounded-lg bg-amber-400 hover:bg-amber-200 p-2'
+                    onClick={() => {
+                        fetch("/api/employees", { method: "POST" }).then(() => {
+                            fetch("/api/employees").then((res) => res.json()).then((data) => {
+                                setEmployees(data);
+                            });
+                        })
+                    }}
+                >
+                    Add Employee
+                </button>
                 <table className='w-[80%] mt-4'>
                     <thead>
                         <tr>
