@@ -11,7 +11,7 @@ export async function submitOrder(order: Order): Promise<void> {
     console.log(order);
     try {
         // restaurant_order - date, total
-        const orderQuery = 'INSERT INTO orders (create_time, subtotal_cents, employee_id) VALUES ($1, $2, $3) RETURNING id';
+        const orderQuery = 'INSERT INTO orders (create_time, subtotal_cents, employee_id, is_finished) VALUES ($1, $2, $3, $4) RETURNING id';
 
         let employeeId: number | undefined;
         if ('id' in order.submittedBy) {
@@ -20,7 +20,7 @@ export async function submitOrder(order: Order): Promise<void> {
 
         const totalCentsString = (order.total * 100).toFixed(0);
 
-        const orderResult = await db.query(orderQuery, [order.timestamp, totalCentsString, employeeId]);
+        const orderResult = await db.query(orderQuery, [order.timestamp, totalCentsString, employeeId, false]);
         if (orderResult.rowCount !== 1) {
             throw new Error('Error inserting order');
         }
@@ -87,7 +87,7 @@ export async function submitOrder(order: Order): Promise<void> {
  * @returns list of Order
  */
 export async function getAll(): Promise<Order[]>{
-    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders ORDER by id DESC) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, create_time, subtotal_cents, tip_cents, employee_id, is_finished) FROM orders WHERE is_finished is not null ORDER by id DESC) t';
     const result = await db.query(query);
 
     let orders: Order[] = [];
@@ -124,6 +124,7 @@ export async function getNotFinished(): Promise<Order[]>{
 
     let orders: Order[] = [];
     for (let row of result.rows) {
+        console.log(row);
         const {
             f1: id,
             f2: create_time,
