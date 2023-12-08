@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { submitOrder, getAll, getNotFinished } from "../../../api"
+import { submitOrder, getAll, getNotFinished, changeStatus } from "../../../api/order"
 
 /**
  * Posts order information to the website based on request information
@@ -14,6 +14,12 @@ export async function POST(req: NextRequest) {
     }).catch((error) => {
         return NextResponse.json({ message: "You done goofed", data, error }, { status: 500 })
     });
+}
+
+export async function PATCH(req: NextRequest) {
+    const history = req.nextUrl.searchParams.get('id') || '';
+    await changeStatus(parseInt(history))
+    return NextResponse.json({ message: "Order status changed" })
 }
 
 /**
