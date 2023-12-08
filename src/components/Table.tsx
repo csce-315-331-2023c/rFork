@@ -89,8 +89,9 @@ export default function Table({ dataType, api, backgroundColor }: {
 
     // Function to get the tag name by menu item ID
     const getTagNameByMenuItemId = (itemId: number) => {
+        
         const tagInfo = tagData.find(tagItem => tagItem.menu_item_id === itemId);
-
+        console.log(tagInfo)
         return tagInfo ? tagInfo.tag_name : 'N/A';
     };
 
@@ -156,8 +157,8 @@ export default function Table({ dataType, api, backgroundColor }: {
                             fetch(`/api/menu?add-tag=${encodeURIComponent(tag)} `, { method: "POST", body: JSON.stringify(newMenuItem) })
                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                             console.log(tag);
+                            await fetchMenuTags();
                             fetchMenuItems();
-                            fetchMenuTags();
                         }}
                         color='#FF9638'
                         hoverColor='#FFC38E'
