@@ -43,7 +43,7 @@ export default function ManagerDashboard() {
             <AuthSessionHeader />
             {/* Slide Menus */}
             <div className='grid grid-rows-2 grid-cols-2 flex-1 h-full'>
-                <div className='grid grid-cols-4 bg-white row-span-1 col-span-1 p-2 gap-2'>
+                <div className='grid grid-cols-5 bg-white row-span-1 col-span-1 p-2 gap-2'>
                     <Link href='/manager-dashboard/reports'>
                         <ImageButton
                             imageURI='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/3162988/chart-clipart-md.png'
@@ -74,7 +74,16 @@ export default function ManagerDashboard() {
                     <Link href='/manager-dashboard/transaction-history'>
                         <ImageButton
                             imageURI='https://cdn-icons-png.flaticon.com/512/8118/8118496.png'
-                            customClassName='flex-1 flex flex-col h-full w-full items-center justify-center border-[#888] border-2'
+                            customClassName='flex-1 flex flex-col h-full w-full items-center justify-center border-[#888] border-2 p-1'
+                            color='#FFF'
+                            hoverColor='#CCC'
+                            altText='View Transaction History Button Image'
+                        />
+                    </Link>
+                    <Link href='/manager-dashboard/employee-management'>
+                        <ImageButton
+                            imageURI='https://cdn-icons-png.flaticon.com/512/912/912318.png'
+                            customClassName='flex-1 flex flex-col h-full w-full items-center justify-center border-[#888] border-2 p-2'
                             color='#FFF'
                             hoverColor='#CCC'
                             altText='View Transaction History Button Image'
@@ -84,6 +93,7 @@ export default function ManagerDashboard() {
                     <p className='text-center text-lg' id='google-translate-element'>Inventory Items</p>
                     <p className='text-center text-lg' id='google-translate-element'>Menu Items</p>
                     <p className='text-center text-lg' id='google-translate-element'>Transaction History</p>
+                    <p className='text-center text-lg' id='google-translate-element'>Employee Management</p>
                 </div>
                 <div className='row-span-2 col-span-1 flex flex-col justify-center items-center h-full w-full border-black border-l-2'>
                     <img src='https://images-ext-2.discordapp.net/external/qF9d_Cke88lBsSweSYIeXSnOPfPFe6JPppS26D2_OvA/https/mma.prnewswire.com/media/2032861/Sweet_Paris_Logo.jpg?format=webp&width=421&height=500' />
