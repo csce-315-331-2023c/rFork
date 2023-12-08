@@ -10,16 +10,14 @@ import 'bootstrap/dist/css/bootstrap.css'
 export default function Initial() {
     // const optionsArray = Object.keys(Languages);
 
-    const clazz = "w-full h-full flex flex-col justify-center items-center text-white text-4xl"
-
     return (
         <div className="h-screen w-screen">
             <div className='grid grid-rows-2 grid-cols-2 h-full w-full'>
 
-                <Link href='/cash-register'><div className={`${clazz} bg-red-500`}>Cash Register</div></Link>
-                <Link href='/manager-dashboard'><div className={`${clazz} bg-blue-500`}>Manager Dashboard</div></Link>
-                <Link href='/kiosk'><div className={`${clazz} bg-yellow-500`}>Customer Kiosk</div></Link>
-                <Link href='/menu-board'><div className={`${clazz} bg-green-500`}>Menu Board</div></Link>
+                <Link href='/cash-register'><div className={`w-full h-full flex flex-col justify-center items-center text-white text-4xl bg-red-500`} aria-label="Cash Register">Cash Register</div></Link>
+                <Link href='/manager-dashboard'><div className={`w-full h-full flex flex-col justify-center items-center text-white text-4xl bg-blue-600`} aria-label="Manager Dashboard">Manager Dashboard</div></Link>
+                <Link href='/kiosk'><div className={`w-full h-full flex flex-col justify-center items-center text-black text-4xl bg-yellow-200`} aria-label="Customer Kiosk">Customer Kiosk</div></Link>
+                <Link href='/menu-board'><div className={`w-full h-full flex flex-col justify-center items-center text-black text-4xl bg-green-300`} aria-label="Menu Board">Menu Board</div></Link>
             </div>
         </div>
     )

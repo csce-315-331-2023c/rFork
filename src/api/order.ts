@@ -124,7 +124,6 @@ export async function getNotFinished(): Promise<Order[]>{
 
     let orders: Order[] = [];
     for (let row of result.rows) {
-        console.log(row);
         const {
             f1: id,
             f2: create_time,
@@ -145,4 +144,12 @@ export async function getNotFinished(): Promise<Order[]>{
     }
 
     return orders;
+}
+
+export async function changeStatus(id: number): Promise<void>{
+    const query = 'UPDATE orders SET is_finished = true WHERE is_finished = false AND id = $1';
+    await db.query(query, [id]);
+
+
+    return;
 }
