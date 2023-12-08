@@ -41,7 +41,7 @@ export async function getAllMenuItems(): Promise<MenuItem[]> {
     }
 
     // get all menu items, create id->item map
-    const menuItemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name, price_cents, description, img_uri) FROM menu_item) t';
+    const menuItemQuery = 'SELECT row_to_json(t) FROM (SELECT (id, name, price_cents, description, img_uri) FROM menu_item ORDER BY id ASC) t';
 
     const menuItemResult = await db.query(menuItemQuery);
 

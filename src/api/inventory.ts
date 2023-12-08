@@ -7,7 +7,7 @@ import db from "./index";
  * @returns list of InventoryItem
  */
 export async function getAllInventoryItems(): Promise<InventoryItem[]> {
-    const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item) t';
+    const query = 'SELECT row_to_json(t) FROM (SELECT (id, item_name, stock, reorder_threshold) FROM inventory_item ORDER BY id ASC) t';
 
     const result = await db.query(query);
 
