@@ -225,9 +225,9 @@ export default function Table({ dataType, api, backgroundColor }: {
                                             if (uimageURI == '' || uimageURI == menuItem.imageURI) {
                                                 updatedImageURI = menuItem.imageURI;
                                             }
-
+                                            
                                             if (udesc == '' || udesc == menuItem.description) {
-                                                updatedDescription = menuItem.desc;
+                                                updatedDescription = menuItem.description;
                                             }
                                             console.log(udesc)
                                             console.log(updatedDescription)
@@ -236,13 +236,13 @@ export default function Table({ dataType, api, backgroundColor }: {
                                             // }
 
                                             //hacky code to fix updatedPrice if it's a decimal or integer
-                                            console.log(uprice);
+                                            //console.log(uprice);
                                             // if (!Number.isInteger(Number(uprice))) {
                                             //     updatedPrice = String(Number(updatedPrice) * 100);//convert decimal string back to cents for database
                                             // }else if(Number(updatedPrice)%1!=0){
                                             //     updatedPrice = String(Number(updatedPrice)*100);
                                             // }
-                                            console.log(updatedPrice);
+                                            //console.log(updatedPrice);
                                             
                                             //console.log(uname);
                                             const updatedItem: MenuItem = {
@@ -254,7 +254,7 @@ export default function Table({ dataType, api, backgroundColor }: {
                                                 description: updatedDescription,
                                                 imageURI: updatedImageURI
                                             }
-                                            //console.log(updatedItem);
+                                            console.log(updatedItem);
                                             await fetch(`/api/menu?edit=${encodeURIComponent(menuItem.id)}`, { method: "POST", body: JSON.stringify(updatedItem) })
                                                 .then((response) => response.json())
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
