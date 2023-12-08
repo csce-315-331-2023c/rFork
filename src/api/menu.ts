@@ -221,3 +221,35 @@ export async function updateMenuTag(updatedMenuItem: MenuItem, newTag: string): 
         throw new Error('Error updating menu item');
     }
 }
+
+export async function addIngredient(ingredient: Ingredient, menuItemId: string, ): Promise<void> {
+    const addIngredientQuery = 'INSERT INTO menu_item_ingredients (item_id, menu_item_id, qty_used, valid_extra) VALUES ($1, $2, $3, $4)';
+
+    const addIngredientResult = await db.query(addIngredientQuery, [ingredient.itemId, Number(menuItemId), ingredient.quantity, true]);
+
+    if (addIngredientResult.rowCount !== 1) {
+        throw new Error('Error adding ingredient');
+    }
+}
+
+export async function deleteIngredient(ingredient: Ingredient, menuItemId: string): Promise<void> {
+    const deleteIngredientQuery = 'DELETE FROM menu_item_ingredients WHERE menu_item_id = $1 AND item_id = $2';
+
+    const deleteIngredientResult = await db.query(deleteIngredientQuery, [menuItemId, ingredient.itemId]);
+
+    if (deleteIngredientResult.rowCount !== 1) {
+        throw new Error('Error deleting ingredient');
+    }
+}
+
+export async function updateIngredient(ingredient: Ingredient, menuItemId: string): Promise<void> {
+    console.log("entered updatefunc");
+    console.log(ingredient.quantity, ingredient.itemId);
+    const updateIngredientQuery = 'UPDATE menu_item_ingredients SET qty_used = $1 WHERE menu_item_id = $2 AND item_id = $3';
+
+    const updateIngredientResult = await db.query(updateIngredientQuery, [Number(ingredient.quantity), menuItemId, ingredient.itemId]);
+
+    if (updateIngredientResult.rowCount !== 1) {
+        throw new Error('Error updating ingredient');
+    }
+}

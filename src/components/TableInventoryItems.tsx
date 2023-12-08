@@ -105,7 +105,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                             <tr key={`Table Row ${index}`}>
                                 <td id='google-translate-element'>{inventoryItem.id}</td>
                                 <td id='google-translate-element'><input type="text" placeholder={inventoryItem.name} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetName(e.target.value)} /></td>
-                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.stock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
+                                <td id='google-translate-element'><input type="text" placeholder={inventoryItem.currentStock} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetStock(e.target.value)} /></td>
                                 <td id='google-translate-element'><input type="text" placeholder={inventoryItem.reorderThreshold} style={{ width: '23%', padding: '5px', marginBottom: '10px' }} onChange={e => usetReorderThreshold(e.target.value)} /></td>
                                 <td id='google-translate-element'>
                                     <TextButton
@@ -119,7 +119,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                                 updatedName = inventoryItem.name;
                                             }
                                             if (uStock == '' || uStock == inventoryItem.price) {
-                                                updatedStock = inventoryItem.stock;
+                                                updatedStock = inventoryItem.currentStock;
                                             }
                                             if (uReorderThreshold == '' || uReorderThreshold == inventoryItem.reorderThreshold) {
                                                 updatedReorderthreshold = inventoryItem.reorderThreshold;
@@ -133,12 +133,11 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                             }
                                             console.log(updateInventoryItem);
                                             await fetch(`/api/inventory?update=${encodeURIComponent(editId)}`, { method: "POST", body: JSON.stringify(updateInventoryItem) })
-                                            //     .then((response) => response.json())
-                                            //     .then((data) => {
-                                            //         //console.log(data);
-                                            //     })
-                                            //     .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
-
+                                            usetEditId(-1);
+                                            usetName('');
+                                            usetStock('');
+                                            usetReorderThreshold('');
+                                            fetchInventoryItems();
                                         }}
                                         color='#FF9638'
                                         hoverColor='#FFC38E'
@@ -158,7 +157,7 @@ export default function TableInventoryItems({ dataType, api, backgroundColor }: 
                                                 .then((response) => response.json())
                                                 .catch((err) => alert(`Issue occured while requesting post to server ${err}`));
                                             //window.location.reload();
-            
+                                            fetchInventoryItems();
                                  
                                         }}
                                         color='#FF9638'

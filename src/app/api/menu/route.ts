@@ -1,6 +1,6 @@
 import { getAllMenuItems, getMenuItemByTag, } from '../../../api'
 import { NextRequest, NextResponse } from 'next/server'
-import { addMenuItem, deleteMenuItem, updateMenuItem, getAllMenuItemTags, addMenuTag, updateMenuTag } from '../../../api/menu';
+import { addMenuItem, deleteMenuItem, updateMenuItem, getAllMenuItemTags, addMenuTag, updateMenuTag, addIngredient, deleteIngredient, updateIngredient } from '../../../api/menu';
 
 
 /**
@@ -60,7 +60,9 @@ export async function POST(req: NextRequest) {
     const delete_id = req.nextUrl.searchParams.get('delete');
     const add_tag =  req.nextUrl.searchParams.get('add-tag');
     const update_tag =  req.nextUrl.searchParams.get('update-tag');
-
+    const add_ingredient = req.nextUrl.searchParams.get('add-ingredient');
+    const delete_ingredient = req.nextUrl.searchParams.get('delete-ingredient');
+    const update_ingredient = req.nextUrl.searchParams.get('update-ingredient');
     if (edit_id) {
         return await updateMenuItem(data).then(() => {
             return NextResponse.json({ message: "sucesfully updated item", data })
@@ -84,6 +86,24 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "sucesfully update menu tag", data })
         }).catch((error) => {
             return NextResponse.json({ message: "frickalik failed to update menu tag", data, error }, { status: 500 })
+        });
+    }else if(add_ingredient){
+        return await addIngredient(data, add_ingredient as string).then(() => {
+            return NextResponse.json({ message: "sucesfully added new ingredient", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik failed to add ingredient", data, error }, { status: 500 })
+        });
+    }else if(delete_ingredient){
+        return await deleteIngredient(data, delete_ingredient as string).then(() => {
+            return NextResponse.json({ message: "sucesfully deleted ignredient", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik failed to delete ingredient", data, error }, { status: 500 })
+        });
+    }else if(update_ingredient){
+        return await updateIngredient(data, update_ingredient as string).then(() => {
+            return NextResponse.json({ message: "sucesfully update ignredient", data })
+        }).catch((error) => {
+            return NextResponse.json({ message: "frickalik failed to update ingredient", data, error }, { status: 500 })
         });
     }
     else {
